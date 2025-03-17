@@ -6,16 +6,19 @@ const Header = () => {
       <div className="max-w-screen-2xl mx-auto flex items-center">
         {/* Logo */}
         <div className="mr-4 flex items-center">
-          <div className="text-2xl font-bold text-[#2874f0]">Flipkart</div>
+          {/* <div className="text-2xl font-bold text-[#2874f0]">Flipkart</div> */}
           <div className="hidden md:flex items-center text-xs italic text-[#9e9e9e]">
-            Explore <span className="text-[#ffe500] font-medium ml-0.5">Plus</span>
+            
+
+
             <img 
-              src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiNGRkUwMDAiIGQ9Ik0wIDBoMTZ2MTZIMHoiLz48cGF0aCBkPSJNNi41NzIgNC000LjkxNCA3LjA3MmMtLjE5Mi4xOTItLjMuNDUyLS4zLjcyOCAwIC4yNzUuMS41MzYuMy43MjhsMS41IDEuNWMuMTkzLjE5Mi40NTMuMyA3MjguMy43MjguMzAwIDAgLjUzNS0uMTA4LjcyOC0uM2wyLjcyOC0yLjgzIDIuNzMgMi44M2MuMTkyLjE5Mi40NTIuMy43MjcuMy4yNzYgMCAuNTM2LS4xMDguNzI4LS4zbDEuNS0xLjVjLjE5My0uMTkyLjMtLjQ1My4zLS43MjggMC0uMjc2LS4xMDctLjUzNi0uMy0uNzI4TDguNzE1IDRjLS4yLS4xOTMtLjQ4LS4zLS43NTgtLjNoLS42MjdjLS4yOCAwLS41Ni4xMDctLjc1OC4zeiIgc3Ryb2tlPSIjRkZFMDAwIiBzdHJva2Utd2lkdGg9Ii4yNSIgZmlsbD0iIzI2MjYyNiIvPjwvZz48L3N2Zz4K" 
-              width="10" 
-              height="10" 
+              src="https://www.sarvswapn.com/assets/images/new-logo.png" 
+              width="80" 
+              height="80" 
               className="ml-0.5"
               alt="Plus icon"
             />
+            {/* <img src="https://www.sarvswapn.com/assets/images/new-logo.png" class="logo" alt=""></img> */}
           </div>
         </div>
 

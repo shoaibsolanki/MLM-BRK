@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const slides = [
   {
     id: 1,
-    image: 'https://rukminim2.flixcart.com/fk-p-flap/1600/270/image/0c706f11307587f3.jpg',
+    image: 'https://rukminim1.flixcart.com/fk-p-flap/480/80/image/8921fc73c192a29f.jpg',
     alt: 'Flight Booking Offer'
   },
   {
@@ -13,7 +13,7 @@ const slides = [
   },
   {
     id: 3,
-    image: 'https://rukminim2.flixcart.com/fk-p-flap/1600/270/image/c3990b1d75ea5468.jpg',
+    image: 'https://rukminim1.flixcart.com/fk-p-flap/480/80/image/173cacfaf069fe7d.png',
     alt: 'Big Savings'
   }
 ];
