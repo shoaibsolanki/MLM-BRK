@@ -14,7 +14,7 @@ const categories = [
 
 const CategoryBar = () => {
   return (
-    <div className="bg-white shadow-sm mb-2">
+    <div className="bg-white shadow-sm mb-2 mt-2">
       <div className="max-w-screen-2xl mx-auto overflow-x-auto">
         <div className="flex whitespace-nowrap py-2 px-4 md:justify-between">
           {categories.map((category, index) => (

@@ -1,16 +1,47 @@
-import { ChevronDown, LogIn, Menu, Search, ShoppingCart, User } from 'lucide-react';
+import { ChevronDown, LogIn, Menu, Search, ShoppingCart, X } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import MobileDrawer from './MobileDrawer';
+import ReferAndEarnModal from './ReferAndEarnModal';
+
+const navItems = [
+  { label: 'Home', path: '/' },
+  { label: 'Products', path: '/products' },
+  { label: 'Gallery', path: '/gallery' },
+  { label: 'Help & Support', path: '/support' },
+  { label: 'Refer And Earn', path: '/refer' }
+];
 
 const Header = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
+  const handleNavigation = (path) => {
+    if (path === '/refer') {
+      setIsModalOpen(true);
+    } else {
+      navigate(path);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <header className="bg-white py-2.5 px-4 md:px-6 shadow-md sticky top-0 z-50">
       <div className="max-w-screen-2xl mx-auto flex items-center">
         {/* Logo */}
         <div className="mr-4 flex items-center">
-          {/* <div className="text-2xl font-bold text-[#2874f0]">Flipkart</div> */}
+          <button className="md:hidden" onClick={toggleDrawer}>
+            {isDrawerOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
           <div className="hidden md:flex items-center text-xs italic text-[#9e9e9e]">
-            
-
-
             <img 
               src="https://www.sarvswapn.com/assets/images/new-logo.png" 
               width="80" 
@@ -18,7 +49,6 @@ const Header = () => {
               className="ml-0.5"
               alt="Plus icon"
             />
-            {/* <img src="https://www.sarvswapn.com/assets/images/new-logo.png" class="logo" alt=""></img> */}
           </div>
         </div>
 
@@ -36,6 +66,19 @@ const Header = () => {
           </div>
         </div>
 
+        {/* Navigation Items - Desktop */}
+        <div className="hidden md:flex items-center space-x-6 mr-6">
+          {navItems.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => handleNavigation(item.path)}
+              className="text-sm font-medium hover:text-[#2874f0] whitespace-nowrap"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
         {/* Right Menu Options */}
         <div className="flex items-center gap-4">
           <button className="hidden md:flex items-center bg-white text-[#2874f0] px-5 py-1 font-medium text-sm border border-[#dbdbdb] rounded-sm">
@@ -44,20 +87,18 @@ const Header = () => {
             <ChevronDown size={16} className="ml-1" />
           </button>
           
-          <button className="hidden md:flex items-center text-sm font-medium">
-            Become a Seller
-          </button>
-          
           <button className="flex items-center text-sm font-medium">
             <ShoppingCart size={20} className="mr-1" />
             Cart
           </button>
-          
-          <button className="md:hidden">
-            <Menu size={24} />
-          </button>
         </div>
       </div>
+
+      {/* Mobile Drawer */}
+      <MobileDrawer isOpen={isDrawerOpen} onClose={toggleDrawer} navItems={navItems} />
+
+      {/* Refer And Earn Modal */}
+      <ReferAndEarnModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </header>
   );
 };
