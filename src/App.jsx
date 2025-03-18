@@ -4,6 +4,7 @@ import Adminhome from './adminpage/adminhome';
 import './index.css';
 import Home from './page/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Support from './page/Support';
 
 
 
@@ -15,9 +16,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
         <Routes>
           <Route path="/" element={<Home />} />
         </Routes>
-        {/* <Routes>
-          <Route path="*" element={<div>404 Not Found</div>} />
-        </Routes> */}
+        <Routes>
+          <Route path="/support" element={<Support />} />
+        </Routes>
       </Router>
       {/* Customer Routes End */}
 
