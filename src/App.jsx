@@ -5,6 +5,7 @@ import './index.css';
 import Home from './page/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Support from './page/Support';
+import Login from './AdminPages/Login';
 
 
 
@@ -30,7 +31,9 @@ import Support from './page/Support';
         <Routes>
           <Route path="/subcategories" element={<Adminhome children={<Home/>}/>} />
         </Routes>
-       
+         <Routes  >
+          <Route path='/admin/login' element={<Login/>}/>
+         </Routes>
       </Router>
       </>
     );

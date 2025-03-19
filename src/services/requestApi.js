@@ -3,7 +3,7 @@ import http from "./http-common";
 class DataService {
   //Api For Port 8089 / 8088
   Login(data) {
-    return http.post("/auth/login", data);
+    return http.post("/auth/user-login", data);
   }
 
 

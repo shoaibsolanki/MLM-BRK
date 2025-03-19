@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 export const BASEURL = {
-    ENDPOINT_URL:"http://103.139.58.166:8092/prod/api/v1",
+    ENDPOINT_URL:"http://103.148.165.246:8088/test/api/v1",
  }
 //  helpkaroprdapi.helpkaro.co.in
 //  export const BASEURL = {
