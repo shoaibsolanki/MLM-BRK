@@ -11,21 +11,17 @@ import ProductDetailPage from './page/ProductDetailPage';
 import Login from './AdminPages/Login';
 import Category from './adminpage/Category';
 import SubCategoryPage from './adminpage/SubCategoryPage';
+import NotFound from './components/NotFound';
 
 
 
   function App() {
     return (
       <>
-      {/* Customer Routes Start */}
-      <Router>
-        {/* <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-        <Routes>
-          <Route path="/support" element={<Support />} />
-        </Routes> */}
-         <Routes>
+    {/* Combined Routes Start */}
+    <Router>
+      <Routes>
+        {/* Customer Routes */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="products" element={<ProductsPage />} />
@@ -33,29 +29,19 @@ import SubCategoryPage from './adminpage/SubCategoryPage';
           <Route path="products/:categoryId/:subcategoryId" element={<ProductsPage />} />
           <Route path="product/:productId" element={<ProductDetailPage />} />
           <Route path="/support" element={<Support />} />
-
         </Route>
-      </Routes>
-      </Router>
-     
-      {/* Customer Routes End */}
 
-      {/* Admin Routes Start */}
-      <Router>
-        <Routes>
-          <Route path="/admin" element={<Adminhome children={<Dashboard/>}/>} />
-        </Routes>
-       
-        <Routes>
-          <Route path="/categories" element={<Adminhome children={<Category/>}/>} />
-        </Routes>
-        <Routes>
-          <Route path="/subcategories" element={<Adminhome children={<SubCategoryPage/>}/>} />
-        </Routes>
-         <Routes  >
-          <Route path='/admin/login' element={<Login/>}/>
-         </Routes>
-      </Router>
+        {/* Admin Routes */}
+        <Route path="/admin" element={<Adminhome />}>
+          <Route index element={<Dashboard />} />
+          <Route path="categories" element={<Category />} />
+          <Route path="subcategories" element={<SubCategoryPage />} />
+        </Route>
+        <Route path='/admin/login' element={<Login />} />
+        <Route path='*' element={<NotFound/>}/>
+      </Routes>
+    </Router>
+    {/* Combined Routes End */}
       </>
     );
   

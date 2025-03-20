@@ -62,100 +62,100 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     {
       title: "Dashboard",
       icon: <HomeIcon  size={18} />,
-      path: "/admin/dashboard",
+      path: "/admin",
     },
     {
       title: "Manage Category",
       icon: <Layers  size={18} />,
-      path: "/categories",
+      path: "/admin/categories",
     },
     {
       title: "Manage Sub Category",
       icon: <Layers  size={18} />,
-      path: "/subcategories",
+      path: "/admin/subcategories",
     },
     {
       title: "Manage Product",
       icon: <Package  size={18} />,
-      path: "/products",
+      path: "/admin/products",
       hasSubmenu: true,
       submenu: [
         {
           title: "Add Product",
-          path: "/products/add",
+          path: "/admin/products/add",
         },
         {
           title: "Product List",
-          path: "/products/list",
+          path: "/admin/products/list",
         },
       ],
     },
     {
       title: "Manage Sub Product",
       icon: <Package  size={18} />,
-      path: "/subproducts",
+      path: "/admin/subproducts",
       hasSubmenu: true,
       submenu: [
         {
           title: "Add Sub Product",
-          path: "/subproducts/add",
+          path: "/admin/subproducts/add",
         },
         {
           title: "Sub Product List",
-          path: "/subproducts/list",
+          path: "/admin/subproducts/list",
         },
       ],
     },
     {
       title: "Manage Distributor",
       icon: <Users  size={18} />,
-      path: "/distributors",
+      path: "/admin/distributors",
       hasSubmenu: true,
       submenu: [
         {
           title: "Add Distributor",
-          path: "/distributors/add",
+          path: "/admin/distributors/add",
         },
         {
           title: "Distributor List",
-          path: "/distributors/list",
+          path: "/admin/distributors/list",
         },
       ],
     },
     {
       title: "Manage Slider",
       icon: <Image  size={18} />,
-      path: "/sliders",
+      path: "/admin/sliders",
     },
     {
       title: "Manage Gallery",
       icon: <Grid  size={18} />,
-      path: "/gallery",
+      path: "/admin/gallery",
     },
     {
       title: "Manage User",
       icon: <Users  size={18} />,
-      path: "/users",
+      path: "/admin/users",
     },
     {
       title: "Manage Order",
       icon: <ShoppingCart  size={18} />,
-      path: "/orders",
+      path: "/admin/orders",
     },
     {
       title: "Manage Complaint",
       icon: <ShoppingCart  size={18} />,
-      path: "/Complaint",
+      path: "/admin/Complaint",
     },
     {
       title: "Manage Banner",
       icon: <ShoppingCart  size={18} />,
-      path: "/Banner",
+      path: "/admin/Banner",
     },
     {
       title: "Manage KYC",
       icon: <ShoppingCart  size={18} />,
-      path: "/KYC",
+      path: "/admin/KYC",
     },
     {
       title: "Income",
@@ -164,48 +164,48 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       submenu: [
         {
           title: "Performance Bonus",
-          path: "/income/Performance",
+          path: "/admin/income/Performance",
         },
         {
           title: "Weekly Matching income",
-          path: "/income/weekly",
+          path: "/admin/income/weekly",
         },
         {
           title: "Director income",
-          path: "/income/director",
+          path: "/admin/income/director",
         },
         {
           title: "Pearl Director",
-          path: "/income/pearl",
+          path: "/admin/income/pearl",
         },
         {
           title: "Emerald Director",
-          path: "/income/Emerald",
+          path: "/admin/income/Emerald",
         },
         {
           title: "Diamond Director",
-          path: "/income/diamond",
+          path: "/admin/income/diamond",
         },
         {
           title: "Double Director",
-          path: "/income/double",
+          path: "/admin/income/double",
         },
       ],
     },
     {
       title: "Manage Gift",
       icon: <Gift  size={18} />,
-      path: "/gift",
+      path: "/admin/gift",
     },
     {
       title: "Gift Orders",
       icon: <GiftIcon  size={18} />,
-      path: "/gift/orders",
+      path: "/admin/gift/orders",
     },
     {
       title: "Gift Coupon",
       icon: <GiftIcon  size={18} />,
-      path: "/gift/coupon",
+      path: "/admin/gift/coupon",
     },
     {
       title: "Schemes",
@@ -214,11 +214,11 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       submenu: [
         {
           title: "Progressive bonus",
-          path: "/scheme/progressive",
+          path: "/admin/scheme/progressive",
         },
         {
           title: "Successive bonus",
-          path: "/scheme/successive",
+          path: "/admin/scheme/successive",
         },
       ],
     },
