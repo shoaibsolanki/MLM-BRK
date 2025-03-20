@@ -1,11 +1,9 @@
 import { TextField, Button, Container, Grid, Typography, Paper } from '@mui/material';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+
 
 const Support = () => {
   return (
-       <div className="min-h-screen bg-gray-100">
-          <Header />
+      
     <Container maxWidth="md" className="py-10">
       <Paper elevation={3} className="p-10 bg-white">
         {/* <Typography variant="h5" className="mb-6 text-center font-semibold">
@@ -35,8 +33,8 @@ const Support = () => {
         </Grid>
       </Paper>
     </Container>
-      <Footer />
-        </div>
+     
+       
   );
 };
 

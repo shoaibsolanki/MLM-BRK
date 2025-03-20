@@ -1,17 +1,17 @@
-import React from 'react'
-import Navbar from '../Component/Navbar'
-import RegistrationForm from '../Component/RegistrationForm'
+import { Outlet } from 'react-router-dom';
+import Header from '../components/Header.jsx';
+import Footer from '../components/Footer.jsx';
 
-function Layout() {
+const Layout = () => {
   return (
-    <div>
-             <div className="flex relative flex-col items-center max-w-[100%] min-h-[100vh]">
-          <Navbar />
-          <div className="shrink-0 mt-6 max-w-full h-px border border-white border-solid w-[1131px]" />
-          <RegistrationForm />
-        </div>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
