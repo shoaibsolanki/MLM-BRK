@@ -8,6 +8,7 @@ import Support from './page/Support';
 import Layout from './Layout/Layout';
 import ProductsPage from './page/ProductsPage';
 import ProductDetailPage from './page/ProductDetailPage';
+import Login from './AdminPages/Login';
 
 
 
@@ -45,7 +46,9 @@ import ProductDetailPage from './page/ProductDetailPage';
         <Routes>
           <Route path="/subcategories" element={<Adminhome children={<Home/>}/>} />
         </Routes>
-       
+         <Routes  >
+          <Route path='/admin/login' element={<Login/>}/>
+         </Routes>
       </Router>
       </>
     );
