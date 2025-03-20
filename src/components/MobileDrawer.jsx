@@ -37,17 +37,18 @@ const MobileDrawer = ({ isOpen, onClose, navItems }) => {
         
         {/* Navigation Items */}
         <div className="overflow-y-auto">
-          <div className="py-2">
-            {navItems.map((item, index) => (
-              <a 
-                key={index} 
-                href="#" 
-                className="block px-4 py-3 text-sm border-b border-gray-100 hover:bg-gray-50"
-              >
-                {item}
-              </a>
-            ))}
-          </div>
+        <div className="py-2">
+  {navItems.map((item, index) => (
+    <a 
+      key={index} 
+      href={item.path}  // yeh href ke liye correct property hai
+      className="block px-4 py-3 text-sm border-b border-gray-100 hover:bg-gray-50"
+    >
+      {item.label}  
+    </a>
+  ))}
+</div>
+
           
           {/* Additional Mobile Menu Items */}
           <div className="mt-2 border-t">
