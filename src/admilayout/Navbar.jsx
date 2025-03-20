@@ -1,18 +1,19 @@
 import { Close, Menu } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import React from 'react';
-
+import logo from '../assets/sarvLogo.jpg';
 const Navbar = ({isSidebarOpen, setIsSidebarOpen}) => {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
       };
     return (
         <nav className="bg-[#383a3a] p-4">
-            <div className="container mx-auto flex justify-between items-center">
+            <div className="container mx-10 flex justify-between items-center">
                 {/* <IconButton onClick={toggleSidebar} className="md:hidden">
                             {isSidebarOpen ? <Close style={{color:"white"}}/> : <Menu style={{color:"white"}} />}
                         </IconButton> */}
-                <div className="text-white text-lg font-bold">Sarv Swapn Solutions
+                <div className="text-white text-lg font-bold flex items-center"> 
+                {isSidebarOpen ? "Sarv Swapn Solutions" : <img src={logo} alt="Sarv Logo" className="h-8" />}
 
                 <IconButton onClick={toggleSidebar} className="md:hidden">
                             {isSidebarOpen ? <Close style={{color:"white"}}/> : <Menu style={{color:"white"}} />}

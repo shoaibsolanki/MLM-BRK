@@ -85,28 +85,28 @@ const Dashboard = () => {
 
         {/* KYC Pending Screen */}
         <div className="p-4 mt-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold mb-4">KYC Pending</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-300 bg-white rounded-lg">
-          <thead>
-            <tr className="bg-gray-200 text-gray-700">
-              <th className="py-2 px-4 border">User Name</th>
-              <th className="py-2 px-4 border">Bank Name</th>
-              <th className="py-2 px-4 border">Account Number</th>
-              <th className="py-2 px-4 border">Apply Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="text-center">
-              <td className="py-2 px-4 border">Abhishek</td>
-              <td className="py-2 px-4 border">State Bank of India</td>
-              <td className="py-2 px-4 border">123456789</td>
-              <td className="py-2 px-4 border">06-10-2023</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+          <h2 className="text-lg font-semibold mb-4">KYC Pending</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full border border-gray-300 bg-white rounded-lg">
+              <thead>
+                <tr className="bg-gray-200 text-gray-700">
+                  <th className="py-2 px-4 border">User Name</th>
+                  <th className="py-2 px-4 border">Bank Name</th>
+                  <th className="py-2 px-4 border">Account Number</th>
+                  <th className="py-2 px-4 border">Apply Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="text-center">
+                  <td className="py-2 px-4 border">Abhishek</td>
+                  <td className="py-2 px-4 border">State Bank of India</td>
+                  <td className="py-2 px-4 border">123456789</td>
+                  <td className="py-2 px-4 border">06-10-2023</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </>
   );

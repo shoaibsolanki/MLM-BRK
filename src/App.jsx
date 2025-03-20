@@ -6,6 +6,8 @@ import Home from './page/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Support from './page/Support';
 import Login from './AdminPages/Login';
+import Category from './adminpage/Category';
+import SubCategoryPage from './adminpage/SubCategoryPage';
 
 
 
@@ -28,8 +30,12 @@ import Login from './AdminPages/Login';
         <Routes>
           <Route path="/admin" element={<Adminhome children={<Dashboard/>}/>} />
         </Routes>
+       
         <Routes>
-          <Route path="/subcategories" element={<Adminhome children={<Home/>}/>} />
+          <Route path="/categories" element={<Adminhome children={<Category/>}/>} />
+        </Routes>
+        <Routes>
+          <Route path="/subcategories" element={<Adminhome children={<SubCategoryPage/>}/>} />
         </Routes>
          <Routes  >
           <Route path='/admin/login' element={<Login/>}/>
