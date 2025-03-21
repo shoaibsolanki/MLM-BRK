@@ -1,6 +1,6 @@
-import AdminLayout from './admilayout/AdminLayout';
+// import AdminLayout from './admilayout/AdminLayout';
 import Dashboard from './admincomponents/Dashbord';
-import Adminhome from './adminpage/adminhome';
+import Adminhome from './adminpage/Adminhome';
 import './index.css';
 import Home from './page/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -12,6 +12,7 @@ import Login from './AdminPages/Login';
 import Category from './adminpage/Category';
 import SubCategoryPage from './adminpage/SubCategoryPage';
 import NotFound from './components/NotFound';
+import AddProduct from './adminpage/Addproduct';
 
 
 
@@ -36,6 +37,7 @@ import NotFound from './components/NotFound';
           <Route index element={<Dashboard />} />
           <Route path="categories" element={<Category />} />
           <Route path="subcategories" element={<SubCategoryPage />} />
+          <Route path="products/add" element={<AddProduct />} />
         </Route>
         <Route path='/admin/login' element={<Login />} />
         <Route path='*' element={<NotFound/>}/>

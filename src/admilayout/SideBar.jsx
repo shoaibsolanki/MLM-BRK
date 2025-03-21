@@ -378,13 +378,48 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             </List>
           </nav>
         </div>
-        <div className="mt-auto" style={{ marginBottom: "200px" }}>
+        <div>
           <nav>
             <List>
               <Tooltip
                 title="Logout"
                 placement="right"
                 disableHoverListener={isSidebarOpen}
+                componentsProps={{
+                  tooltip:{
+                    sx:{
+                      bgcolor: '#383a3a',
+                      color: 'white',
+                      // padding: '0px',
+                      borderTopLeftRadius: '0px',
+                      borderBottomLeftRadius: '0px',
+                      borderTopRightRadius: '8px',
+                      borderBottomRightRadius: '8px',
+                    }
+                  }
+                }}
+                slotProps={{
+                  popper: {
+                    sx: {
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginTop: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginBottom: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginLeft: "0px",
+                        },
+                      [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                        {
+                          marginRight: "0px",
+                        },
+                    },
+                  },
+                }}
               >
                 <ListItem button className="cursor-pointer">
                   <ListItemIcon>
