@@ -70,6 +70,7 @@ const Login = () => {
             const response = await DataService.Login(data)
             console.log(response)
             if(response.data.status){
+              localStorage.setItem('token', response.data.data.jwt_response)
                 enqueueSnackbar(response.data.message, { variant: 'success' })
                 navigate('/admin')
             }
