@@ -5,7 +5,9 @@ class DataService {
   Login(data) {
     return http.post("/auth/user-login", data);
   }
-
+  GetMasterCategory(saasid, storeid){
+    return http.get(`/Master-category/get-list-master/${saasid}/${storeid}`)
+  }
 
   OtpVarification(data) {
     return http.post("/auth/validate/otp", data);

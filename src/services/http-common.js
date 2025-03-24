@@ -8,12 +8,12 @@ export const BASEURL = {
 //  export const BASEURL = {
 //     ENDPOINT_URL:"http://103.139.58.166:8088/prod/api/v1",
 //  }
-export const authToken = localStorage.getItem('Token');
+export const authToken = localStorage.getItem('token');
 
 export default axios.create({
     baseURL: `${BASEURL.ENDPOINT_URL}`,
     headers: {
         'Content-Type': 'application/json',
-        //  "Authorization":`Bearer ${authToken}`
+         "Authorization":`Bearer ${authToken}`
      }
 });

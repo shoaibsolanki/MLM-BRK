@@ -14,6 +14,8 @@ import SubCategoryPage from './adminpage/SubCategoryPage';
 import NotFound from './components/NotFound';
 import AddProduct from './adminpage/Addproduct';
 import ProtectedRouteForAdmin from './ProtectedRouteForAdmin';
+import Allproduct from './adminpage/Allproduct';
+import AddsubProduct from './adminpage/AddsubProduct';
 
 
 
@@ -40,6 +42,8 @@ import ProtectedRouteForAdmin from './ProtectedRouteForAdmin';
           <Route path="categories" element={<ProtectedRouteForAdmin Component={ Category} />} />
           <Route path="subcategories" element={<ProtectedRouteForAdmin Component={ SubCategoryPage} />} />
           <Route path="products/add" element={<ProtectedRouteForAdmin Component={ AddProduct} />} />
+          <Route path="products/list" element={<ProtectedRouteForAdmin Component={ Allproduct} />} />
+          <Route path="subproducts/add" element={<ProtectedRouteForAdmin Component={ AddsubProduct} />} />
         </Route>
         <Route path='/admin/login' element={<Login />} />
         <Route path='*' element={<NotFound/>}/>

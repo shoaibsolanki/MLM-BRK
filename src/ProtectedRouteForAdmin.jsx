@@ -8,7 +8,7 @@ const ProtectedRouteForAdmin = (props) => {
 
     return (
         <>
-            {token && userData?.userType === 'ALL' ? (
+            {token && userData?.userType === 'ADMIN' ? (
                 <Component />
             ) : (
                 <Navigate to="/admin/login" />
