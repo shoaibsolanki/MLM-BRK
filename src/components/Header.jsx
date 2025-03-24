@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileDrawer from './MobileDrawer';
 import ReferAndEarnModal from './ReferAndEarnModal';
-
+import logo from '../assets/sarvLogo.png';
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Products', path: '/products' },
@@ -43,7 +43,7 @@ const Header = () => {
           </button>
           <div className="hidden md:flex items-center text-xs italic text-[#9e9e9e]">
             <img 
-              src="https://www.sarvswapn.com/assets/images/new-logo.png" 
+              src={logo} 
               width="80" 
               height="80" 
               className="ml-0.5"
