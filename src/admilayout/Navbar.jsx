@@ -13,7 +13,7 @@ const Navbar = ({isSidebarOpen, setIsSidebarOpen}) => {
                             {isSidebarOpen ? <Close style={{color:"white"}}/> : <Menu style={{color:"white"}} />}
                         </IconButton> */}
                 <div className="text-white text-lg font-bold flex items-center gap-3 "> 
-                {isSidebarOpen ? "Sarv Swapn Solutions" : <img src={logo} alt="Sarv Logo" className="h-8" />}
+                {isSidebarOpen ? "BRK Cart " : <img src={logo} alt="Sarv Logo" className="h-8" />}
 
                 <IconButton onClick={toggleSidebar} className="md:hidden">
                             {isSidebarOpen ? <Close style={{color:"white"}}/> : <Menu style={{color:"white"}} />}
