@@ -16,6 +16,7 @@ import AddProduct from './adminpage/Addproduct';
 import ProtectedRouteForAdmin from './ProtectedRouteForAdmin';
 import Allproduct from './adminpage/Allproduct';
 import AddsubProduct from './adminpage/AddsubProduct';
+import CustomerRegstration from './components/Registration/CustomerRegstration';
 
 
 
@@ -33,6 +34,8 @@ import AddsubProduct from './adminpage/AddsubProduct';
           <Route path="products/:categoryId/:subcategoryId" element={<ProductsPage />} />
           <Route path="product/:productId" element={<ProductDetailPage />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/customer-regstration" element={<CustomerRegstration />} />
+
         </Route>
 
         {/* Admin Routes */}
