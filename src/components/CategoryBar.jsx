@@ -1,10 +1,25 @@
 import { ChevronDown } from 'lucide-react';
-import { getCategories, getFeaturedProducts } from '../components/data/mockData.jsx';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import DataService from '../services/requestApi';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthConext';
+import { getCategories } from './data/mockData';
 
 
 const CategoryBar = () => {
-        const categories = getCategories();
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const response = await getCategories();
+      setCategories(response?.data?.data);
+    };
+
+    fetchCategories();
+  }, []);
+
+        // const categories = getCategories();
   
   return (
     <div className="bg-white shadow-sm mb-2 mt-2">
@@ -13,7 +28,7 @@ const CategoryBar = () => {
           {categories.map((category, index) => (
              <Link 
              key={category.id} 
-             to={`/products/${category.id}`}
+             to={`/products/${category.masterCategoryId}`}
              className="group block"
            >
             <div key={index} className="flex flex-col items-center px-3 md:px-4 cursor-pointer text-sm">
@@ -23,7 +38,7 @@ const CategoryBar = () => {
                 className="w-10 h-10 object-cover transition-transform duration-300 group-hover:scale-105"
               /></span>
               <div className="flex items-center">
-                <span>{category.name}</span>
+                <span>{category.masterCategoryName}</span>
                 {category.dropdown && <ChevronDown size={14} className="ml-1" />}
               </div>
             </div>
