@@ -29,7 +29,7 @@ function App() {
   return (
     <>
       {/* Combined Routes Start */}
-        <Router>
+      
           <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress color='secondary'/></div>}>
             <Routes>
           {/* Customer Routes */}
@@ -61,7 +61,6 @@ function App() {
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Suspense>
-      </Router>
       {/* Combined Routes End */}
     </>
   );

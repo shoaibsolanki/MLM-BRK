@@ -1,11 +1,13 @@
 import { Copy, X } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ReferAndEarnModal = ({ isOpen, onClose }) => {
-  const [referralCode, setReferralCode] = useState('FRIEND25OFF');
+  const navigate = useNavigate(); // ✅ Move useNavigate() to the top
+  const [referralCode] = useState('FRIEND25OFF');
   const [copySuccess, setCopySuccess] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isOpen) return null; // ✅ This should come after useNavigate()
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(referralCode);
@@ -13,6 +15,10 @@ const ReferAndEarnModal = ({ isOpen, onClose }) => {
     setTimeout(() => setCopySuccess(false), 2000);
   };
 
+  const handleREgistration=()=>{
+    onClose()
+    navigate("/customer-regstration")
+  }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
@@ -45,12 +51,10 @@ const ReferAndEarnModal = ({ isOpen, onClose }) => {
               placeholder="Password"
               className="w-full p-3 mb-4 border border-gray-300 dark:border-gray-600 rounded outline-none bg-transparent"
             />
-         
 
-         
             <div className="flex justify-between">
               <button className="bg-[#2874f0] text-white px-6 py-2 rounded">Login</button>
-              <button className="bg-gray-200 dark:bg-gray-700 px-6 py-2 rounded">Register</button>
+              <button onClick={handleREgistration} className="bg-gray-200 dark:bg-gray-700 px-6 py-2 rounded">Register</button>
             </div>
             {copySuccess && (
               <p className="text-green-600 text-sm mt-1">Copied to clipboard!</p>
@@ -66,7 +70,6 @@ const ReferAndEarnModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-        
         </div>
       </div>
     </div>
