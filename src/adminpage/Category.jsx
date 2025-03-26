@@ -1,41 +1,64 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomDataTable from '../admincomponents/Microcomponents/DataTable'
 import { Edit } from 'lucide-react';
-
+import DataService from "../services/requestApi";
+import EditMasterCategory from '../admincomponents/Modals/EditMasterCategory';
+import { Button } from '@mui/material';
+import AddMasterCategoryModal from '../admincomponents/Modals/AddMasterCategorymoad';
 const Category = () => {
-    const handleEdit = (id) => {
-        // Handle edit action here
-        console.log(`Edit category with id: ${id}`);
-    };
-
+     const [open,setOpen] = useState(false)
+    const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
+    const [masterCategory, setMasterCategory] = useState([]);
+    const [selectedCat, setSelectedCategory]= useState("")
+    const getMatserCategory = async () => {
+        try {
+          const response = await DataService.GetMasterCategory(saasId, storeId);
+          setMasterCategory(response.data.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    
+      useEffect(() => {
+        getMatserCategory();
+      }, []);
+      
+      const handleEdit = (row)=>{
+        setSelectedCategory(row)
+        setOpen(true)
+      }
+     
     const columns = [
-        { name: 'Category Name', selector: row => row.category_name, sortable: true },
+        { name: 'Category Name', selector: row => row.masterCategoryName, sortable: true },
         { 
             name: 'Image', 
-            selector: row => <img src={row.userId} alt="category" style={{ width: '50px', height: '50px' }} />, 
+            selector: row => row.masterCategoryImage 
+                ? <img src={row.masterCategoryImage} alt="category" style={{ width: '50px', height: '50px' }} /> 
+                : 'No Image', 
             sortable: true 
         },
-        { name: 'Creation Date', selector: row => row.created_date, sortable: true },
+        { name: 'SaaS ID', selector: row => row.saasId, sortable: true },
+        { name: 'Store ID', selector: row => row.store_id, sortable: true },
         { 
             name: 'Action', 
             selector: row => (
-                <Edit className='cursor-pointer'/>
+                <Edit className='cursor-pointer' onClick={() => handleEdit(row)} />
             ), 
-            sortable: true 
+            sortable: false 
         },
     ];
 
-    const data = [
-        { id: 1, category_name: 'Electronics', userId: 'https://via.placeholder.com/50', created_date: '2023-01-01' },
-        { id: 2, category_name: 'Books', userId: 'https://via.placeholder.com/50', created_date: '2023-02-01' },
-        { id: 3, category_name: 'Clothing', userId: 'https://via.placeholder.com/50', created_date: '2023-03-01' },
-        { id: 4, category_name: 'Home Appliances', userId: 'https://via.placeholder.com/50', created_date: '2023-04-01' },
-    ];
-  return (
+    
+return (
     <div>
-        <CustomDataTable columns={columns} data={data} title="View Category" />
+            <div className='flex justify-between items-center bg-white rounded p-2'>
+                <h1>Mange Master Category</h1>
+                <AddMasterCategoryModal getMatserCategory={getMatserCategory}/>
+            </div>
+            <CustomDataTable columns={columns} data={masterCategory} title="View Category" />
+            <EditMasterCategory category={selectedCat} open={open} handleClose={() => setOpen(false)} />
     </div>
-  )
+)
 }
 
-export default Category
+export default Category 
