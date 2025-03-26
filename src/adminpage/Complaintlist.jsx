@@ -18,7 +18,7 @@ const Complaintlist = () => {
     ];
   return (
     <div>
-        <CustomDataTable />
+        <CustomDataTable columns={columns} data={data} title={"Complaint Management"}/>
     </div>
   )
 }
