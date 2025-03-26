@@ -1,5 +1,5 @@
 import { ArrowUp, Facebook, Instagram, Linkedin, Mail, MessageCircle, Twitter, Youtube } from 'lucide-react';
-
+import logo from '../assets/sarvLogo.png'
 const Footer = () => {
   // Function to scroll back to top
   const scrollToTop = () => {
@@ -19,7 +19,7 @@ const Footer = () => {
             {/* Logo */}
             <div className="mb-4">
               <img 
-                   src="https://www.sarvswapn.com/assets/images/new-logo.png"
+                   src={logo}
                 alt="Sarv Swapn Solutions Logo" 
                 className="h-20 w-auto"
               />
@@ -113,7 +113,7 @@ const Footer = () => {
       {/* Copyright Bar */}
       <div className="bg-gray-800 text-white py-4 relative">
         <div className="max-w-screen-2xl mx-auto px-4 text-center text-sm">
-          Copyright © 2023, Sarv Swapn Solutions Pvt. Ltd. All Rights Reserved.
+          Copyright © 2023, BBK Cart Pvt. Ltd. All Rights Reserved.
         </div>
         {/* Back to top button */}
         <button 

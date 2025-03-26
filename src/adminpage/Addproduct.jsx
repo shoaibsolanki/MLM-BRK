@@ -3,7 +3,58 @@ import { TextField, MenuItem, Button } from '@mui/material';
 import { styled } from "@mui/system";
 import { color } from 'framer-motion';
 import DataService from '../services/requestApi'
+import { useSnackbar } from 'notistack';
 const AddProduct = () => {
+  const { enqueueSnackbar } = useSnackbar();
+  const {storeId,saasId} = JSON.parse(localStorage.getItem('user_data'))
+  const [productData, setProductData] = useState({
+    item_name: "",
+    price: 0,
+    price_pcs: 0,
+    discount: 0,
+    special_description: "",
+    description: "",
+    opening_qty: 0,
+    actual_price: 0,
+    mrp: 0,
+    brand: "",
+    tax: 0,
+    status: "",
+    saas_id: "",
+    store_id: "",
+    hsn_code: "",
+    promo_id: "",
+    category: "",
+    barcode: "",
+    conc_id: "",
+    dept: "",
+    item_class: "",
+    sub_class: "",
+    item_code: "",
+    class_code: 0,
+    dept_code: 0,
+    combo: "",
+    UOM: "",
+    rp: 0,
+    videoUrl: "",
+    colorList: []
+  });
+  useEffect(() => {
+    setProductData((prevData) => ({
+      ...prevData,
+      saas_id: saasId,
+      store_id: storeId,
+    }));
+  }, [saasId, storeId]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProductData({
+      ...productData,
+      [name]: value,
+    });
+  };
+
     const StyledButton = styled(Button)({
         marginTop: "20px",
         padding: "12px",
@@ -18,8 +69,10 @@ const AddProduct = () => {
           color: "#1e1e1e", // Black Text for Contrast
         },
       });
-      const {storeId,saasId} = JSON.parse(localStorage.getItem('user_data'))
+      
       const [masterCategory, setMasterCategory] = useState([])
+      const [selectedcategory, setSelectedCategory] = useState('')
+      const [subcategories, setSubCategories] = useState([])
       const getMatserCategory = async () =>{
         try {
           const response = await DataService.GetMasterCategory(saasId,storeId)
@@ -33,12 +86,77 @@ const AddProduct = () => {
         getMatserCategory()
       }, [])
       
+      const subCategory = async ()=>{
+        try {
+          const response = await DataService.GetSubCategory(saasId,storeId,selectedcategory)
+          console.log(response)
+          setSubCategories(response.data.data)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+     useEffect(() => {
+       if(selectedcategory){
+        subCategory()
+       }
+     }, [selectedcategory])
+   
+     
+     const addProduct = async () =>{
+        if (!productData.item_name || !productData.price || !productData.description || !productData.actual_price) {
+          enqueueSnackbar('Please fill in all required fields: Product Name, Price, Description, and MRP', { variant: 'error' });
+          return;
+        }
+      try {
+        const response = await DataService.AddProduct(productData)
+        if(response.data.status){
+          enqueueSnackbar('Product Added Successfully', { variant:"success"})
+            setProductData({
+            item_name: "",
+            price: 0,
+            price_pcs: 0,
+            discount: 0,
+            special_description: "",
+            description: "",
+            opening_qty: 0,
+            actual_price: 0,
+            mrp: 0,
+            brand: "",
+            tax: 0,
+            status: "",
+            saas_id: "",
+            store_id: "",
+            hsn_code: "",
+            promo_id: "",
+            category: "",
+            barcode: "",
+            conc_id: "",
+            dept: "",
+            item_class: "",
+            sub_class: "",
+            item_code: "",
+            class_code: 0,
+            dept_code: 0,
+            combo: "",
+            UOM: "",
+            rp: 0,
+            videoUrl: "",
+            colorList: []
+            });
+        }
+      } catch (error) {
+        console.log(error)
+      }
+     }
+
+   
 
   return (
     <div className="p-6 bg-white rounded">
       <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="form-group">
           <TextField
+           onChange={(e)=>{setSelectedCategory(e.target.value)}}
             label="Category"
             select
             fullWidth
@@ -47,72 +165,111 @@ const AddProduct = () => {
             <MenuItem value="">
               <em>Select Category</em>
             </MenuItem>
-            {/* Add more options here */}
+            {masterCategory.map((category) => (
+              <MenuItem key={category.masterCategoryId} value={category.masterCategoryId}>
+                {category.masterCategoryName}
+              </MenuItem>
+            ))}
           </TextField>
         </div>
         <div className="form-group">
           <TextField
-            label="Sub Category"
-            select
-            fullWidth
-            variant="outlined"
+          name='category'
+          value={productData?.category}
+          onChange={handleInputChange}
+          label="Sub Category"
+          select
+          fullWidth
+          variant="outlined"
           >
-            <MenuItem value="">
-              <em>Select Category</em>
+          <MenuItem value="">
+            <em>Select Sub Category</em>
+          </MenuItem>
+          {subcategories.map((subcategory) => (
+            <MenuItem key={subcategory.id} value={subcategory.id}>
+            {subcategory.category}
             </MenuItem>
-            {/* Add more options here */}
+          ))}
           </TextField>
         </div>
         <div className="form-group">
           <TextField
-            label="Product Name"
-            fullWidth
-            variant="outlined"
+          name='item_name'
+          value={productData?.item_name}
+          onChange={handleInputChange}
+          label="Product Name"
+          fullWidth
+          variant="outlined"
           />
         </div>
         <div className="form-group">
           <TextField
-            label="Product ID"
-            fullWidth
-            variant="outlined"
+          name='item_code'
+          value={productData?.item_code}
+          onChange={handleInputChange}
+          label="Product ID"
+          fullWidth
+          variant="outlined"
           />
         </div>
         <div className="form-group">
           <TextField
-            label="HSN Code"
-            fullWidth
-            variant="outlined"
+          name='hsn_code'
+          value={productData?.hsn_code}
+          onChange={handleInputChange}
+          label="HSN Code"
+          fullWidth
+          variant="outlined"
           />
         </div>
         <div className="form-group">
           <TextField
-            label="Stock"
-            fullWidth
-            variant="outlined"
+          name='opening_qty'
+          value={productData?.opening_qty}
+          onChange={handleInputChange}
+          label="Stock"
+          fullWidth
+          variant="outlined"
           />
         </div>
         <div className="form-group">
           <TextField
-            label="GST"
-            fullWidth
-            variant="outlined"
+          name='tax'
+          value={productData?.tax}
+          onChange={handleInputChange}
+          label="GST"
+          fullWidth
+          variant="outlined"
           />
         </div>
         <div className="form-group">
           <TextField
-            label="Combo"
-            select
-            fullWidth
-            variant="outlined"
+          name='combo'
+          value={productData?.combo}
+          onChange={handleInputChange}
+          label="Combo"
+          select
+          fullWidth
+          variant="outlined"
           >
-            <MenuItem value="">
-              <em>Select Type</em>
-            </MenuItem>
-            {/* Add more options here */}
+          <MenuItem value="">
+            <em>Select Type</em>
+          </MenuItem>
+          <MenuItem value="YES">
+            <em>YES</em>
+          </MenuItem>
+          <MenuItem value="No">
+            <em>No</em>
+          </MenuItem>
+          
+          {/* Add more options here */}
           </TextField>
         </div>
         <div className="form-group">
           <TextField
+          name='actual_price'
+          value={productData?.actual_price}
+          onChange={handleInputChange}
             label="MRP"
             fullWidth
             variant="outlined"
@@ -120,6 +277,19 @@ const AddProduct = () => {
         </div>
         <div className="form-group">
           <TextField
+          name='price'
+          value={productData?.price}
+          onChange={handleInputChange}
+            label="Price"
+            fullWidth
+            variant="outlined"
+          />
+        </div>
+        <div className="form-group">
+          <TextField
+            name='description'
+            value={productData?.description}
+            onChange={handleInputChange}
             label="Description"
             fullWidth
             variant="outlined"
@@ -127,6 +297,9 @@ const AddProduct = () => {
         </div>
         <div className="form-group">
           <TextField
+            name='rp'
+            value={productData?.rp}
+            onChange={handleInputChange}
             label="Reward Point"
             fullWidth
             variant="outlined"
@@ -134,6 +307,9 @@ const AddProduct = () => {
         </div>
         <div className="form-group">
           <TextField
+            name='UOM'
+            value={productData?.UOM}
+            onChange={handleInputChange}
             label="Weight"
             fullWidth
             variant="outlined"
@@ -155,6 +331,9 @@ const AddProduct = () => {
          <div className="form-group">
          <label className="block mb-2">Product Video</label>
           <TextField
+            name='videoUrl'
+            value={productData?.videoUrl}
+            onChange={handleInputChange}
             label="Video URL"
             fullWidth
             variant="outlined"
@@ -163,7 +342,7 @@ const AddProduct = () => {
         
          
         <div className="form-group col-span-full">
-          <StyledButton variant="contained" color="primary" fullWidth>
+          <StyledButton onClick={addProduct} variant="contained" color="primary" fullWidth>
             Submit
           </StyledButton>
         </div>
