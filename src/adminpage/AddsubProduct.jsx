@@ -3,7 +3,7 @@ import { TextField, Button, MenuItem, Grid, Typography, Container } from '@mui/m
 
 const AddsubProduct = () => {
   return (
-    <Container maxWidth="sm" sx={{bgcolor:"white" , p:4 }}>
+    <Container maxWidth="sm" sx={{bgcolor:"white" , p:4 , borderRadius:2}}>
       <Typography variant="h4" component="h2" gutterBottom>
         Add Sub Product
       </Typography>

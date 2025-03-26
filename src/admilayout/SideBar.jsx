@@ -51,6 +51,11 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const handleResethome = () => {
     navigate("/");
   };
+  const handleLogout = () => {
+    localStorage.clear();
+    // Perform logout logic here, e.g., clearing tokens, redirecting to login page, etc.
+    navigate("/admin/login");
+  };
 
   const [openMenu, setOpenMenu] = useState(null);
 
@@ -90,6 +95,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         },
       ],
     },
+    
     {
       title: "Manage Sub Product",
       icon: <Package  size={18} />,
@@ -107,6 +113,22 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       ],
     },
     {
+      title:"Combo Mange",
+      icon:<Package size={18}/>,
+      path:"/admin/combo",
+      hasSubmenu: true,
+      submenu: [
+        {
+          title: "Add Combo",
+          path: "/admin/combo/add",
+        },
+        {
+          title: "Combo List",
+          path: "/admin/combo/list",
+        },
+      ],
+      },
+    {
       title: "Manage Distributor",
       icon: <Users  size={18} />,
       path: "/admin/distributors",
@@ -122,16 +144,16 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         },
       ],
     },
-    {
-      title: "Manage Slider",
-      icon: <Image  size={18} />,
-      path: "/admin/sliders",
-    },
-    {
-      title: "Manage Gallery",
-      icon: <Grid  size={18} />,
-      path: "/admin/gallery",
-    },
+    // {
+    //   title: "Manage Slider",
+    //   icon: <Image  size={18} />,
+    //   path: "/admin/sliders",
+    // },
+    // {
+    //   title: "Manage Gallery",
+    //   icon: <Grid  size={18} />,
+    //   path: "/admin/gallery",
+    // },
     {
       title: "Manage User",
       icon: <Users  size={18} />,
@@ -268,7 +290,8 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                         borderTopLeftRadius: '0px', // Optional: rounded corners  
                         borderBottomLeftRadius: '0px', // Optional: rounded corners  
                         borderTopRightRadius: '8px', // Optional: rounded corners  
-                        borderBottomRightRadius: '8px', // Optional: rounded corners  
+                        borderBottomRightRadius: '8px', // Optional: rounded corners 
+                        cursor:'pointer', 
                       },  
                     },  
                   }}  
@@ -279,14 +302,14 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                         <List>
                           {item.submenu.map((subItem, subIndex) => (
                             <>
-                            <ListItem  onClick={() => navigate(subItem.path)} key={subIndex}>
+                            <ListItem className="cursor-pointer"  onClick={() => navigate(subItem.path)} key={subIndex}>
                               {subItem.title}
                             </ListItem>
                             </>
                           ))}
                         </List>
                       ) : (
-                        <ListItem  onClick={() => navigate(item.path)} >{item.title}</ListItem>
+                        <ListItem className="cursor-pointer"  onClick={() => navigate(item.path)} >{item.title}</ListItem>
                         
                       )
                     }
@@ -329,9 +352,9 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                           location.pathname === item.path ? "black" : "white",
                       }}
                     >
-                      <ListItemIcon className="w-8" sx={{ color:location.pathname === item.path ? "black" : "white", }}>{item.icon}</ListItemIcon>
+                      <ListItemIcon className="w-8 cursor-pointer" sx={{ color:location.pathname === item.path ? "black" : "white", }}>{item.icon}</ListItemIcon>
                       {isSidebarOpen && (
-                        <li className="montserrat-text-normal list-none">
+                        <li className="montserrat-text-normal list-none cursor-pointer">
                           {item.title}
                         </li>
                       )}
@@ -421,7 +444,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                   },
                 }}
               >
-                <ListItem button className="cursor-pointer">
+                <ListItem onClick={handleLogout} button className="cursor-pointer">
                   <ListItemIcon>
                     <ExitToApp className="text-white" />
                   </ListItemIcon>
