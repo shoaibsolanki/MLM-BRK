@@ -1,7 +1,8 @@
 import axios from 'axios';
 import DataService from "../../services/requestApi";
+import { BASEURL } from '../../services/http-common';
 
-const API_BASE_URL = 'https://your-api-url.com'; // Replace with your actual API URL
+const API_BASE_URL = BASEURL.ENDPOINT_URL; // Replace with your actual API URL
 const saasid = "22";
 const storeid = "22001";
 export const getCategories = async () => {
