@@ -23,7 +23,7 @@ const ProductsPage = () => {
   const storeid = "22001";
   useEffect(() => {
     const fetchCategories = async () => {
-      const response =  await DataService.GetMasterCategory(saasid,storeid);
+      const response = await DataService.GetMasterCategory(saasid, storeid);
       if (response.status) {
         setCategories(response.data.data);
       }
@@ -34,10 +34,14 @@ const ProductsPage = () => {
   useEffect(() => {
     const fetchCategory = async () => {
       if (categoryId) {
-        const response = await DataService.GetSubCategory(saasid, storeid, categoryId);
+        const response = await DataService.GetSubCategory(
+          saasid,
+          storeid,
+          categoryId
+        );
         if (response.data.status) {
-          setCurrentCategory(response.data.data );
-          console.log("currentCategory",response.data.data)
+          setCurrentCategory(response.data.data);
+          console.log("currentCategory", response.data.data);
         } else {
           setCurrentCategory([]);
         }
@@ -47,7 +51,6 @@ const ProductsPage = () => {
     };
     fetchCategory();
   }, [categoryId]);
-  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -59,22 +62,19 @@ const ProductsPage = () => {
         response = await getProductsByCategory(categoryId);
         setTitle(currentCategory?.category || "Products");
       } else {
-        response =   await DataService.GetItemByPage(saasid,storeid,"1");
+        response = await DataService.GetItemByPage(saasid, storeid, "1");
         setTitle("All Products");
-        
       }
-      
+
       if (response.status) {
         setProducts(response.data.data || []);
-        console.log("products",products)
-
+        console.log("products", products);
       } else {
         setProducts([]);
       }
     };
     fetchProducts();
   }, [categoryId, subcategoryId, currentCategory]);
-  
 
   const toggleCategory = (catId) => {
     setExpandedCategory(expandedCategory === catId ? null : catId);
@@ -89,47 +89,70 @@ const ProductsPage = () => {
             className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 rounded-lg border border-gray-200"
           >
             <span className="font-medium text-gray-700">
-              {categoryId ? currentCategory?.category || "Categories" : "Categories"}
+              {categoryId
+                ? currentCategory?.category || "Categories"
+                : "Categories"}
             </span>
-            {isMobileMenuOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            {isMobileMenuOpen ? (
+              <ChevronUp size={20} />
+            ) : (
+              <ChevronDown size={20} />
+            )}
           </button>
 
           {isMobileMenuOpen && (
             <div className="border-t border-gray-200 py-2 max-h-[60vh] overflow-y-auto">
               <Link
                 to="/products"
-                className={`block px-4 py-2 ${!categoryId ? "bg-blue-50 text-blue-700" : "text-gray-700"}`}
+                className={`block px-4 py-2 ${
+                  !categoryId ? "bg-blue-50 text-blue-700" : "text-gray-700"
+                }`}
               >
                 All Products
               </Link>
               {categories.map((category) => (
-                <div key={category.masterCategoryId} className="border-t border-gray-100">
+                <div
+                  key={category.masterCategoryId}
+                  className="border-t border-gray-100"
+                >
                   <div className="flex items-center justify-between px-4 py-2">
                     <Link
                       to={`/products/${category.masterCategoryId}`}
-                      className={`${categoryId == category.masterCategoryId ? "text-blue-700 font-medium" : "text-gray-700"}`}
+                      className={`${
+                        categoryId == category.masterCategoryId
+                          ? "text-blue-700 font-medium"
+                          : "text-gray-700"
+                      }`}
                     >
                       {category.masterCategoryName}
                     </Link>
-                    <button onClick={() => toggleCategory(category.masterCategoryId)} className="p-1 rounded-full hover:bg-gray-100">
-                      {expandedCategory == category.masterCategoryId ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    <button
+                      onClick={() => toggleCategory(category.masterCategoryId)}
+                      className="p-1 rounded-full hover:bg-gray-100"
+                    >
+                      {expandedCategory == category.masterCategoryId ? (
+                        <ChevronUp size={16} />
+                      ) : (
+                        <ChevronDown size={16} />
+                      )}
                     </button>
                   </div>
 
-                  {expandedCategory == categoryId&&
-  currentCategory.length > 0 &&
-  currentCategory.map((subcategory) => (
-    <Link
-      key={subcategory.id}
-      to={`/products/${subcategory.masterCategoryId}/${subcategory.id}`}
-      className={`block py-2 text-sm ${
-        subcategoryId == subcategory.id ? "text-blue-700 font-medium" : "text-gray-600"
-      }`}
-    >
-      {subcategory.category}
-    </Link>
-  ))}
-
+                  {expandedCategory == categoryId &&
+                    currentCategory.length > 0 &&
+                    currentCategory.map((subcategory) => (
+                      <Link
+                        key={subcategory.id}
+                        to={`/products/${subcategory.masterCategoryId}/${subcategory.id}`}
+                        className={`block py-2 text-sm ${
+                          subcategoryId == subcategory.id
+                            ? "text-blue-700 font-medium"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        {subcategory.category}
+                      </Link>
+                    ))}
                 </div>
               ))}
             </div>
@@ -143,40 +166,51 @@ const ProductsPage = () => {
           <nav className="space-y-1">
             <Link
               to="/products"
-              className={`block px-3 py-2 rounded-md ${!categoryId ? "bg-blue-50 text-blue-700" : "text-gray-700 hover:bg-gray-50"}`}
+              className={`block px-3 py-2 rounded-md ${
+                !categoryId
+                  ? "bg-blue-50 text-blue-700"
+                  : "text-gray-700 hover:bg-gray-50"
+              }`}
             >
               All Products
             </Link>
 
             {categories.map((category) => (
-                <div key={category.masterCategoryId} className="border-t border-gray-100">
-                  <div className="flex items-center justify-between px-4 py-2">
-                    <Link
-                      to={`/products/${category.masterCategoryId}`}
-                      className={` block px-3 py-2 rounded-md ${categoryId == category.masterCategoryId ? "text-blue-700 font-medium" : "text-gray-700 hover:bg-gray-50"}`}
-                    >
-                      {category.masterCategoryName}
-                    </Link>
-                  </div>
-                  <div className="ml-4 space-y-1 mt-1">
-                  {expandedCategory == categoryId&&
-  currentCategory.length > 0 &&
-  
-  currentCategory.map((subcategory) => (
-    <Link
-    key={subcategory.id}
-    to={`/products/${subcategory.masterCategoryId}/${subcategory.id}`}
-    className={`block px-3 py-2 rounded-md text-sm  ${
-      subcategoryId == subcategory.id ? "text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-50"
-    }`}
-    >
-      {subcategory.category}
-    </Link>
-  ))}
-  </div>
-
+              <div
+                key={category.masterCategoryId}
+                className="border-t border-gray-100"
+              >
+                <div className="flex items-center justify-between px-4 py-2">
+                  <Link
+                    to={`/products/${category.masterCategoryId}`}
+                    className={` block px-3 py-2 rounded-md ${
+                      categoryId == category.masterCategoryId
+                        ? "text-blue-700 font-medium"
+                        : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {category.masterCategoryName}
+                  </Link>
                 </div>
-              ))}
+                <div className="ml-4 space-y-1 mt-1">
+                  {expandedCategory == categoryId &&
+                    currentCategory.length > 0 &&
+                    currentCategory.map((subcategory) => (
+                      <Link
+                        key={subcategory.id}
+                        to={`/products/${subcategory.masterCategoryId}/${subcategory.id}`}
+                        className={`block px-3 py-2 rounded-md text-sm  ${
+                          subcategoryId == subcategory.id
+                            ? "text-blue-700 font-medium"
+                            : "text-gray-600 hover:bg-gray-50"
+                        }`}
+                      >
+                        {subcategory.category}
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            ))}
           </nav>
         </div>
 
@@ -185,7 +219,9 @@ const ProductsPage = () => {
 
           {products.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">No products found in this category.</p>
+              <p className="text-gray-500">
+                No products found in this category.
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
