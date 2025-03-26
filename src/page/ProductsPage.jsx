@@ -36,7 +36,7 @@ const ProductsPage = () => {
       if (categoryId) {
         const response = await DataService.GetSubCategory(saasid, storeid, categoryId);
         if (response.data.status) {
-          setCurrentCategory(response.data.data || []);
+          setCurrentCategory(response.data.data );
           console.log("currentCategory",response.data.data)
         } else {
           setCurrentCategory([]);
@@ -149,31 +149,34 @@ const ProductsPage = () => {
             </Link>
 
             {categories.map((category) => (
-              <div key={category.masterCategoryId}>
-                <Link
-                  to={`/products/${category.masterCategoryId}`}
-                  className={`block px-3 py-2 rounded-md ${categoryId == category.masterCategoryId ? "bg-blue-50 text-blue-700" : "text-gray-700 hover:bg-gray-50"}`}
-                >
-                  {category.masterCategoryName}
-                </Link>
-
-                {categoryId == category.masterCategoryId && (
-                  <div className="ml-4 space-y-1 mt-1">
-                    {categories
-                      .filter((c) => c.masterCategoryId === category.masterCategoryId)
-                      .map((subcategory) => (
-                        <Link
-                          key={subcategory.id}
-                          to={`/products/${subcategory.masterCategoryId}/${subcategory.id}`}
-                          className={`block px-3 py-2 rounded-md text-sm ${subcategoryId == subcategory.id ? "bg-blue-50 text-blue-700" : "text-gray-600 hover:bg-gray-50"}`}
-                        >
-                          {subcategory.category}
-                        </Link>
-                      ))}
+                <div key={category.masterCategoryId} className="border-t border-gray-100">
+                  <div className="flex items-center justify-between px-4 py-2">
+                    <Link
+                      to={`/products/${category.masterCategoryId}`}
+                      className={` block px-3 py-2 rounded-md ${categoryId == category.masterCategoryId ? "text-blue-700 font-medium" : "text-gray-700 hover:bg-gray-50"}`}
+                    >
+                      {category.masterCategoryName}
+                    </Link>
                   </div>
-                )}
-              </div>
-            ))}
+                  <div className="ml-4 space-y-1 mt-1">
+                  {expandedCategory == categoryId&&
+  currentCategory.length > 0 &&
+  
+  currentCategory.map((subcategory) => (
+    <Link
+    key={subcategory.id}
+    to={`/products/${subcategory.masterCategoryId}/${subcategory.id}`}
+    className={`block px-3 py-2 rounded-md text-sm  ${
+      subcategoryId == subcategory.id ? "text-blue-700 font-medium" : "text-gray-600 hover:bg-gray-50"
+    }`}
+    >
+      {subcategory.category}
+    </Link>
+  ))}
+  </div>
+
+                </div>
+              ))}
           </nav>
         </div>
 
