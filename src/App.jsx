@@ -25,6 +25,8 @@ const Distibutorlist = lazy(() => import('./adminpage/Distibutorlist'));
 const UserMange = lazy(() => import('./adminpage/UserMange'));
 const OrderMange = lazy(() => import('./adminpage/OrderMange'));
 const AddCombo = lazy(()=> import('./adminpage/Combomange'))
+const Combolist = lazy(()=> import('./adminpage/Combolist'))
+const Complaintlist = lazy(()=> import('./adminpage/Complaintlist'))
 function App() {
   return (
     <>
@@ -56,6 +58,8 @@ function App() {
               <Route path="users" element={<ProtectedRouteForAdmin Component={UserMange} />} />
               <Route path="orders" element={<ProtectedRouteForAdmin Component={OrderMange} />} />
               <Route path="combo/add" element={<ProtectedRouteForAdmin Component={AddCombo} />} />
+              <Route path="combo/list" element={<ProtectedRouteForAdmin Component={Combolist} />} />
+              <Route path="Complaint" element={<ProtectedRouteForAdmin Component={Complaintlist} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />
