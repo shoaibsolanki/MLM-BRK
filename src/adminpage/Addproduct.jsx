@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, MenuItem, Button } from '@mui/material';
+import { TextField, MenuItem, Button, IconButton } from '@mui/material';
 import { styled } from "@mui/system";
 import { color } from 'framer-motion';
 import DataService from '../services/requestApi'
 import { useSnackbar } from 'notistack';
+import { Add } from '@mui/icons-material';
+import { Trash } from 'lucide-react';
+import axios from 'axios';
 const AddProduct = () => {
   const { enqueueSnackbar } = useSnackbar();
   const {storeId,saasId} = JSON.parse(localStorage.getItem('user_data'))
@@ -111,6 +114,7 @@ const AddProduct = () => {
         const response = await DataService.AddProduct(productData)
         if(response.data.status){
           enqueueSnackbar('Product Added Successfully', { variant:"success"})
+          handleUpload(response.data.data.item_id)
             setProductData({
             item_name: "",
             price: 0,
@@ -146,10 +150,58 @@ const AddProduct = () => {
         }
       } catch (error) {
         console.log(error)
+        enqueueSnackbar('Failed to add product. Please try again later.', { variant: 'error' });
       }
      }
+ 
+    const [imageFields, setImageFields] = useState(Array(3).fill(null));
 
-   
+    const handleAddImageField = () => {
+      setImageFields((prevFields) => [...prevFields, null]);
+    };
+     
+    const [files, setFiles] = useState(Array(3).fill(null));
+    
+    const handleFileChange = (event, index) => {
+      const newFiles = [...files];
+      newFiles[index] = event.target.files[0]; // Store the selected file
+      console.log(newFiles)
+      setFiles(newFiles);
+    };
+  
+    const addFileInput = () => {
+      setFiles([...files, null]); // Add a new empty file input
+    };
+  
+    const removeFileInput = (index) => {
+      const newFiles = files.filter((_, i) => i !== index);
+      setFiles(newFiles);
+    };
+    
+
+    const handleUpload = async (id) => {
+      const formData = new FormData();
+      files.forEach((file) => {
+        if (file) {
+          formData.append("file", file);
+        }
+      });
+      const validFiles = files.filter(file => file !== null); // Filter out null values
+      validFiles.forEach((file) => {
+        formData.append("file", file);
+      });
+      console.log(formData, validFiles,files);
+      if(validFiles.length <= 0){
+        return
+      }
+      try {
+        const response = await DataService.AddImages(id, formData)
+        console.log("Upload Success:", response.data);
+        setFiles(Array(3).fill(null));
+      } catch (error) {
+        console.error("Upload Failed:", error);
+      }
+    };
 
   return (
     <div className="p-6 bg-white rounded">
@@ -185,8 +237,8 @@ const AddProduct = () => {
           <MenuItem value="">
             <em>Select Sub Category</em>
           </MenuItem>
-          {subcategories.map((subcategory) => (
-            <MenuItem key={subcategory.id} value={subcategory.id}>
+          {subcategories &&subcategories?.map((subcategory) => (
+            <MenuItem key={subcategory.id} value={subcategory.category}>
             {subcategory.category}
             </MenuItem>
           ))}
@@ -315,21 +367,8 @@ const AddProduct = () => {
             variant="outlined"
           />
         </div>
-       
         <div className="form-group">
-          <label className="block mb-2">Thumbnail Image</label>
-          <input type="file" className="block w-full text-sm text-gray-500  border-2 p-1 rounded" />
-          <small className="text-gray-500">270px X 200px (jpg, jpeg, png, gif, svg)</small>
-        </div>
-        {Array.from({ length: 7 }, (_, i) => (
-          <div className="form-group" key={i}>
-            <label className="block mb-2">Product Image {i + 1}</label>
-            <input type="file" className="block w-full text-sm text-gray-500 border-2 p-1 rounded" />
-            <small className="text-gray-500">300px X 300px (jpg, jpeg, png, gif, svg)</small>
-          </div>
-        ))}
-         <div className="form-group">
-         <label className="block mb-2">Product Video</label>
+         {/* <label className="block mb-2">Product Video</label> */}
           <TextField
             name='videoUrl'
             value={productData?.videoUrl}
@@ -339,9 +378,57 @@ const AddProduct = () => {
             variant="outlined"
           />
         </div>
-        
+        {/* <div className="form-group">
+          <label className="block mb-2">Thumbnail Image</label>
+          <input type="file" className="block w-full text-sm text-gray-500  border-2 p-1 rounded" />
+          <small className="text-gray-500">270px X 200px (jpg, jpeg, png, gif, svg)</small>
+        </div> */}
+         {/* <div> */}
+      {files.map((file, index) => (
+        <div className="form-group" key={index}>
+        <label className="block mb-2">Product Image {index + 1}</label>
+        <input  accept="image/*" onChange={(event) => handleFileChange(event, index)} type="file" className="block w-full text-sm text-gray-500 border-2 p-1 rounded" />
+        <small className="text-gray-500">300px X 300px (jpg, jpeg, png, gif, svg)</small>
+        <IconButton onClick={() => removeFileInput(index)} color="error">
+            <Trash />
+          </IconButton>
+      </div>
+        // <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
+          
+        //   <input
+        //     type="file"
+        //     onChange={(event) => handleFileChange(event, index)}
+        //     accept="image/*"
+        //   />
+        //   <IconButton onClick={() => removeFileInput(index)} color="error">
+        //     <Trash />
+        //   </IconButton>
+        // </div>
+      ))}
+      
+    {/* </div> */}
+        {/* {Array.from({ length: 7 }, (_, i) => (
+          <div className="form-group" key={i}>
+            <label className="block mb-2">Product Image {i + 1}</label>
+            <input type="file" className="block w-full text-sm text-gray-500 border-2 p-1 rounded" />
+            <small className="text-gray-500">300px X 300px (jpg, jpeg, png, gif, svg)</small>
+          </div>
+        ))} */}
          
+        
+{/*          
         <div className="form-group col-span-full">
+         <Button onClick={addFileInput} startIcon={<Add />} variant="outlined">
+        Add More Files
+      </Button>
+      <Button onClick={handleUpload} variant="contained" color="primary" style={{ marginLeft: 8 }}>
+        Upload
+      </Button>
+        </div> */}
+        <div className="form-group col-span-full">
+        <StyledButton onClick={addFileInput} startIcon={<Add />} variant="outlined">
+        Add More Files
+      </StyledButton>
           <StyledButton onClick={addProduct} variant="contained" color="primary" fullWidth>
             Submit
           </StyledButton>
