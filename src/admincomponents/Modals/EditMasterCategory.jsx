@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 import DataService from '../../services/requestApi'
 import { useSnackbar } from 'notistack';
-const EditMasterCategory = ({ open, handleClose, category }) => {
+const EditMasterCategory = ({getMatserCategory, open, handleClose, category }) => {
     const [categoryName, setCategoryName] = useState(category?.masterCategoryName || '');
     const { enqueueSnackbar } = useSnackbar();
     const handleSave = async () => {
@@ -10,6 +10,8 @@ const EditMasterCategory = ({ open, handleClose, category }) => {
             const response = await DataService.updateMasterCategory(category.masterCategoryId, categoryName)
             if(response.data.status){
                 enqueueSnackbar('Master Category Updated Successfully', {variant:"success"})
+                getMatserCategory()
+                handleClose()
             } 
         } catch (error) {
             console.log(error)
