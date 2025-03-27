@@ -11,6 +11,15 @@ class DataService {
   GetSubCategoryByItem(saasid,storeid,categoryname,page){
     return http.get(`/item/get-category-list/${saasid}/${storeid}/${categoryname}/${page}`)
   }
+  updateMasterCategory(id, name){
+    return http.put(`Master-category/update-detail/${id}/${name}`)
+  }
+  AddMasterCategory(data){
+    return http.post(`/Master-category/master/category`,data)
+  }
+  // GetSubCategory(saasid,storeid,categoryid){
+  //   return http.get(`/Master-category/get-list/${saasid}/${storeid}/${categoryid}`)
+  // }
   GetSubCategory(saasid,storeid,categoryid){
     return http.get(`/Master-category/get-list/${saasid}/${storeid}/${categoryid}`)
   }
@@ -38,7 +47,14 @@ class DataService {
       headers: { "Content-Type": "multipart/form-data" },
     });
   }
+  DeleteCombo(id){
+    return http.delete(`combo/delete/${id}`)
+  }
 
+  EditCombo(id,data){
+    return http.put(`combo/update/${id}`, data)
+  }
+  
 
 
   //new customesite⬇ start from here⬇⬇⬇⬇⬇⬇⬇⬇❌
