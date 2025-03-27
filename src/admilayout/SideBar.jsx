@@ -165,6 +165,11 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       path: "/admin/orders",
     },
     {
+      title: "RP Bonus Manage",
+      icon: <ShoppingCart  size={18} />,
+      path: "/admin/bonus",
+    },
+    {
       title: "Manage Complaint",
       icon: <ShoppingCart  size={18} />,
       path: "/admin/Complaint",
