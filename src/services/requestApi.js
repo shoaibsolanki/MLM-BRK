@@ -64,7 +64,18 @@ class DataService {
   EditCombo(id,data){
     return http.put(`combo/update/${id}`, data)
   }
-  
+  GetRpData(saasid){
+    return http.get(`RpBonus/get-rpBonusValue/${saasid}`)
+  }
+  BonusType(){
+    return http.get(`RpBonus/get-rpBonusType`)
+  }
+  CreateBonus(data){
+    return http.post(`RpBonus/create-rpBonusValue`,data)
+  }
+  DeleteRp(id){
+    return http.put(`RpBonus/inactive-rpBonusValue/${id}`)
+  }
 
 
   //new customesite⬇ start from here⬇⬇⬇⬇⬇⬇⬇⬇❌
