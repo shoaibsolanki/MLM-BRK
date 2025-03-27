@@ -1,8 +1,52 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomDataTable from '../admincomponents/Microcomponents/DataTable'
 import { Edit, Trash } from 'lucide-react';
-
+import DataService from '../services/requestApi'
+import { Button } from '@mui/material';
+import AddRpBonusModal from '../admincomponents/Modals/AddRpbonusmodal';
+import { useSnackbar } from 'notistack';
+import EditRpBonusModal from '../admincomponents/Modals/EditRpbonusmodal';
 const Rpbonusemange = () => {
+    const { enqueueSnackbar } = useSnackbar()
+    const [RpData, setRpData] = useState([])
+    const [open , setOpen] = useState(false)
+    const [edimodal, setEditmodal] = useState(false)
+    const handleClose =()=>{
+        setOpen(false)
+    }
+    const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
+    const GetRpData = async ()=>{
+        try {
+            const response  = await DataService.GetRpData(saasId)
+            if (response.data.status){
+                setRpData(response.data.data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+   
+    useEffect(() => {
+      GetRpData()
+    }, [])
+    
+
+    const handleEdit = row => {
+        console.log('Edit action for:', row);
+    };
+
+    const handleDelete = async(id) => {
+        try {
+            const response = await DataService.DeleteRp(id)
+            if(response.data.status){
+                enqueueSnackbar("Deleted Successfully", {variant:"success"})
+                GetRpData()
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        
+    };
     const columns = [
         {
             name: 'ID',
@@ -40,44 +84,34 @@ const Rpbonusemange = () => {
             sortable: true,
         },
         {
-            name: 'SaaS ID',
-            selector: row => row.saasId,
-            sortable: true,
-        },
-        {
             name: 'Actions',
             cell: row => (
                 <div className='flex'>
-                    <Edit className='cursor-pointer' />
-                    <Trash className='cursor-pointer'/>
+                    <Edit className='cursor-pointer' onClick={()=>setEditmodal(true)}/>
+                    <Trash className='cursor-pointer' onClick={()=>handleDelete(row.id)}/>
                 </div>
             ),
         },
     ];
 
-    const data = [
-        {
-            id: 2,
-            createdAt: '2025-03-25',
-            start_rp: 1,
-            end_rp: 100,
-            type: 'Early Buy Benefit',
-            bonus: 5,
-            status: 'Active',
-            saasId: '22',
-        },
-    ];
-
-    const handleEdit = row => {
-        console.log('Edit action for:', row);
-    };
-
-    const handleDelete = row => {
-        console.log('Delete action for:', row);
-    };
+   
+    
   return (
     <div>
-        <CustomDataTable columns={columns} data={data} title={"Rp Management"}/>
+        <div className='flex justify-between items-center bg-white rounded p-2'>
+                        <h1>Mange Rp Bonus</h1>
+                        <Button 
+                            variant='contained'
+                            color='primary'
+                            // className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                            onClick={() => setOpen(true)}
+                        >
+                            Add RP Bonus
+                        </Button>
+                    </div>
+        <CustomDataTable columns={columns} data={RpData} title={"Rp Management"}/>
+        <AddRpBonusModal GetRpData={GetRpData} open={open} handleClose={handleClose}/>
+        <EditRpBonusModal open={edimodal} handleClose={()=>setEditmodal(false)} />
     </div>
   )
 }
