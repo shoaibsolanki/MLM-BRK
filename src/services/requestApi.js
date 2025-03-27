@@ -11,6 +11,9 @@ class DataService {
   GetSubCategoryByItem(saasid,storeid,categoryname,page){
     return http.get(`/item/get-category-list/${saasid}/${storeid}/${categoryname}/${page}`)
   }
+  DeleteCategory(id){
+    return http.delete(`/Master-category/delete-detail/${id}`)
+  }
   updateMasterCategory(id, name){
     return http.put(`Master-category/update-detail/${id}/${name}`)
   }
@@ -25,6 +28,13 @@ class DataService {
   }
   AddProduct(data){
     return http.post('/item/add-item',data)
+  }
+  AddImages(id, formData){
+    return http.post(`/item/add-item-images/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
   AddCombo(data){
     return http.post('/combo/create',data)
