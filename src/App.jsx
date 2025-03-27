@@ -11,6 +11,8 @@ const Home = lazy(() => import('./page/Home'));
 const ProductsPage = lazy(() => import('./page/ProductsPage'));
 const ProductDetailPage = lazy(() => import('./page/ProductDetailPage'));
 const Support = lazy(() => import('./page/Support'));
+const CustomerRegstration = lazy(()=> import('./components/Registration/CustomerRegstration'))
+
 const Login = lazy(() => import('./AdminPages/Login'));
 const Adminhome = lazy(() => import('./adminpage/Adminhome'));
 const Dashboard = lazy(() => import('./admincomponents/Dashbord'));
@@ -27,6 +29,7 @@ const OrderMange = lazy(() => import('./adminpage/OrderMange'));
 const AddCombo = lazy(()=> import('./adminpage/Combomange'))
 const Combolist = lazy(()=> import('./adminpage/Combolist'))
 const Complaintlist = lazy(()=> import('./adminpage/Complaintlist'))
+
 function App() {
   return (
     <>
@@ -42,6 +45,8 @@ function App() {
               <Route path="products/:categoryId/:subcategoryId" element={<ProductsPage />} />
               <Route path="product/:productId" element={<ProductDetailPage />} />
               <Route path="/support" element={<Support />} />
+              <Route path="/customer-regstration" element={<CustomerRegstration />} />
+
             </Route>
 
             {/* Admin Routes */}

@@ -9,10 +9,11 @@ import { getCategories } from './data/mockData';
 
 const CategoryBar = () => {
   const [categories, setCategories] = useState([]);
-
+  const saasid = "22";
+  const storeid = "22001";
   useEffect(() => {
     const fetchCategories = async () => {
-      const response = await getCategories();
+      const response = await DataService.GetMasterCategory(saasid, storeid);
       setCategories(response?.data?.data);
     };
 
@@ -28,7 +29,7 @@ const CategoryBar = () => {
           {categories.map((category, index) => (
              <Link 
              key={category.id} 
-             to={`/products/${category.masterCategoryId}`}
+             to={`/products`}
              className="group block"
            >
             <div key={index} className="flex flex-col items-center px-3 md:px-4 cursor-pointer text-sm">

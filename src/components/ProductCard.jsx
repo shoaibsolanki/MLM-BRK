@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
   return (
-    <Link to={`/product/${product.id}`} className="group">
+    <Link to={`/product/${product.item_id}`} className="group">
       <div className="overflow-hidden rounded-lg bg-white shadow transition hover:shadow-md">
         <div className="relative h-64 overflow-hidden">
           <img

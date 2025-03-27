@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import CategoryBar from '../components/CategoryBar'
 import MainBanner from '../components/MainBanner'
@@ -6,10 +6,28 @@ import ProductSection from '../components/ProductSection'
 import Footer from '../components/Footer'
 import ProductCard from '../components/ProductCard'
 import { getCategories, getFeaturedProducts } from '../components/data/mockData.jsx';
+import DataService from "../services/requestApi.js";
+
 const Home = () => {
       const [currentSlide, setCurrentSlide] = useState(0);
       const categories = getCategories();
-      const featuredProducts = getFeaturedProducts();
+      // const featuredProducts = getFeaturedProducts();
+  const [featuredProducts, setfeaturedProducts] = useState([]);
+  const saasid = "22";
+  const storeid = "22001";
+ const fetchAllProducts = async () => {
+    const response = await DataService.GetrecommendedItemByPage(storeid,saasid, "1");
+    if (response.status) {
+      setfeaturedProducts(response.data.data || []);
+      // setTitle("All Products");
+    } else {
+      setProducts([]);
+    }
+  };
+useEffect(() => {
+  fetchAllProducts()
+}, [])
+
       console.log("featuredProducts",featuredProducts)
   return (
     <div className="min-h-screen bg-gray-100">
@@ -22,9 +40,9 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* {featuredProducts.map((product) => (
+            {featuredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
-            ))} */}
+            ))}
           </div>
         </div>
       </section>
