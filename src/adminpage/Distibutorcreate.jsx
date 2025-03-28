@@ -15,6 +15,7 @@ const DistributorCreate = () => {
       user_name: '',
       user_type:"DISTRIBUTOR",
       password: '',
+      mobile_number:"",
       store_name: '',
       city: '',
       address: '',
@@ -81,34 +82,30 @@ const DistributorCreate = () => {
             helperText={errors.city?.message}
           />
           <TextField
+            label="Mobile Number"
+            variant="outlined"
+            fullWidth
+            {...register('mobile_number', { 
+              required: 'Mobile Number is required', 
+              pattern: {
+                value: /^[0-9]{10}$/,
+                message: 'Mobile Number must be 10 digits'
+              }
+            })}
+            error={!!errors.mobile_number}
+            helperText={errors.mobile_number?.message}
+          />
+          <TextField
             label="Address"
             variant="outlined"
-            className="md:col-span-2"
+            // className="md:col-span-2"
             fullWidth
             {...register('address', { required: 'Address is required' })}
             error={!!errors.address}
             helperText={errors.address?.message}
           />
-          
-          {/* <TextField
-            label="Mobile"
-            variant="outlined"
-            fullWidth
-            {...register('mobile', { required: 'Mobile is required' })}
-            error={!!errors.mobile}
-            helperText={errors.mobile?.message}
-          /> */}
-          {/* <TextField
-            label="Store"
-            variant="outlined"
-            fullWidth
-            className="md:col-span-3"
-            {...register('store_type', { required: 'Store are required' })}
-            error={!!errors.store_type}
-            helperText={errors.store_type?.message}
-          /> */}
           <div className="md:col-span-3 flex justify-end">
-            <Button variant="contained" color="primary" type="submit">
+            <Button variant="contained" color="primary" type="submit" disabled={isSubmitting}>
               Submit
             </Button>
           </div>

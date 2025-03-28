@@ -3,12 +3,15 @@ import CustomDataTable from '../admincomponents/Microcomponents/DataTable'
 import { Edit } from 'lucide-react';
 import DataService from '../services/requestApi'
 import { Button } from '@mui/material';
+import DistributorEditModal from '../admincomponents/Modals/Distibutoredit';
 const Distibutorlist = () => {
     const[page , setPage] = useState(1)
     const [size,  setSize] = useState(10)
     const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
     const [data, setData] = useState([])
     const [Count , setCount] = useState('')
+    const [open, setOpen] = useState(false)
+    const [distributorData , setDistributorData] = useState('')
     const GetDistributorsData=  async ()=>{
         try {
         const response = await DataService.GetDistributor(page, size , saasId, storeId)
@@ -33,10 +36,12 @@ const Distibutorlist = () => {
         { name: 'Store Name', selector: row => row.storeName, sortable: true },
         // { name: 'Address', selector: row => row.address, sortable: true },
         { name: 'City', selector: row => row.city, sortable: true },
-        // { name: 'Mobile', selector: row => row.mobile, sortable: true },
+        { name: 'Mobile', selector: row => row.mobileNumber, sortable: true },
         { 
             name: 'Action', 
-            selector: row => <Edit />, 
+            selector: row => <Edit className='cursor-pointer' onClick={()=> {setOpen(true);
+                setDistributorData(row)
+            }}/>, 
             sortable: false 
         }
     ];
@@ -79,7 +84,8 @@ const Distibutorlist = () => {
     // ];
   return (
     <div>
-        <CustomDataTable columns={columns} data={data} title="Distributor List" handlePageChange={handlePageChange} handleRowsPerPageChange={handleRowsPerPageChange} count={Count}/>
+        <CustomDataTable  columns={columns} data={data} title="Distributor List" handlePageChange={handlePageChange} handleRowsPerPageChange={handleRowsPerPageChange} count={Count}/>
+        <DistributorEditModal GetDistributorsData={GetDistributorsData} distributorData={distributorData} open={open} handleClose={()=>setOpen(false)}/>
     </div>
   )
 }

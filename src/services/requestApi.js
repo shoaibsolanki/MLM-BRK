@@ -83,7 +83,15 @@ class DataService {
     return http.post(`auth/user-registration`,data)
   }
   EditDistributor(id,data){
-    return http.post(`register/update-user/${id}`, data)
+    return http.put(`register/update-user/${id}`, data)
+  }
+  
+  GetRpTransaction(saasid){
+    return http.get(`transactions/rp/get-all/${saasid}`)
+  }
+
+  GetRpBonusvalue(saasid){
+    return http.get(`RpBonus/get-rp-value-list/${saasid}`)
   }
 
 
