@@ -5,12 +5,13 @@ import DataService from '../services/requestApi';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthConext';
 import { getCategories } from './data/mockData';
+import { BASEURL } from '../services/http-common';
 
 
 const CategoryBar = () => {
   const [categories, setCategories] = useState([]);
-  const saasid = "22";
-  const storeid = "22001";
+  const { saasid, storeid } = useAuth();
+
   useEffect(() => {
     const fetchCategories = async () => {
       const response = await DataService.GetMasterCategory(saasid, storeid);
@@ -34,7 +35,7 @@ const CategoryBar = () => {
            >
             <div key={index} className="flex flex-col items-center px-3 md:px-4 cursor-pointer text-sm">
               <span className="text-base md:text-xl mb-1">  <img
-                src={category.image}
+                src={`${BASEURL.ENDPOINT_URL}/Master-category/get-master-image/${category.masterCategoryId}`}
                 alt={category.name}
                 className="w-10 h-10 object-cover transition-transform duration-300 group-hover:scale-105"
               /></span>

@@ -1,47 +1,92 @@
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import DataService from "../../services/requestApi";
+import { useAuth } from '../../contexts/AuthConext';
 
 const CustomerRegstration = () => {
   // Form state
+    const { saasid, storeid } = useAuth();
+  
   const [formData, setFormData] = useState({
     sponsorId: '',
     sponsorName: '',
-    organization: '',
-    fullName: '',
-    gender: '',
-    dateOfBirth: '',
-    mobileNumber: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    captchaInput: '',
-    isOver18: false,
-    acceptTerms: false
+    mobile_number: "",
+    email: "",
+    name: "",
+    password: "",
+    confirmPassword:"",
+    address_1: "",
+    address_2: "",
+    address_3: "",
+    dob: "",
+    gender: "",
+    saas_id: saasid,
+    store_id: storeid,
+    city: "",
+    state: "",
+    country: "",
+    direction: "org2",
+    referId: "",
   });
 
   // Password visibility states
   const [showPassword, setShowPassword] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
   // Fixed captcha value (in a real app, this would be dynamically generated)
   const captchaValue = '360964';
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    const isCheckbox = type === 'checkbox';
-    
-    setFormData({
-      ...formData,
-      [name]: isCheckbox ? e.target.checked : value
-    });
-  };
+  // Handle input change
+  const handleChange = async (e) => {
+    const { name, value } = e.target;
 
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Call API when Sponsor ID is entered
+    if (name === "referId" && value.length == 3) {
+      try {
+        const response = await DataService.getReferName(value);
+        if (response.data) {
+          setFormData((prev) => ({
+            ...prev,
+            sponsorName: response.data.data, // Assuming API returns { name: "John Doe" }
+          }));
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            sponsorName: "", // Clear if invalid ID
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching sponsor name:", error);
+        setFormData((prev) => ({
+          ...prev,
+          sponsorName: "",
+        }));
+      }
+    }
+  };
   // Handle form submission
-  const handleSubmit = (e) => {
+   // Handle form submission
+   const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, you would add validation here before submission
-    console.log('Form submitted:', formData);
-    // Proceed with registration logic
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await DataService.createCustomer(formData);
+      if (response.data) {
+        setMessage("Customer created successfully!");
+      }
+    } catch (error) {
+      console.error("Error creating customer:", error);
+      setMessage("Failed to create customer.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,9 +107,9 @@ const CustomerRegstration = () => {
               <input
                 type="text"
                 id="sponsorId"
-                name="sponsorId"
+                name="referId"
                 placeholder="Enter SSS Sponsor ID"
-                value={formData.sponsorId}
+                value={formData.referId}
                 onChange={handleChange}
                 className="pl-12 w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -95,8 +140,8 @@ const CustomerRegstration = () => {
             </label>
             <select
               id="organization"
-              name="organization"
-              value={formData.organization}
+              name="direction"
+                value={formData.direction}
               onChange={handleChange}
               className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -115,9 +160,9 @@ const CustomerRegstration = () => {
             <input
               type="text"
               id="fullName"
-              name="fullName"
+              name="name"
               placeholder="Enter Full Name"
-              value={formData.fullName}
+              value={formData.name}
               onChange={handleChange}
               className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -150,9 +195,9 @@ const CustomerRegstration = () => {
             <input
               type="date"
               id="dateOfBirth"
-              name="dateOfBirth"
+              name="dob"
               placeholder="dd-mm-yyyy"
-              value={formData.dateOfBirth}
+              value={formData.dob}
               onChange={handleChange}
               className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -166,9 +211,9 @@ const CustomerRegstration = () => {
             <input
               type="tel"
               id="mobileNumber"
-              name="mobileNumber"
+              name="mobile_number"
               placeholder="Enter Mobile Number"
-              value={formData.mobileNumber}
+              value={formData.mobile_number}
               onChange={handleChange}
               className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />

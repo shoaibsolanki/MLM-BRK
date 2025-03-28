@@ -1,34 +1,49 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import DataService from "../services/requestApi.js";
-
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
+  const [productImages, setProductImages] = useState([]); // State for images
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      setLoading(true);
-      try {
-        const response = await DataService.getProductbyitemId(productId);
-        if (response.status) {
-          setProduct(response.data.data);
-        } else {
-          setProduct(null);
-        }
-      } catch (error) {
-        console.error("Error fetching product:", error);
+    fetchProduct();
+    fetchImages();
+  }, [productId]);
+
+  const fetchProduct = async () => {
+    setLoading(true);
+    try {
+      const response = await DataService.getProductbyitemId(productId);
+      if (response.status) {
+        setProduct(response.data.data);
+      } else {
         setProduct(null);
       }
-      setLoading(false);
-    };
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      setProduct(null);
+    }
+    setLoading(false);
+  };
 
-    fetchProduct();
-  }, [productId]);
+  const fetchImages = async () => {
+    try {
+      const response = await DataService.getImgbyItemId(productId);
+      if (response.status) {
+        setProductImages(response.data.data.map(img => img.image)); // Store images
+      } else {
+        setProductImages([]);
+      }
+    } catch (error) {
+      console.error("Error fetching images:", error);
+      setProductImages([]);
+    }
+  };
 
   if (loading) {
     return (
@@ -53,19 +68,13 @@ const ProductDetailPage = () => {
     );
   }
 
-  const images = [
-    product.image_name1 !== "no_image.png" ? product.image_name1 : null,
-    product.image_name2,
-    product.image_name3
-  ].filter(Boolean); // Remove null values
-
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    setCurrentImageIndex((prev) => (prev + 1) % productImages.length);
   };
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => 
-      prev === 0 ? images.length - 1 : prev - 1
+      prev === 0 ? productImages.length - 1 : prev - 1
     );
   };
 
@@ -95,15 +104,15 @@ const ProductDetailPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Product Images */}
         <div>
-          {images.length > 0 ? (
+          {productImages.length > 0 ? (
             <div className="relative rounded-lg overflow-hidden bg-gray-100 mb-4">
               <img 
-                src={images[currentImageIndex]} 
+                src={productImages[currentImageIndex]} 
                 alt={product.item_name} 
                 className="w-full h-96 object-contain"
               />
               
-              {images.length > 1 && (
+              {productImages.length > 1 && (
                 <>
                   <button 
                     onClick={prevImage}
@@ -127,9 +136,9 @@ const ProductDetailPage = () => {
           )}
           
           {/* Thumbnail Navigation */}
-          {images.length > 1 && (
+          {productImages.length > 1 && (
             <div className="flex gap-2 overflow-x-auto py-2">
-              {images.map((img, index) => (
+              {productImages.map((img, index) => (
                 <button
                   key={index}
                   onClick={() => selectImage(index)}

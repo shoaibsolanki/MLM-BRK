@@ -162,8 +162,8 @@ export const AuthProvider = ({ children }) => {
         const [categories, setCategories] = useState([]);
         
         
-        const saasid = "22";
-        const storeid = "22001";
+        const saasid = "5";
+        const storeid = "50001";
       
         const getCategory = async () => {
           try {
@@ -179,7 +179,8 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-
+        storeid,
+        saasid,
         // new 
         getCategory,
         categories,

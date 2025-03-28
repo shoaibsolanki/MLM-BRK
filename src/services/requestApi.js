@@ -62,12 +62,23 @@ class DataService {
     return http.get(`/search/recommended-item/${saasid}/${storeid}/${page}`)
   }
 
-
-  getReferName(ID){
-    return http.get(`/search/recommended-item/${ID}`)
+  GetAllCategory(saasid, storeid){
+    return http.get(`/category/get-list/${saasid}/${storeid}`)
   }
+ 
   getProductbyitemId(ID){
     return http.get(`/item/view-item-detil/${ID}`)
   }
+  getReferName(ID){
+    return http.get(`/customer/getReferName/${ID}`)
+  }
+
+  createCustomer(data){
+    return http.post(`/customer/create/v2`,data)
+  }
+  getImgbyItemId(ID){
+    return http.get(`/item/get-item-images/${ID}`)
+  }
+ 
 }
 export default new DataService();

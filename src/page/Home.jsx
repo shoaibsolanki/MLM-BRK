@@ -7,14 +7,15 @@ import Footer from '../components/Footer'
 import ProductCard from '../components/ProductCard'
 import { getCategories, getFeaturedProducts } from '../components/data/mockData.jsx';
 import DataService from "../services/requestApi.js";
+import { useAuth } from '../contexts/AuthConext.jsx'
 
 const Home = () => {
       const [currentSlide, setCurrentSlide] = useState(0);
       const categories = getCategories();
       // const featuredProducts = getFeaturedProducts();
   const [featuredProducts, setfeaturedProducts] = useState([]);
-  const saasid = "22";
-  const storeid = "22001";
+  const { saasid, storeid } = useAuth();
+
  const fetchAllProducts = async () => {
     const response = await DataService.GetrecommendedItemByPage(storeid,saasid, "1");
     if (response.status) {

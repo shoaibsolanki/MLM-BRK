@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import DataService from "../services/requestApi.js";
 import ProductCard from "../components/ProductCard.jsx";
+import { useAuth } from "../contexts/AuthConext.jsx";
 
 const ProductsPage = () => {
   const { categoryId, subcategoryId } = useParams();
+  const { saasid, storeid } = useAuth();
+
   const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("All Products");
   const [categories, setCategories] = useState([]);
@@ -13,8 +16,7 @@ const ProductsPage = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(categoryId || null);
   const [activeSubcategory, setActiveSubcategory] = useState(subcategoryId || null);
-  const saasid = "22";
-  const storeid = "22001";
+ 
 
   useEffect(() => {
     const fetchCategories = async () => {
