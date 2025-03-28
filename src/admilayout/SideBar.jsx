@@ -170,6 +170,17 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       path: "/admin/bonus",
     },
     {
+      title: "RP Transactions",
+      icon: <ShoppingCart  size={18} />,
+      path: "/admin/rp/transactions",
+    },
+    {
+      title: "RP Value Exchange",
+      icon: <ShoppingCart  size={18} />,
+      path: "/admin/rp/exchange",
+    },
+
+    {
       title: "Manage Complaint",
       icon: <ShoppingCart  size={18} />,
       path: "/admin/Complaint",
