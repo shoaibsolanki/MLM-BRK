@@ -104,11 +104,11 @@ const ProductDetailPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Product Images */}
         <div>
-          {productImages.length > 0 ? (
+          {productImages?.length > 0 ? (
             <div className="relative rounded-lg overflow-hidden bg-gray-100 mb-4">
               <img 
                 src={productImages[currentImageIndex]} 
-                alt={product.item_name} 
+                alt={product?.item_name} 
                 className="w-full h-96 object-contain"
               />
               
@@ -136,9 +136,9 @@ const ProductDetailPage = () => {
           )}
           
           {/* Thumbnail Navigation */}
-          {productImages.length > 1 && (
+          {productImages?.length > 1 && (
             <div className="flex gap-2 overflow-x-auto py-2">
-              {productImages.map((img, index) => (
+              {productImages?.map((img, index) => (
                 <button
                   key={index}
                   onClick={() => selectImage(index)}
@@ -161,13 +161,13 @@ const ProductDetailPage = () => {
         
         {/* Product Details */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.item_name}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">{product?.item_name}</h1>
           <p className="text-2xl font-semibold text-gray-900 mb-6">
-            ${product.price.toFixed(2)}
+          ₹{product?.price?.toFixed(2)}
           </p>
           
           <div className="prose prose-sm text-gray-700 mb-6">
-            <p>{product.description}</p>
+            <p>{product?.description}</p>
           </div>
 
           <button className="w-full md:w-auto px-6 py-3 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none">

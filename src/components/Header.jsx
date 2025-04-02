@@ -1,9 +1,13 @@
 import { ChevronDown, LogIn, Menu, Search, ShoppingCart, X } from 'lucide-react';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import MobileDrawer from './MobileDrawer';
 import ReferAndEarnModal from './ReferAndEarnModal';
 import logo from '../assets/sarvLogo.png';
+import { useAuth } from '../contexts/AuthConext';
+import DataService from "../services/requestApi";
+import { useCart } from '../contexts/CartContext';
+import Badge from "@mui/material/Badge";
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Products', path: '/products' },
@@ -13,6 +17,36 @@ const navItems = [
 ];
 
 const Header = () => {
+  const { searchKeyword, setSearchKeyword, setSearchResults,logout } = useAuth();
+  const { cart, totalItems } = useCart();
+
+  const [inputValue, setInputValue] = useState(searchKeyword);
+  const { saasid, storeid } = useAuth();
+
+  useEffect(() => {
+    const handler = setTimeout(async () => {
+      if (searchKeyword.trim() === "") {
+        setSearchResults([]);
+        return;
+      }
+  
+      const response = await DataService.GetrecommendedItemByKeyword(storeid, saasid, searchKeyword);
+      if (response.status) {
+        setSearchResults(response.data.data || []);
+      }else{
+        setSearchResults([])
+      }
+    }, 1000); // Delay of 500ms
+  
+    return () => clearTimeout(handler); // Cleanup function to clear the previous timeout
+  }, [searchKeyword]);
+  
+
+
+
+
+
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -28,10 +62,15 @@ const Header = () => {
       navigate(path);
     }
   };
-
+  const clearSearch = () => {
+    setInputValue("");
+    setSearchKeyword("");
+    setSearchResults([]);
+  };
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+  const isAuthenticated = localStorage.getItem("token");
 
   return (
     <header className="bg-white py-2.5 px-4 md:px-6 shadow-md sticky top-0 z-50">
@@ -57,9 +96,19 @@ const Header = () => {
           <div className="flex items-center bg-[#f0f5ff] rounded-sm overflow-hidden">
             <input
               type="text"
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                setSearchKeyword(e.target.value);
+              }}
               placeholder="Search for Products, Brands and More"
               className="w-full py-2 px-4 bg-transparent border-none outline-none text-sm"
             />
+             {inputValue && (
+              <button onClick={clearSearch} className="absolute right-10 text-gray-500 hover:text-gray-700">
+                <X size={18} />
+              </button>
+            )}
             <button className="px-4 py-2 text-[#2874f0]">
               <Search size={20} />
             </button>
@@ -81,16 +130,34 @@ const Header = () => {
 
         {/* Right Menu Options */}
         <div className="flex items-center gap-4">
-          <button className="hidden md:flex items-center bg-white text-[#2874f0] px-5 py-1 font-medium text-sm border border-[#dbdbdb] rounded-sm">
-            <LogIn size={16} className="mr-2" />
-            Login
-            <ChevronDown size={16} className="ml-1" />
-          </button>
+         {isAuthenticated?
+         <button 
+         onClick={() =>logout()}
+     
+     className="hidden md:flex items-center bg-white text-[#2874f0] px-5 py-1 font-medium text-sm border border-[#dbdbdb] rounded-sm">
+       <LogIn  size={16} className="mr-2" />
+       Logout
+     </button>:
+         <button 
+              onClick={() =>setIsModalOpen(true)}
           
-          <button className="flex items-center text-sm font-medium">
-            <ShoppingCart size={20} className="mr-1" />
-            Cart
-          </button>
+          className="hidden md:flex items-center bg-white text-[#2874f0] px-5 py-1 font-medium text-sm border border-[#dbdbdb] rounded-sm">
+            <LogIn  size={16} className="mr-2" />
+            Login
+          </button>}
+          
+          <Link to="/cart">
+          <button className="flex items-center text-sm font-medium relative">
+      <Badge 
+        badgeContent={totalItems} 
+        color="error"
+        overlap="circular"
+      >
+        <ShoppingCart size={26} />
+      </Badge>
+      <span className="ml-1">Cart</span>
+    </button>
+    </Link>
         </div>
       </div>
 
