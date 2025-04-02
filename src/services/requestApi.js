@@ -103,7 +103,13 @@ class DataService {
   AddSubCategory(data){
     return http.post(`category/store/category`,data)
   }
-
+  AddSubCatImage(id, file){
+    return http.post(`category/save-image-by-category/${id}`,file ,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    )
+  }
   
 
 

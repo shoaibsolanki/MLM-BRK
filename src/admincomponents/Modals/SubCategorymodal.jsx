@@ -3,22 +3,25 @@ import { useForm, Controller } from "react-hook-form";
 import { Modal, Box, TextField, Button } from "@mui/material";
 import DataService from '../../services/requestApi'
 import { useSnackbar } from "notistack";
-const SubCategoryModal = ({ open, handleClose, onSubmit, defaultValues }) => {
+const SubCategoryModal = ({ open, handleClose, getsubcategory, defaultValues }) => {
     const { control, handleSubmit, reset  , setValue} = useForm();
     const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
     const {enqueueSnackbar} = useSnackbar()
     const handleFormSubmit = async(data) => {
         // onSubmit(data);
         // console.log(data)
-        // reset();
-        // handleClose();
+       
         try {
             console.log(defaultValues)
             const response = await DataService.EditSubCategory(defaultValues.category_id, data)
             if(response.data.status){
-            enqueueSnackbar('Sub Category updated Successfully', {variant : "success"})
+                getsubcategory()
+                reset();
+                handleClose();
+                enqueueSnackbar('Sub Category updated Successfully', {variant : "success"})
             }
         } catch (error) {
+            enqueueSnackbar('Error in Update Sub Category', {variant : "error"})
             console.log(error)
         }
     };
@@ -27,8 +30,26 @@ const SubCategoryModal = ({ open, handleClose, onSubmit, defaultValues }) => {
       setValue('saas_id', saasId)
       setValue('store_id', storeId)
     }, [open])
-    
-
+ 
+    const onChange = async (e) => {
+        const file = e.target.files[0];
+        try {
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
+                const response = await DataService.AddSubCatImage(defaultValues.category_id ,formData)
+                if(response.data.status){
+                    getsubcategory()
+                    enqueueSnackbar("Image Updated Successfully", {variant: "success"})
+                }
+            }
+        } catch (error) {
+            enqueueSnackbar("Error Occurred In Image Update", {variant: "error"})
+            console.log(error)
+        }
+        
+    };
+ 
     return (
         <Modal open={open} onClose={handleClose}>
             <Box
@@ -50,6 +71,20 @@ const SubCategoryModal = ({ open, handleClose, onSubmit, defaultValues }) => {
                             <TextField
                                 {...field}
                                 label="Sub Category Name"
+                                variant="outlined"
+                                fullWidth
+                            />
+                        )}
+                    />
+                    <Controller
+                        name="file"
+                        control={control}
+                        render={({ field }) => (
+                            <TextField
+                                {...field}
+                                type="file"
+                                onChange={onChange}
+                                inputProps={{ accept: "image/*" }}
                                 variant="outlined"
                                 fullWidth
                             />
