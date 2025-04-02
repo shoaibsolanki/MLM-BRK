@@ -100,8 +100,11 @@ class DataService {
   EditSubCategory(id,data){
     return http.put(`/category/update-detil/${id}`,data)
   }
+  AddSubCategory(data){
+    return http.post(`category/store/category`,data)
+  }
 
-
+  
 
 
 

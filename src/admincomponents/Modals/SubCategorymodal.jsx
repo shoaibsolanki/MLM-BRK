@@ -5,6 +5,7 @@ import DataService from '../../services/requestApi'
 import { useSnackbar } from "notistack";
 const SubCategoryModal = ({ open, handleClose, onSubmit, defaultValues }) => {
     const { control, handleSubmit, reset  , setValue} = useForm();
+    const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
     const {enqueueSnackbar} = useSnackbar()
     const handleFormSubmit = async(data) => {
         // onSubmit(data);
@@ -23,8 +24,8 @@ const SubCategoryModal = ({ open, handleClose, onSubmit, defaultValues }) => {
     };
 
     useEffect(() => {
-      setValue('saas_id', defaultValues.saas_id)
-      setValue('store_id', defaultValues.store_id)
+      setValue('saas_id', saasId)
+      setValue('store_id', storeId)
     }, [open])
     
 
