@@ -33,6 +33,8 @@ const AddCombo = lazy(()=> import('./adminpage/Combomange'))
 const Combolist = lazy(()=> import('./adminpage/Combolist'))
 const Complaintlist = lazy(()=> import('./adminpage/Complaintlist'))
 const Rpbonusemange = lazy(()=> import('./adminpage/Rpbonusemange'))
+const Rptransactions = lazy(()=> import('./adminpage/Rptransactions'))
+const Rpexchange = lazy(()=> import('./adminpage/Rpexchange'))
 
 function App() {
   return (
@@ -72,6 +74,8 @@ function App() {
               <Route path="combo/list" element={<ProtectedRouteForAdmin Component={Combolist} />} />
               <Route path="Complaint" element={<ProtectedRouteForAdmin Component={Complaintlist} />} />
               <Route path="bonus" element={<ProtectedRouteForAdmin Component={Rpbonusemange} />} />
+              <Route path="rp/transactions" element={<ProtectedRouteForAdmin Component={Rptransactions} />} />
+              <Route path="rp/exchange" element={<ProtectedRouteForAdmin Component={Rpexchange} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />

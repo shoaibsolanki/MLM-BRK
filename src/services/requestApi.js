@@ -76,6 +76,27 @@ class DataService {
   DeleteRp(id){
     return http.put(`RpBonus/inactive-rpBonusValue/${id}`)
   }
+  GetDistributor(page,size,saasid, storeid){
+    return http.get(`/user-master/get-distributer/${page}/${size}/${saasid}/${storeid}`)
+  }
+  CreateDistributor(data){
+    return http.post(`auth/user-registration`,data)
+  }
+  EditDistributor(id,data){
+    return http.put(`register/update-user/${id}`, data)
+  }
+  
+  GetRpTransaction(saasid){
+    return http.get(`transactions/rp/get-all/${saasid}`)
+  }
+
+  GetRpBonusvalue(saasid){
+    return http.get(`RpBonus/get-rp-value-list/${saasid}`)
+  }
+
+
+
+
 
 
   //new customesite⬇ start from here⬇⬇⬇⬇⬇⬇⬇⬇❌
