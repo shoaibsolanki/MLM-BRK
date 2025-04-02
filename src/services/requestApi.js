@@ -93,6 +93,14 @@ class DataService {
   GetRpBonusvalue(saasid){
     return http.get(`RpBonus/get-rp-value-list/${saasid}`)
   }
+   
+  GetSubCategory(saasid, storeid){
+    return http.get(`category/get-list/${saasid}/${storeid}`)
+  }
+  EditSubCategory(id,data){
+    return http.put(`/category/update-detil/${id}`,data)
+  }
+
 
 
 
