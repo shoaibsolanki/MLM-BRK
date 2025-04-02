@@ -14,7 +14,7 @@ const Home = () => {
       const categories = getCategories();
       // const featuredProducts = getFeaturedProducts();
   const [featuredProducts, setfeaturedProducts] = useState([]);
-  const { saasid, storeid } = useAuth();
+  const { saasid, storeid,searchKeyword, searchResults } = useAuth();
 
  const fetchAllProducts = async () => {
     const response = await DataService.GetrecommendedItemByPage(storeid,saasid, "1");
@@ -30,8 +30,12 @@ useEffect(() => {
 }, [])
 
       console.log("featuredProducts",featuredProducts)
+      
   return (
-    <div className="min-h-screen bg-gray-100">
+    <>
+    {!searchKeyword ? (
+      
+      <div className="min-h-screen bg-gray-100">
       {/* <Header /> */}
       <CategoryBar />
       <main className="max-w-screen-2xl mx-auto px-2 sm:px-4">
@@ -50,7 +54,18 @@ useEffect(() => {
       
       </main>
       {/* <Footer /> */}
-    </div>
+    </div>) : (
+         <section className="py-12 bg-gray-50">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <h2 className="text-2xl font-bold text-gray-900 mb-6">Featured Products</h2>
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+             {searchResults.map((product) => (
+               <ProductCard key={product.id} product={product} />
+             ))}
+           </div>
+         </div>
+       </section>)}
+    </>
   )
 }
 

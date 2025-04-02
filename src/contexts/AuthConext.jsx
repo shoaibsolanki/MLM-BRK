@@ -122,11 +122,11 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     console.log("Logged Out");
     setAuthData({ token: null, user: null });
-    localStorage.removeItem("authData");
+    localStorage.removeItem("token");
     localStorage.clear();
     // Cookies.remove("authToken");
     window.location.reload();
-    navigate("/login")
+    // navigate("/login")
   };
 
   const DataByCatogory=async (id)=>{
@@ -176,9 +176,15 @@ export const AuthProvider = ({ children }) => {
             console.error("Error fetching categories:", error);
           }
         };
+
+
+        // Seach state
+        const [searchKeyword, setSearchKeyword] = useState('');
+        const [searchResults, setSearchResults] = useState([]);
   return (
     <AuthContext.Provider
       value={{
+        searchKeyword, setSearchKeyword, searchResults, setSearchResults,
         storeid,
         saasid,
         // new 

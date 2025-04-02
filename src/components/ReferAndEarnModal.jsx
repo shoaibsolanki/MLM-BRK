@@ -17,16 +17,19 @@ const ReferAndEarnModal = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       const response = await DataService.Login({ user_name: userId, password });
-      if (response.data.data.user_data.userType !== 'ADMIN') {
-        enqueueSnackbar('Access denied. User type is not authorized.', { variant: 'error' });
-        return;
-      }
+      // if (response.data.data.user_data.userType !== 'ADMIN') {
+      //   enqueueSnackbar('Access denied. User type is not authorized.', { variant: 'error' });
+      //   return;
+      // }
       if (response.data.status) {
+        localStorage.clear();
         localStorage.setItem('token', response.data.data.jwt_response);
         localStorage.setItem('user_data', JSON.stringify(response.data.data.user_data));
-        localStorage.setItem('store_data', JSON.stringify(response.data.data.store_data));
+        localStorage.setItem('authData', JSON.stringify(response.data.data.store_data));
         enqueueSnackbar(response.data.message, { variant: 'success' });
-        navigate('/admin');
+        navigate('/');
+    window.location.reload();
+
         onClose();
       }
     } catch (error) {

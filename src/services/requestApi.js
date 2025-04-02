@@ -79,6 +79,7 @@ class DataService {
 
 
   //new customesite⬇ start from here⬇⬇⬇⬇⬇⬇⬇⬇❌
+ 
   GetrecommendedItemByPage(saasid,storeid,page){
     return http.get(`/search/recommended-item/${saasid}/${storeid}/${page}`)
   }
@@ -101,5 +102,30 @@ class DataService {
     return http.get(`/item/get-item-images/${ID}`)
   }
  
+  GetAllBanner(saasid){
+    return http.get(`/saas-master/get-brandlogos/${saasid}`)
+  }
+  GetrecommendedItemByKeyword(storeid,saasid,Keyword){
+    return http.get(`/search/get-result/${storeid}/${saasid}/${Keyword}`)
+  }
+  AddItemsToCart(item, saasId, storeId, id) {
+    return http.post(
+      `/price-check/addproduct/${saasId}/${storeId}/${id}`,
+      item
+    );
+  }
+  GetCartItems(saasId, storeId, id) {
+    return http.get(`/price-check/getcart/${saasId}/${storeId}/${id}`);
+  }
+  DeleteItemsFromCart(saasId, storeId, id, itemid) {
+    return http.delete(
+      `/price-check/deleteproduct/${saasId}/${storeId}/${id}/${itemid}`
+    );
+  }
+  DeleteAllItemsFromCart(saasId, storeId, id) {
+    return http.delete(
+      `price-check/delete-all-products/${saasId}/${storeId}/${id}`
+    );
+  }
 }
 export default new DataService();

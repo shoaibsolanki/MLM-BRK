@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import DataService from "../../services/requestApi";
 import { useAuth } from '../../contexts/AuthConext';
-
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 const CustomerRegstration = () => {
   // Form state
     const { saasid, storeid } = useAuth();
-  
+    const { enqueueSnackbar } = useSnackbar();
   const [formData, setFormData] = useState({
     sponsorId: '',
     sponsorName: '',
@@ -61,7 +62,7 @@ const CustomerRegstration = () => {
           }));
         }
       } catch (error) {
-        console.error("Error fetching sponsor name:", error);
+        enqueueSnackbar("Failed to fetch sponsor name", { variant: "error" });
         setFormData((prev) => ({
           ...prev,
           sponsorName: "",
@@ -71,6 +72,7 @@ const CustomerRegstration = () => {
   };
   // Handle form submission
    // Handle form submission
+    const navigate = useNavigate();
    const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -79,11 +81,12 @@ const CustomerRegstration = () => {
     try {
       const response = await DataService.createCustomer(formData);
       if (response.data) {
-        setMessage("Customer created successfully!");
+        enqueueSnackbar("Customer created successfully!", { variant: "success" });
+        navigate('/');
       }
     } catch (error) {
       console.error("Error creating customer:", error);
-      setMessage("Failed to create customer.");
+      enqueueSnackbar("Failed to create customer", { variant: "error" });
     } finally {
       setLoading(false);
     }
@@ -148,7 +151,7 @@ const CustomerRegstration = () => {
               <option value="">Select Organization</option>
               <option value="org1">Organization 1</option>
               <option value="org2">Organization 2</option>
-              <option value="org3">Organization 3</option>
+              {/* <option value="org3">Organization 3</option> */}
             </select>
           </div>
 
