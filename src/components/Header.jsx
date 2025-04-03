@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/AuthConext';
 import DataService from "../services/requestApi";
 import { useCart } from '../contexts/CartContext';
 import Badge from "@mui/material/Badge";
+import ReferralModal from './MicroComponant/ReferralModal';
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Products', path: '/products' },
@@ -57,7 +58,7 @@ const Header = () => {
 
   const handleNavigation = (path) => {
     if (path === '/refer') {
-      setIsModalOpen(true);
+      setShowReferralModal(true);
     } else {
       navigate(path);
     }
@@ -72,7 +73,17 @@ const Header = () => {
   };
   const isAuthenticated = localStorage.getItem("token");
 
+
+  const [showReferralModal, setShowReferralModal] = useState(false);
+
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }, []);
   return (
+    <>
     <header className="bg-white py-2.5 px-4 md:px-6 shadow-md sticky top-0 z-50">
       <div className="max-w-screen-2xl mx-auto flex items-center">
         {/* Logo */}
@@ -167,6 +178,10 @@ const Header = () => {
       {/* Refer And Earn Modal */}
       <ReferAndEarnModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </header>
+    {showReferralModal && (
+        <ReferralModal onClose={() => setShowReferralModal(false)} />
+      )}
+    </>
   );
 };
 

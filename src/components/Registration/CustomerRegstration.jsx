@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import DataService from "../../services/requestApi";
 import { useAuth } from '../../contexts/AuthConext';
 import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 const CustomerRegstration = () => {
   // Form state
+  const { organization, referralCode } = useParams();
     const { saasid, storeid } = useAuth();
     const { enqueueSnackbar } = useSnackbar();
   const [formData, setFormData] = useState({
-    sponsorId: '',
+    sponsorId: "",
     sponsorName: '',
     mobile_number: "",
     email: "",
@@ -26,7 +27,7 @@ const CustomerRegstration = () => {
     city: "",
     state: "",
     country: "",
-    direction: "org2",
+    direction: organization,
     referId: "",
   });
 
@@ -38,6 +39,35 @@ const CustomerRegstration = () => {
   const captchaValue = '360964';
 
   // Handle input change
+  useEffect(() => {
+  
+      const fetchSponsorName = async () => {
+        try {
+          const response = await DataService.getReferName(referralCode);
+          if (response.data) {
+            setFormData((prev) => ({
+              ...prev,
+              sponsorName: response.data.data, // Assuming API returns { name: "John Doe" }
+            }));
+          } else {
+            setFormData((prev) => ({
+              ...prev,
+              sponsorName: "",
+            }));
+          }
+        } catch (error) {
+          enqueueSnackbar("Failed to fetch sponsor name", { variant: "error" });
+          setFormData((prev) => ({
+            ...prev,
+            sponsorName: "",
+          }));
+        }
+      };
+
+      fetchSponsorName();
+    
+  }, [referralCode]); 
+
   const handleChange = async (e) => {
     const { name, value } = e.target;
 
@@ -46,29 +76,6 @@ const CustomerRegstration = () => {
       [name]: value,
     }));
 
-    // Call API when Sponsor ID is entered
-    if (name === "referId" && value.length == 3) {
-      try {
-        const response = await DataService.getReferName(value);
-        if (response.data) {
-          setFormData((prev) => ({
-            ...prev,
-            sponsorName: response.data.data, // Assuming API returns { name: "John Doe" }
-          }));
-        } else {
-          setFormData((prev) => ({
-            ...prev,
-            sponsorName: "", // Clear if invalid ID
-          }));
-        }
-      } catch (error) {
-        enqueueSnackbar("Failed to fetch sponsor name", { variant: "error" });
-        setFormData((prev) => ({
-          ...prev,
-          sponsorName: "",
-        }));
-      }
-    }
   };
   // Handle form submission
    // Handle form submission
@@ -91,7 +98,11 @@ const CustomerRegstration = () => {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    if (organization) {
+      setFormData((prev) => ({ ...prev, direction: organization,referId: referralCode }));
+    }
+  }, [organization]);
   return (
     <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
       <h1 className="text-2xl font-bold text-center mb-8">Register</h1>
@@ -147,6 +158,7 @@ const CustomerRegstration = () => {
                 value={formData.direction}
               onChange={handleChange}
               className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              // disabled 
             >
               <option value="">Select Organization</option>
               <option value="org1">Organization 1</option>

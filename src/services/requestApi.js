@@ -115,6 +115,9 @@ class DataService {
   getReferName(ID){
     return http.get(`/customer/getReferName/${ID}`)
   }
+  getRefercode(ID){
+    return http.get(`/customer/get-points/${ID}`)
+  }
 
   createCustomer(data){
     return http.post(`/customer/create/v2`,data)
@@ -147,6 +150,30 @@ class DataService {
     return http.delete(
       `price-check/delete-all-products/${saasId}/${storeId}/${id}`
     );
+  }
+  DeleteAddress (saasId, storeId, id) {
+    return http.delete(
+      `customer/delete-customer-address-app/${saasId}/${storeId}/${id}`
+    );
+  }
+  GetSavedAddress(id, saasId, storeId) {
+    return http.get(
+      `customer/get-all-customer-address-app/${id}/${saasId}/${storeId}`
+    );
+  }
+  OrderHistory(storeId, saasId, id) {
+    return http.get(
+      `order/view-order-detail-fastside/${storeId}/${saasId}/${id}`
+    );
+  }
+  CreateOrder(data) {
+    return http.post(`/order/create/order/master`, data);
+  }
+  SaveAddress(data, id) {
+    return http.post(`customer/create-address/${id}`, data);
+  }
+  SaveComplaint(data, id) {
+    return http.post(`/complaints`, data);
   }
 }
 export default new DataService();

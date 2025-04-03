@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     }
   });
   const { id } = authData;
-  // const isAuthenticated = localStorage.get("authToken");
+  const isAuthenticated = localStorage.getItem("token");
   // console.log("isAuthenticated", isAuthenticated);
   const selectedStore = localStorage.getItem('selectedStore');
   const parsedStore = selectedStore ? JSON.parse(selectedStore) : null;
@@ -199,7 +199,7 @@ export const AuthProvider = ({ children }) => {
         handleSnackbarClose,
         // snackbarSeverity,
         authData,
-        // isAuthenticated,     
+        isAuthenticated,     
         allOrders,
         selectedCat,
         id,

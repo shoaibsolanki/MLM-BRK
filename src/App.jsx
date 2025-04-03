@@ -12,6 +12,8 @@ const ProductsPage = lazy(() => import('./page/ProductsPage'));
 const ProductDetailPage = lazy(() => import('./page/ProductDetailPage'));
 const Support = lazy(() => import('./page/Support'));
 const Cart = lazy(() => import('./page/Cart'));
+const Checkout = lazy(() => import('./page/Checkout'));
+
 
 const CustomerRegstration = lazy(()=> import('./components/Registration/CustomerRegstration'))
 
@@ -46,12 +48,14 @@ function App() {
           {/* Customer Routes */}
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+            <Route path="/checkout" element={<Checkout />} />
+
               <Route path="products" element={<ProductsPage />} />
               <Route path="products/:categoryId" element={<ProductsPage />} />
               <Route path="products/:categoryId/:subcategoryId" element={<ProductsPage />} />
               <Route path="product/:productId" element={<ProductDetailPage />} />
               <Route path="/support" element={<Support />} />
-              <Route path="/customer-regstration" element={<CustomerRegstration />} />
+              <Route   path="/customer-registration/:organization/:referralCode" element={<CustomerRegstration />} />  
               <Route path="/cart" element={<Cart />} />
 
 

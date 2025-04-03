@@ -20,6 +20,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useAuth } from "../contexts/AuthConext";
 import { useNavigate } from "react-router-dom";
 import HorizontalLinearAlternativeLabelStepper from "../components/MicroComponant/HorizontalLinearAlternativeLabelStepper";
+import { BASEURL } from "../services/http-common";
 
 
 const CartItem = ({
@@ -30,18 +31,11 @@ const CartItem = ({
   isAuthenticated,
 }) => (
   <>
-    <Box className="my-2 items-center max-md:hidden">
+    <Box className="bg-white my-2 items-center max-md:hidden">
       <Grid container spacing={4} alignItems="center">
         <Grid item xs={2}>
           <img
-            src={
-            //   isAuthenticated
-                // ?
-                 item?.image_url
-                //   ? item?.image_url
-                //   : "/default-image.jpg"
-                // : item?.colorList?.length > 0 && item?.colorList[0].image_url
-            }
+           src={`${BASEURL.ENDPOINT_URL}/item/get-image/${item?.item_id}`}
             alt={item?.itemName}
             width={50}
             height={50}
@@ -91,13 +85,7 @@ const CartItem = ({
         <img
           width={100}
           height={100}
-          src={
-            isAuthenticated
-              ? item?.image_url
-                ? item?.image_url
-                : "/default-image.jpg"
-              : ""
-          }
+          src={`${BASEURL.ENDPOINT_URL}/item/get-image/${item?.item_id}`}
           className="h-[72px] w-[72px] relative rounded-8xs object-cover z-[1]"
           loading="lazy"
           alt=""
@@ -214,7 +202,7 @@ const Cart = () => {
                 )}
               </div>
               <div className="max-md:hidden">
-                <Box bgcolor="#E6F7FF" p={2} borderRadius={2}>
+                <Box bgcolor="#ffff" p={2} borderRadius={2}>
                   <Grid container>
                     <Grid item xs={4}>
                       <Typography variant="subtitle1" fontWeight="bold">
@@ -260,7 +248,7 @@ const Cart = () => {
                 alignItems={{ xs: "center", sm: "flex-start" }}
                 mt={2}
               >
-                <button className="bg-second text-white font-medium text-md rounded-2xl p-4 w-full sm:w-[200px] text-center mb-2 sm:mb-0">
+                <button className="bg-primary text-white font-medium text-md rounded-2xl p-4 w-full sm:w-[200px] text-center mb-2 sm:mb-0">
                   <Link to="/">Continue shopping</Link>
                 </button>
                 <button
@@ -278,12 +266,12 @@ const Cart = () => {
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box p={2} className="flex justify-center" bgcolor="#E6F7FF">
+              <Box p={2} className="flex justify-center" bgcolor="#ffff">
                 <Typography variant="subtitle1" fontWeight="bold">
                   {loading ? <Skeleton width={100} /> : "Cart total"}
                 </Typography>
               </Box>
-              <Box p={2} borderRadius={2}>
+              <Box bgcolor="#ffff" p={2} borderRadius={2}>
                 <Box display="flex" justifyContent="space-between" my={1}>
                   <Typography variant="body1">
                     {loading ? <Skeleton width={70} /> : "Subtotal"}
@@ -324,7 +312,7 @@ const Cart = () => {
                   ) : (
                     <button
                       onClick={handleProceedToCheckout}
-                      className="bg-second text-white font-medium text-md rounded-2xl p-2 w-full sm:w-[250px] text-center"
+                      className="bg-primary text-white font-medium text-md rounded-2xl p-2 w-full sm:w-[250px] text-center"
                     >
                       Proceed to checkout
                     </button>
@@ -360,7 +348,7 @@ const Cart = () => {
       <HorizontalLinearAlternativeLabelStepper activeStep={0} />
       <Box className="mt-5" p={5}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={8}>
+          <Grid bgcolor="#ffff" item xs={12} md={8}>
             <div className="mb-4 hidden max-md:block text-primary font-semibold">
               subtotal{" "}
               <span className="text-xl font-bold">
@@ -369,9 +357,9 @@ const Cart = () => {
               </span>
             </div>
             <div className="max-md:hidden">
-              <Box bgcolor="#E6F7FF" p={2} borderRadius={2}>
-                <Grid container>
-                  <Grid item xs={4}>
+              <Box bgcolor="#ffff" p={2} borderRadius={2}>
+                <Grid  container>
+                  <Grid  item xs={4}>
                     <Typography variant="subtitle1" fontWeight="bold">
                       Product
                     </Typography>
@@ -414,7 +402,7 @@ const Cart = () => {
               alignItems={{ xs: "center", sm: "flex-start" }}
               mt={2}
             >
-              <button className="bg-second text-white font-medium text-md rounded-2xl p-4 w-full sm:w-[200px] text-center mb-2 sm:mb-0">
+              <button className="bg-primary text-white font-medium text-md rounded-2xl p-4 w-full sm:w-[200px] text-center mb-2 sm:mb-0">
                 <Link to="/">Continue shopping</Link>
               </button>
               <button
@@ -432,12 +420,12 @@ const Cart = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box p={2} className="flex justify-center" bgcolor="#E6F7FF">
+            <Box  p={2} className="flex justify-center" bgcolor="#ffff">
               <Typography variant="subtitle1" fontWeight="bold">
                 Cart total
               </Typography>
             </Box>
-            <Box p={2} borderRadius={2}>
+            <Box bgcolor="#ffff" p={2} borderRadius={2}>
               <Box display="flex" justifyContent="space-between" my={1}>
                 <Typography variant="body1">Subtotal</Typography>
                 <Typography variant="body1">₹{totalPrice}</Typography>
@@ -459,7 +447,7 @@ const Cart = () => {
               <div className="flex justify-center">
                 <button
                   onClick={handleProceedToCheckout}
-                  className="bg-second text-white font-medium text-md rounded-2xl p-2 w-full sm:w-[250px] text-center"
+                  className="bg-primary text-white font-medium text-md rounded-2xl p-2 w-full sm:w-[250px] text-center"
                 >
                   Proceed to checkout
                 </button>
