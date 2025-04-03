@@ -110,8 +110,18 @@ class DataService {
       }
     )
   }
-  
 
+  DeleteSubCat(id){
+    return http.delete(`category/delete-detail/${id}`)
+  }
+  
+  GetAllCustomer(saasId){
+    return http.get(`/customer/get-custm-detail/${saasId}`)
+  }
+  
+ GetComplain(saasId){
+  return http.get(`/complaints/get-complaint-list/${saasId}`)
+ }
 
 
 
