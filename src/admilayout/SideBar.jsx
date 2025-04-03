@@ -96,34 +96,34 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       ],
     },
     
+    // {
+    //   title: "Manage Sub Product",
+    //   icon: <Package  size={18} />,
+    //   path: "/admin/subproducts",
+    //   hasSubmenu: true,
+    //   submenu: [
+    //     {
+    //       title: "Add Sub Product",
+    //       path: "/admin/subproducts/add",
+    //     },
+    //     {
+    //       title: "Sub Product List",
+    //       path: "/admin/subproducts/list",
+    //     },
+    //   ],
+    // },
     {
-      title: "Manage Sub Product",
-      icon: <Package  size={18} />,
-      path: "/admin/subproducts",
-      hasSubmenu: true,
-      submenu: [
-        {
-          title: "Add Sub Product",
-          path: "/admin/subproducts/add",
-        },
-        {
-          title: "Sub Product List",
-          path: "/admin/subproducts/list",
-        },
-      ],
-    },
-    {
-      title:"Combo Mange",
+      title:"Manage Sub Product",
       icon:<Package size={18}/>,
       path:"/admin/combo",
       hasSubmenu: true,
       submenu: [
         {
-          title: "Add Combo",
+          title: "Add Sub Product",
           path: "/admin/combo/add",
         },
         {
-          title: "Combo List",
+          title: "Sub Product List",
           path: "/admin/combo/list",
         },
       ],
