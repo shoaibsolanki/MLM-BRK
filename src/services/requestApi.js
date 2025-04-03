@@ -123,6 +123,13 @@ class DataService {
   return http.get(`/complaints/get-complaint-list/${saasId}`)
  }
 
+ GetGifts(saasId){
+  return http.get(`gifts/get-gift-list/${saasId}`)
+ }
+ CreateGifts(data){
+  return http.post(`/gifts`, data)
+ }
+
 
 
 

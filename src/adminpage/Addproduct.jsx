@@ -181,11 +181,11 @@ const AddProduct = () => {
 
     const handleUpload = async (id) => {
       const formData = new FormData();
-      files.forEach((file) => {
-        if (file) {
-          formData.append("file", file);
-        }
-      });
+      // files.forEach((file) => {
+      //   if (file) {
+      //     formData.append("file", file);
+      //   }
+      // });
       const validFiles = files.filter(file => file !== null); // Filter out null values
       validFiles.forEach((file) => {
         formData.append("file", file);
@@ -238,8 +238,8 @@ const AddProduct = () => {
             <em>Select Sub Category</em>
           </MenuItem>
           {subcategories &&subcategories?.map((subcategory) => (
-            <MenuItem key={subcategory.id} value={subcategory.category}>
-            {subcategory.category}
+            <MenuItem key={subcategory.id} value={subcategory.category_name}>
+            {subcategory.category_name}
             </MenuItem>
           ))}
           </TextField>
