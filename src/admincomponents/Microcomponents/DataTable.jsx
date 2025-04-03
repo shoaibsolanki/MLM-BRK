@@ -6,6 +6,18 @@ const CustomDataTable = ({ columns, data, title , handlePageChange ,handleRowsPe
         headCells: {
             style: {
                 fontWeight: 'bold',
+                
+            },
+        },
+        rows: {
+            style: {
+            minHeight: '60px', // Set a minimum height for table rows
+            },
+        },
+        table: {
+            style: {
+                height: '400px', // Set a fixed height for the table
+                overflowY: 'auto',
             },
         },
     };
