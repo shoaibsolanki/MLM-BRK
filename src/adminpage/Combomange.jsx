@@ -210,8 +210,8 @@ const handleComboImageChange = (e) => {
                     <em>Select Sub Category</em>
                   </MenuItem>
                   {subcategories.map((subcategory) => (
-                    <MenuItem key={subcategory.id} value={subcategory.category}>
-                    {subcategory.category}
+                    <MenuItem key={subcategory.id} value={subcategory.category_name}>
+                    {subcategory.category_name}
                     </MenuItem>
                   ))}
                   </TextField>

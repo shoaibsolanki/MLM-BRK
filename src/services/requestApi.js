@@ -93,8 +93,42 @@ class DataService {
   GetRpBonusvalue(saasid){
     return http.get(`RpBonus/get-rp-value-list/${saasid}`)
   }
+   
+  GetSubCategory(saasid, storeid){
+    return http.get(`category/get-list/${saasid}/${storeid}`)
+  }
+  EditSubCategory(id,data){
+    return http.put(`/category/update-detil/${id}`,data)
+  }
+  AddSubCategory(data){
+    return http.post(`category/store/category`,data)
+  }
+  AddSubCatImage(id, file){
+    return http.post(`category/save-image-by-category/${id}`,file ,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    )
+  }
 
+  DeleteSubCat(id){
+    return http.delete(`category/delete-detail/${id}`)
+  }
+  
+  GetAllCustomer(saasId){
+    return http.get(`/customer/get-custm-detail/${saasId}`)
+  }
+  
+ GetComplain(saasId){
+  return http.get(`/complaints/get-complaint-list/${saasId}`)
+ }
 
+ GetGifts(saasId){
+  return http.get(`gifts/get-gift-list/${saasId}`)
+ }
+ CreateGifts(data){
+  return http.post(`/gifts`, data)
+ }
 
 
 

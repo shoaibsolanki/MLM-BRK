@@ -26,51 +26,61 @@ const Rptransactions = () => {
             name: 'ID',
             selector: row => row.id,
             sortable: true,
+            width: '100px',
         },
         {
             name: 'Customer ID',
             selector: row => row.customerId,
             sortable: true,
+            width: '100px',
         },
         {
             name: 'Transaction Type',
             selector: row => row.transactionType,
             sortable: true,
+            width: '100px',
         },
         {
             name: 'RP',
             selector: row => row.rp,
             sortable: true,
+            width: '100px',
         },
         {
             name: 'SaaS ID',
             selector: row => row.saasId,
             sortable: true,
+            width: '100px',
         },
         {
             name: 'Transaction Amount',
             selector: row => row.transactionAmount,
             sortable: true,
+            width: '200px',
         },
         {
             name: 'Order ID',
             selector: row => row.orderId,
             sortable: true,
+            width: '100px',
         },
         {
             name: 'Status',
             selector: row => row.status,
             sortable: true,
+            width: '100px',
         },
         {
             name: 'Description',
             selector: row => row.description,
             sortable: true,
+            width: '100px',
         },
         {
             name: 'Created At',
             selector: row => row.createdAt,
             sortable: true,
+            width: '100px',
         },
     ];
 

@@ -37,6 +37,7 @@ const Complaintlist = lazy(()=> import('./adminpage/Complaintlist'))
 const Rpbonusemange = lazy(()=> import('./adminpage/Rpbonusemange'))
 const Rptransactions = lazy(()=> import('./adminpage/Rptransactions'))
 const Rpexchange = lazy(()=> import('./adminpage/Rpexchange'))
+const Giftmange = lazy(()=> import('./adminpage/Mangegift'))
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
               <Route path="bonus" element={<ProtectedRouteForAdmin Component={Rpbonusemange} />} />
               <Route path="rp/transactions" element={<ProtectedRouteForAdmin Component={Rptransactions} />} />
               <Route path="rp/exchange" element={<ProtectedRouteForAdmin Component={Rpexchange} />} />
+              <Route path="gift" element={<ProtectedRouteForAdmin Component={Giftmange} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />

@@ -1,18 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CustomDataTable from "../admincomponents/Microcomponents/DataTable";
 import { Edit } from "lucide-react";
 import { Button } from "@mui/material";
-
+import DataService from '../services/requestApi'
 const UserMange = () => {
+  
+  const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
+  const [data, setData] = useState([])
+
+  const GetUsers =async ()=>{
+    try {
+     const response = await  DataService.GetAllCustomer(saasId)
+     if(response.data.status){
+     setData(response.data.data)
+     }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  useEffect(() => {
+    GetUsers()
+  }, [])
+  
+
+
   const columns = [
-    { name: "S.NO", selector: (row) => row.sno, sortable: true },
-    { name: "UserID", selector: (row) => row.userId, sortable: true },
+    { name: "S.NO", selector: (row, index) => index + 1, sortable: true },
+    { name: "UserID", selector: (row) => row.customerId, sortable: true },
     { name: "Name", selector: (row) => row.name, sortable: true },
     { name: "Password", selector: (row) => row.password, sortable: true },
-    { name: "Sponsor ID", selector: (row) => row.sponsorId, sortable: true },
+    { name: "Sponsor ID", selector: (row) => row.refferBy, sortable: true },
     {
       name: "Activation Status",
-      selector: (row) => row.activationStatus,
+      selector: (row) => row.status,
       sortable: true,
     },
     {
@@ -23,29 +45,29 @@ const UserMange = () => {
     {
       name: "Mobile Verification",
       selector: (row) => {
-        return row.mobileVerification == "Verified" ? (
+        return row.mobileVerification ? (
           <div className=" rounded text-white bg-green-600 p-3 ">
-            {row.mobileVerification}
+           Verified
           </div>
         ) : (
           <div className="rounded text-white bg-red-600 p-3">
-            {row.mobileVerification}
+            Unverified
           </div>
         );
       },
       sortable: true,
     },
-    { name: "Email ID", selector: (row) => row.emailId, sortable: true },
+    { name: "Email ID", selector: (row) => row.email, sortable: true },
     {
       name: "Email Verification",
       selector: (row) => {
-        return row.emailVerification == "Verified" ? (
+        return row.emailVerification ? (
           <div className=" rounded text-white bg-green-600 p-3 ">
-            {row.emailVerification}
+            Verified 
           </div>
         ) : (
           <div className="rounded text-white bg-red-600 p-3">
-            {row.emailVerification}
+           Unverified 
           </div>
         );
       },
@@ -54,7 +76,7 @@ const UserMange = () => {
     { name: "Gender", selector: (row) => row.gender, sortable: true },
     {
       name: "Creation Date",
-      selector: (row) => row.creationDate,
+      selector: (row) => row.createdAt,
       sortable: true,
     },
     {
@@ -77,23 +99,23 @@ const UserMange = () => {
     }
   ];
 
-  const data = [
-    {
-      sno: 1,
-      userId: "U001",
-      name: "John Doe",
-      password: "password123",
-      sponsorId: "S001",
-      activationStatus: "Active",
-      mobileNumber: "1234567890",
-      mobileVerification: "Verified",
-      emailId: "john.doe@example.com",
-      emailVerification: "Verified",
-      gender: "Male",
-      creationDate: "2023-01-01",
-    },
-    // Add more data as needed
-  ];
+  // const data = [
+  //   {
+  //     sno: 1,
+  //     userId: "U001",
+  //     name: "John Doe",
+  //     password: "password123",
+  //     sponsorId: "S001",
+  //     activationStatus: "Active",
+  //     mobileNumber: "1234567890",
+  //     mobileVerification: "Verified",
+  //     emailId: "john.doe@example.com",
+  //     emailVerification: "Verified",
+  //     gender: "Male",
+  //     creationDate: "2023-01-01",
+  //   },
+  //   // Add more data as needed
+  // ];
 
   const handleEdit = (row) => {
     // Handle edit action
