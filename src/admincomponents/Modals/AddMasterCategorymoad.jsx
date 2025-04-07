@@ -53,6 +53,7 @@ const AddMasterCategoryModal = ({getMatserCategory}) => {
                         borderRadius: 2,
                     }}
                 >
+                    
                     <Typography variant="h6" component="h2" mb={2}>
                         Add Master Category
                     </Typography>
@@ -73,8 +74,23 @@ const AddMasterCategoryModal = ({getMatserCategory}) => {
                                 />
                             )}
                         />
+                        <Controller
+                        name="category_image"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                            <TextField
+                                {...field}
+                                type="file"
+                                fullWidth
+                                margin="normal"
+                                InputLabelProps={{ shrink: true }}
+                                inputProps={{ accept: "image/*" }}
+                            />
+                        )}
+                    />
                         <Box mt={2} display="flex" justifyContent="flex-end">
-                            <Button onClick={handleClose} color="secondary" sx={{ mr: 1 }}>
+                            <Button onClick={handleClose} variant="outlined" color="secondary" sx={{ mr: 1 }}>
                                 Cancel
                             </Button>
                             <Button type="submit" variant="contained" color="primary">

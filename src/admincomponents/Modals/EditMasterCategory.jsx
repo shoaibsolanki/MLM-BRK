@@ -44,8 +44,16 @@ const EditMasterCategory = ({getMatserCategory, open, handleClose, category }) =
                     variant="outlined"
                     margin="normal"
                 />
+                <TextField
+                    fullWidth
+                    type="file"
+                    inputProps={{ accept: "image/*" }}
+                    onChange={(e) => console.log(e.target.files[0])}
+                    variant="outlined"
+                    margin="normal"
+                />
                 <Box mt={2} display="flex" justifyContent="flex-end">
-                    <Button onClick={handleClose} color="secondary" sx={{ mr: 1 }}>
+                    <Button onClick={handleClose} variant='outlined' color="secondary" sx={{ mr: 1 }}>
                         Cancel
                     </Button>
                     <Button onClick={handleSave} variant="contained" color="primary">
