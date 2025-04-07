@@ -34,6 +34,11 @@ const CheckoutPage = () => {
       setSelectedAddress(null);
     }
   }, [showNewAddressForm]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/customer-registration/organization1/self");
+    }
+  }, [isAuthenticated]);
   const handlePaymentChange = (type) => {
     setSelectedMethod(type);
     console.log(selectedMethod);
@@ -451,7 +456,7 @@ const CheckoutPage = () => {
 
   return (
     <div className="w-full mx-auto p-4">
-      {!isAuthenticated && (
+      {/* {!isAuthenticated && (
         <div className="border border-gray-300 p-6 mb-6 rounded-md">
           <h2 className="text-lg font-semibold mb-4">Register Information</h2>
 
@@ -592,10 +597,10 @@ const CheckoutPage = () => {
             </Alert>
           </Snackbar>
         </div>
-      )}
+      )} */}
 
       {showNewAddressForm && isAuthenticated ? (
-        <div className="border border-gray-300 p-6 mb-6 rounded-md">
+        <div className="bg-white border  border-gray-300 p-6 mb-6 rounded-md">
           <h3 className="text-primary uppercase font-medium text-sm">
             <span className="bg-light py-[1px] px-[3px] text-sm rounded-sm mr-1 ">
               1.2
@@ -708,7 +713,7 @@ const CheckoutPage = () => {
               {savedAddresses?.length !== 0 && (
                 <button
                   onClick={() => setShowNewAddressForm(false)}
-                  className="w-full py-3 bg-second text-white text-lg font-semibold hover:bg-yellow-600 transition-colors"
+                  className="w-full py-3 bg-primary text-white text-lg font-semibold hover:bg-blue-600 transition-colors"
                 >
                   Use existing address
                 </button>
@@ -719,7 +724,7 @@ const CheckoutPage = () => {
       ) : (
         <>
           {isAuthenticated && (
-            <div className="border  gap-4 border-gray-300 p-6 mb-6 rounded-md">
+            <div className="bg-white border  gap-4 border-gray-300 p-6 mb-6 rounded-md">
               <div className="flex justify-between items-center max-sm:flex-col max-sm:w-full">
                 <h3 className="text-primary uppercase font-medium text-sm">
                   <span className="bg-light py-[1px] px-[3px] text-sm rounded-sm mr-1 ">
@@ -801,7 +806,7 @@ const CheckoutPage = () => {
       )}
 
       {!showNewAddressForm ? (
-        <div className="p-4 border-[1px] rounded-md">
+        <div className="bg-white p-4 border-[1px] rounded-md">
           <h3 className="text-primary uppercase font-medium text-sm">
             <span className="bg-light py-[1px] px-[3px] text-sm rounded-sm mr-1 ">
               2

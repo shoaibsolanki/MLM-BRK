@@ -37,7 +37,7 @@ const ItemsShowInSide = ({ items }) => {
 
   if (isLoading) {
     return (
-      <div className="my-4 w-full md:w-[500px] h-full mx-auto border border-gray-300 p-6 rounded-md text-dark">
+      <div className=" my-4 w-full md:w-[500px] h-full mx-auto border border-gray-300 p-6 rounded-md text-dark">
         <h2 className="text-lg font-semibold mb-4">Order summary</h2>
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, index) => (
@@ -79,7 +79,7 @@ const ItemsShowInSide = ({ items }) => {
   }
 
   return (
-    <div className="my-4 w-full md:w-[500px] h-full mx-auto border border-gray-300 p-6 rounded-md text-dark">
+    <div className="bg-white my-4 w-full md:w-[500px] h-full mx-auto border border-gray-300 p-6 rounded-md text-dark">
       <h2 className="text-lg font-semibold mb-4">Order summary</h2>
       <div className="space-y-4">
         {items?.map((item, index) => {

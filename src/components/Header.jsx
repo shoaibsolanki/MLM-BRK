@@ -1,4 +1,4 @@
-import { ChevronDown, LogIn, Menu, Search, ShoppingCart, X } from 'lucide-react';
+import { ChevronDown, LogIn, Menu, Search, ShoppingCart,User, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MobileDrawer from './MobileDrawer';
@@ -141,6 +141,13 @@ const Header = () => {
 
         {/* Right Menu Options */}
         <div className="flex items-center gap-4">
+           {/* Profile Icon */}
+  <div className="hidden md:flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full">
+    <User onClick={()=>
+      navigate("/profile")
+
+    } size={20} className="text-gray-600 cursor-pointer" />
+  </div>
          {isAuthenticated?
          <button 
          onClick={() =>logout()}

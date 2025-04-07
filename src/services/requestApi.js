@@ -23,7 +23,7 @@ class DataService {
   // GetSubCategory(saasid,storeid,categoryid){
   //   return http.get(`/Master-category/get-list/${saasid}/${storeid}/${categoryid}`)
   // }
-  GetSubCategory(saasid,storeid,categoryid){
+  GetSubCategorybycatgoryid(saasid,storeid,categoryid){
     return http.get(`/Master-category/get-list/${saasid}/${storeid}/${categoryid}`)
   }
   AddProduct(data){
@@ -122,6 +122,9 @@ class DataService {
  GetComplain(saasId){
   return http.get(`/complaints/get-complaint-list/${saasId}`)
  }
+ GetRewardPoint(customerId){
+  return http.get(`/customer/get-points/${customerId}`)
+ }
 
  GetGifts(saasId){
   return http.get(`gifts/get-gift-list/${saasId}`)
@@ -209,5 +212,8 @@ class DataService {
   SaveComplaint(data, id) {
     return http.post(`/complaints`, data);
   }
+  GetPointHistory(customerId){
+    return http.get(`/customer/get-rp-by-custm/${customerId}`)
+   }
 }
 export default new DataService();

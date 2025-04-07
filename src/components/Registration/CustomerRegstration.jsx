@@ -43,6 +43,9 @@ const CustomerRegstration = () => {
   
       const fetchSponsorName = async () => {
         try {
+          if (referralCode !== "self") {
+            
+         
           const response = await DataService.getReferName(referralCode);
           if (response.data) {
             setFormData((prev) => ({
@@ -54,7 +57,7 @@ const CustomerRegstration = () => {
               ...prev,
               sponsorName: "",
             }));
-          }
+          } }
         } catch (error) {
           enqueueSnackbar("Failed to fetch sponsor name", { variant: "error" });
           setFormData((prev) => ({
@@ -68,6 +71,8 @@ const CustomerRegstration = () => {
     
   }, [referralCode]); 
 
+ console.log("referId",formData.referId)
+  // Handle input change
   const handleChange = async (e) => {
     const { name, value } = e.target;
 
@@ -76,6 +81,29 @@ const CustomerRegstration = () => {
       [name]: value,
     }));
 
+    // Call API when Sponsor ID is entered
+    if (name === "referId" && value.length == 3) {
+      try {
+        const response = await DataService.getReferName(value);
+        if (response.data) {
+          setFormData((prev) => ({
+            ...prev,
+            sponsorName: response.data.data, // Assuming API returns { name: "John Doe" }
+          }));
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            sponsorName: "", // Clear if invalid ID
+          }));
+        }
+      } catch (error) {
+        enqueueSnackbar("Failed to fetch sponsor name", { variant: "error" });
+        setFormData((prev) => ({
+          ...prev,
+          sponsorName: "",
+        }));
+      }
+    }
   };
   // Handle form submission
    // Handle form submission
@@ -87,9 +115,12 @@ const CustomerRegstration = () => {
 
     try {
       const response = await DataService.createCustomer(formData);
-      if (response.data) {
+      if (response.data.status) {
         enqueueSnackbar("Customer created successfully!", { variant: "success" });
         navigate('/');
+      }else {
+        const error =response.data.message
+        enqueueSnackbar(error, { variant: "error" });
       }
     } catch (error) {
       console.error("Error creating customer:", error);
@@ -99,9 +130,11 @@ const CustomerRegstration = () => {
     }
   };
   useEffect(() => {
+    console.log("organization",organization)
     if (organization) {
-      setFormData((prev) => ({ ...prev, direction: organization,referId: referralCode }));
+      setFormData((prev) => ({ ...prev, direction: organization,referId: referralCode !== "self"?referralCode:"" }));
     }
+
   }, [organization]);
   return (
     <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
@@ -112,11 +145,11 @@ const CustomerRegstration = () => {
           {/* SSS Sponsor ID */}
           <div>
             <label htmlFor="sponsorId" className="block text-sm font-medium text-gray-700 mb-1">
-              SSS Sponsor ID
+             BRK Sponsor ID
             </label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                SSS
+              BRK
               </span>
               <input
                 type="text"
@@ -125,8 +158,11 @@ const CustomerRegstration = () => {
                 placeholder="Enter SSS Sponsor ID"
                 value={formData.referId}
                 onChange={handleChange}
-                className="pl-12 w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+                disabled={referralCode !== "self"}
+                className={`pl-12 w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  referralCode !== "self" ? "bg-gray-200 cursor-not-allowed" : ""
+                }`}
+             />
             </div>
           </div>
 
@@ -157,10 +193,12 @@ const CustomerRegstration = () => {
               name="direction"
                 value={formData.direction}
               onChange={handleChange}
-              className="w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              // disabled 
+              disabled={referralCode !== "self"}
+              className={`w-full p-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                referralCode !== "self" ? "bg-gray-200 cursor-not-allowed" : ""
+              }`}
             >
-              <option value="">Select Organization</option>
+              {/* <option value="">Select Organization</option> */}
               <option value="org1">Organization 1</option>
               <option value="org2">Organization 2</option>
               {/* <option value="org3">Organization 3</option> */}
