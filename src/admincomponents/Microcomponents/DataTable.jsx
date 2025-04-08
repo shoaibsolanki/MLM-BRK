@@ -49,7 +49,7 @@ const CustomDataTable = ({ columns, data, title , handlePageChange ,handleRowsPe
             onChangeRowsPerPage={handleRowsPerPageChange} // Called when rows per page change
             paginationTotalRows={count}
             highlightOnHover
-            selectableRows
+            // selectableRows
             responsive
             customStyles={customStyles}
         />
