@@ -17,7 +17,7 @@ const ReferralModal = ({ onClose }) => {
       const response = await DataService.getRefercode(id);
 
       if (response.status && response.data) {
-        setReferralCode(response.data.data.referredBy); // Ensure extracting only the referral code
+        setReferralCode(response.data.data.customerId); // Ensure extracting only the referral code
       } else {
         console.error("Invalid response format:", response);
         setReferralCode("N/A"); // Fallback

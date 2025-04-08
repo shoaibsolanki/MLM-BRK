@@ -25,7 +25,7 @@ const ReferAndEarnModal = ({ isOpen, onClose }) => {
         localStorage.clear();
         localStorage.setItem('token', response.data.data.jwt_response);
         localStorage.setItem('user_data', JSON.stringify(response.data.data.user_data));
-        localStorage.setItem('authData', JSON.stringify(response.data.data.store_data));
+        localStorage.setItem('authData', JSON.stringify(response.data.data.customer_data));
         enqueueSnackbar(response.data.message, { variant: 'success' });
         navigate('/');
     window.location.reload();
@@ -41,7 +41,7 @@ const ReferAndEarnModal = ({ isOpen, onClose }) => {
 
   const handleRegistration = () => {
     onClose();
-    navigate('/customer-regstration');
+    navigate(`/customer-registration/organization1/self`);
   };
 
   return (

@@ -2,9 +2,12 @@ import { useState } from "react";
 import { TextField, Button, Container, Grid, Typography, Paper } from "@mui/material";
 import DataService from "../services/requestApi"; // Import DataService
 import { useAuth } from "../contexts/AuthConext";
+import { useSnackbar } from 'notistack';
 
 const Support = () => {
     const { saasid, storeid,authData} = useAuth();
+        const { enqueueSnackbar } = useSnackbar();
+    
     const { id,  } = authData;
   const [formData, setFormData] = useState({
     customer_name: "",
@@ -36,10 +39,12 @@ const Support = () => {
     try {
       const response = await DataService.SaveComplaint(payload);
       console.log("Complaint Submitted:", response.data);
-      alert("Complaint submitted successfully!");
+      enqueueSnackbar("Complaint submitted successfully!", { variant: "success" });
+
     } catch (error) {
       console.error("Error submitting complaint:", error);
-      alert("Failed to submit complaint.");
+      enqueueSnackbar("Failed to submit complaint.", { variant: "error" });
+
     }
   };
 

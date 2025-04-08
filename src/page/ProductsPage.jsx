@@ -53,7 +53,7 @@ const ProductsPage = () => {
   };
 
   const fetchSubcategories = async () => {
-    const response = await DataService.GetSubCategory(saasid, storeid, categoryId);
+    const response = await DataService.GetSubCategorybycatgoryid(saasid, storeid, categoryId);
     if (response.data.status) {
       setSubcategories(response.data.data);
     } else {

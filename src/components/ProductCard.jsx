@@ -4,10 +4,10 @@ import AddToCartButton from './MicroComponant/AddToCartButton';
 
 const ProductCard = ({ product }) => {
   return (
-    <Link  className="group">
+    <div  className="group">
       <div className="overflow-hidden rounded-lg bg-white shadow transition hover:shadow-md">
         <div className="relative h-64 overflow-hidden">
-        <Link  className="group">
+        <Link  to={`/product/${product.item_id}`}  className="group">
           <img
             src={`${BASEURL.ENDPOINT_URL}/item/get-image/${product?.item_id}`}
             alt={product?.name}
@@ -26,11 +26,15 @@ const ProductCard = ({ product }) => {
           <p className="mt-2 text-lg font-semibold text-gray-900">
             ₹{product?.price?.toFixed(2)}
           </p>
+          <p className="mt-2 text-md font-semibold text-green-500">
+            {product?.rp} RP
+          </p>
         </div>
+        
         <AddToCartButton item={product} />
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

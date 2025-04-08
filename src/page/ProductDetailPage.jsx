@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import DataService from "../services/requestApi.js";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCart } from '../contexts/CartContext.jsx';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
@@ -81,7 +82,9 @@ const ProductDetailPage = () => {
   const selectImage = (index) => {
     setCurrentImageIndex(index);
   };
-
+ const { addToCart, cart } = useCart();
+  const AddedItem = cart?.find((el) => el.productId === product.item_id);
+  console.log("AddedItem",cart)
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumbs */}
@@ -170,8 +173,10 @@ const ProductDetailPage = () => {
             <p>{product?.description}</p>
           </div>
 
-          <button className="w-full md:w-auto px-6 py-3 rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none">
-            Add to Cart
+          <button  style={{
+          backgroundColor: AddedItem ? "blue" : "#de9b15",
+        }} onClick={() => addToCart(product)} className="bg-primary w-full md:w-auto px-6 py-3 rounded-md  text-white font-medium hover:bg-blue-700 focus:outline-none">
+            Add to Cart{AddedItem ? AddedItem.product_qty : ""}
           </button>
         </div>
       </div>
