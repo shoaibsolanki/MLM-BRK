@@ -129,6 +129,22 @@ class DataService {
  CreateGifts(data){
   return http.post(`/gifts`, data)
  }
+ AddThumbnailImage(id, file){
+  return http.post(`/item/save-image/${id}
+`,file , {
+  headers: { "Content-Type": "multipart/form-data"}
+})
+ }
+
+ EditGift(id, data){
+  return http.put(`gifts/${id}`, data)
+ }
+ DeleteGift(id){
+  return http.delete(`/gifts/${id}`)
+ }
+
+
+
 
 
 
