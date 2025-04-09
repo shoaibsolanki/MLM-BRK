@@ -197,11 +197,6 @@ const AddProduct = () => {
 
     const handleUpload = async (id) => {
       const formData = new FormData();
-      // files.forEach((file) => {
-      //   if (file) {
-      //     formData.append("file", file);
-      //   }
-      // });
       const validFiles = files.filter(file => file !== null); // Filter out null values
       validFiles.forEach((file) => {
         formData.append("file", file);
@@ -218,6 +213,7 @@ const AddProduct = () => {
         console.error("Upload Failed:", error);
       }
     };
+
 
   return (
     <div className="p-6 bg-white rounded">
@@ -409,17 +405,7 @@ const AddProduct = () => {
             <Trash />
           </IconButton>
       </div>
-        // <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
-          
-        //   <input
-        //     type="file"
-        //     onChange={(event) => handleFileChange(event, index)}
-        //     accept="image/*"
-        //   />
-        //   <IconButton onClick={() => removeFileInput(index)} color="error">
-        //     <Trash />
-        //   </IconButton>
-        // </div>
+      
       ))}
       
     {/* </div> */}

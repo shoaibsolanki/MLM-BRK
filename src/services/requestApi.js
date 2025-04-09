@@ -146,6 +146,21 @@ class DataService {
   return http.delete(`/gifts/${id}`)
  }
 
+ UpdateItem(id,data){
+  return http.put(`/item/update-item/${id}`,data)
+ }
+ 
+ ImagesUpdate(id , formData){
+  return http.patch(`/item/update-item-images/${id}`, formData, {
+    headers:{
+      "Content-Type":"multipart/form-data"
+    }
+  })
+ }
+
+
+
+
 
 
 
