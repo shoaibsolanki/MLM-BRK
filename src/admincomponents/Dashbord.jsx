@@ -1,7 +1,8 @@
 import React from "react";
 import { Card, CardContent, Button } from "@mui/material";
 import CustomDataTable from "./Microcomponents/DataTable";
-
+import DataService from '../services/requestApi'
+import { useEffect, useState } from "react";
 const Dashboard = () => {
   const stats = [
     { value: "5601", label: "Total User" },
@@ -48,6 +49,22 @@ const Dashboard = () => {
     { orderNumber: 'O002', userName: 'Jane Smith', pickupCenter: 'Center 2', totalAmount: '$200', orderStatus: 'Completed', orderDate: '2023-03-02', action: 'View' },
     // Add more data as needed
   ];
+
+    const [dashboardData, setDashboardData] = useState([]);
+    const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
+    const fetchDashboardData = async () => {
+      try {
+        const response = await DataService.DashBoardDataGet(saasId);
+        setDashboardData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchDashboardData();
+    }, []);
+
 
   return (
     <>
