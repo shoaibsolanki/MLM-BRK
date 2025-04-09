@@ -5,6 +5,9 @@ class DataService {
   Login(data) {
     return http.post("/auth/user-login", data);
   }
+  DashBoardDataGet(saasId){
+    return http.get(`dashboard/get-dashboard-details/${saasId}`)
+  }
   GetMasterCategory(saasid, storeid){
     return http.get(`/Master-category/get-list-master/${saasid}/${storeid}`)
   }
@@ -162,6 +165,15 @@ class DataService {
   return http.get(`customer/getMLMTree/${id}`)
  }
 
+ UpdateSlider(saasId,formData){
+  return http.post(`saas-master/save-brandlogo/${saasId}`, formData, {
+    headers:{
+      "Content-Type":"multipart/form-data"
+    }
+  })
+ }
+ 
+ 
 
 
  

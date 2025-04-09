@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import CustomDataTable from "../admincomponents/Microcomponents/DataTable";
-import { Edit } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 import { Button } from "@mui/material";
 import DataService from '../services/requestApi'
+import { Link } from "react-router-dom";
 const UserMange = () => {
   
   const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
@@ -78,6 +79,18 @@ const UserMange = () => {
       name: "Creation Date",
       selector: (row) => row.createdAt,
       sortable: true,
+    },
+    {
+      name: "View",
+      cell: (row) => (
+       <Link to={`/admin/Cutomertree/${row.customerId}`}
+       >
+        <Eye />
+       </Link>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
     },
     {
       name: "Action",
