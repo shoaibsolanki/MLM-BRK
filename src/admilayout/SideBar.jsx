@@ -186,9 +186,9 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       path: "/admin/Complaint",
     },
     {
-      title: "Manage Banner",
+      title: "Manage Slider",
       icon: <ShoppingCart  size={18} />,
-      path: "/admin/Banner",
+      path: "/admin/slider",
     },
     {
       title: "Manage KYC",
@@ -263,217 +263,228 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   ];
 
   return (
-    <div>
-      <Box
-        className={`flex flex-col py-4 [background:#383a3a] text-white ${
-          isSidebarOpen ? "w-[250px]" : "w-[60px]"
+    <>
+      <div 
+        className={`md:hidden fixed inset-0 bg-black bg-opacity-50 z-20 transition-opacity duration-300 ${
+          isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
-        style={{ height: "100%" }}
+        onClick={() => setIsSidebarOpen(false)}
+      />
+      <div
+        className={`fixed md:static top-0 left-0 h-full z-30 md:z-auto transition-transform duration-300 transform ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}
       >
-        <div>
-          <div className="flex items-center mb-4">
-            <Avatar
-              className="cursor-pointer left-2"
-              onClick={() => navigate("/Profile")}
-              alt="User Photo"
-              sx={{
-                backgroundColor: "transparent",
-                width: 56,
-                height: 56,
-                marginRight: 2,
-                display: isSidebarOpen ? "block" : "none",
-              }}
-            />
-            {isSidebarOpen && (
-              <div>
-                <Typography variant="h6" className="montserrat-text-normal">
-                  User Name
-                </Typography>
-              </div>
-            )}
-          </div>
-          <nav>
-            <List>
-              {menuItems.map((item, index) => (
-                <React.Fragment key={index}>
-                  <Tooltip
-                  componentsProps={{  
-                    tooltip: {  
-                      sx: {  
-                        bgcolor: '#383a3a', // Custom hex color  
-                        color: 'white', 
-                        padding:'0px', 
-                        borderTopLeftRadius: '0px', // Optional: rounded corners  
-                        borderBottomLeftRadius: '0px', // Optional: rounded corners  
-                        borderTopRightRadius: '8px', // Optional: rounded corners  
-                        borderBottomRightRadius: '8px', // Optional: rounded corners 
-                        cursor:'pointer', 
+        <Box
+          className={`flex flex-col py-4 [background:#383a3a] text-white h-full ${
+            isSidebarOpen ? "w-[250px]" : "w-[60px]"
+          }`}
+        >
+          <div className="overflow-y-auto">
+            <div className="flex items-center mb-4">
+              <Avatar
+                className="cursor-pointer left-2"
+                onClick={() => navigate("/Profile")}
+                alt="User Photo"
+                sx={{
+                  backgroundColor: "transparent",
+                  width: 56,
+                  height: 56,
+                  marginRight: 2,
+                  display: isSidebarOpen ? "block" : "none",
+                }}
+              />
+              {isSidebarOpen && (
+                <div>
+                  <Typography variant="h6" className="montserrat-text-normal">
+                    User Name
+                  </Typography>
+                </div>
+              )}
+            </div>
+            <nav>
+              <List>
+                {menuItems.map((item, index) => (
+                  <React.Fragment key={index}>
+                    <Tooltip
+                    componentsProps={{  
+                      tooltip: {  
+                        sx: {  
+                          bgcolor: '#383a3a', // Custom hex color  
+                          color: 'white', 
+                          padding:'0px', 
+                          borderTopLeftRadius: '0px', // Optional: rounded corners  
+                          borderBottomLeftRadius: '0px', // Optional: rounded corners  
+                          borderTopRightRadius: '8px', // Optional: rounded corners  
+                          borderBottomRightRadius: '8px', // Optional: rounded corners 
+                          cursor:'pointer', 
+                        },  
                       },  
-                    },  
-                  }}  
-                    disableHoverListener={isSidebarOpen}
-                    placement="right"
-                    title={
-                      item.hasSubmenu && !isSidebarOpen ? (
-                        <List>
-                          {item.submenu.map((subItem, subIndex) => (
-                            <>
-                            <ListItem className="cursor-pointer"  onClick={() => navigate(subItem.path)} key={subIndex}>
-                              {subItem.title}
-                            </ListItem>
-                            </>
-                          ))}
-                        </List>
-                      ) : (
-                        <ListItem className="cursor-pointer"  onClick={() => navigate(item.path)} >{item.title}</ListItem>
-                        
-                      )
-                    }
-                    slotProps={{
-                      popper: {
-                        sx: {
-                          [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
-                            {
-                              marginTop: "0px",
-                            },
-                          [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
-                            {
-                              marginBottom: "0px",
-                            },
-                          [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
-                            {
-                              marginLeft: "0px",
-                            },
-                          [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
-                            {
-                              marginRight: "0px",
-                            },
-                        },
-                      },
-                    }}
-                  >
-                    <ListItem
-                      button
-                      onClick={() =>
-                        item.hasSubmenu
-                          ? handleToggle(item.title)
-                          : navigate(item.path)
+                    }}  
+                      disableHoverListener={isSidebarOpen}
+                      placement="right"
+                      title={
+                        item.hasSubmenu && !isSidebarOpen ? (
+                          <List>
+                            {item.submenu.map((subItem, subIndex) => (
+                              <>
+                              <ListItem className="cursor-pointer"  onClick={() => navigate(subItem.path)} key={subIndex}>
+                                {subItem.title}
+                              </ListItem>
+                              </>
+                            ))}
+                          </List>
+                        ) : (
+                          <ListItem className="cursor-pointer"  onClick={() => navigate(item.path)} >{item.title}</ListItem>
+                          
+                        )
                       }
-                      style={{
-                        backgroundColor:
-                          location.pathname === item.path
-                            ? "#FFEDEC"
-                            : "inherit",
-                        color:
-                          location.pathname === item.path ? "black" : "white",
+                      slotProps={{
+                        popper: {
+                          sx: {
+                            [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                              {
+                                marginTop: "0px",
+                              },
+                            [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                              {
+                                marginBottom: "0px",
+                              },
+                            [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                              {
+                                marginLeft: "0px",
+                              },
+                            [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                              {
+                                marginRight: "0px",
+                              },
+                          },
+                        },
                       }}
                     >
-                      <ListItemIcon className="w-8 cursor-pointer" sx={{ color:location.pathname === item.path ? "black" : "white", }}>{item.icon}</ListItemIcon>
-                      {isSidebarOpen && (
-                        <li className="montserrat-text-normal list-none cursor-pointer">
-                          {item.title}
-                        </li>
-                      )}
-                      {item.hasSubmenu &&
-                        isSidebarOpen &&
-                        (openMenu === item.title ? (
-                          <ExpandLess />
-                        ) : (
-                          <ExpandMore />
-                        ))}
-                    </ListItem>
-                  </Tooltip>
-                  {item.hasSubmenu && (
-                    <Collapse in={openMenu === item.title}>
-                      <List disablePadding className="pl-6">
-                        {item.submenu.map((subItem, subIndex) => (
-                          <ListItemButton
-                            key={subIndex}
-                            onClick={() => navigate(subItem.path)}
-                            style={{
-                              backgroundColor:
-                                location.pathname === subItem.path
-                                  ? "#FFEDEC"
-                                  : "inherit",
-                              color:
-                                location.pathname === subItem.path
-                                  ? "black"
-                                  : "white",
-                            }}
-                          >
-                            <ListItemIcon>{subItem.icon}</ListItemIcon>
-                            {isSidebarOpen && (
-                              <li className="montserrat-text-normal list-none">
-                                {subItem.title}
-                              </li>
-                            )}
-                          </ListItemButton>
-                        ))}
-                      </List>
-                    </Collapse>
-                  )}
-                </React.Fragment>
-              ))}
-            </List>
-          </nav>
-        </div>
-        <div>
-          <nav>
-            <List>
-              <Tooltip
-                title="Logout"
-                placement="right"
-                disableHoverListener={isSidebarOpen}
-                componentsProps={{
-                  tooltip:{
-                    sx:{
-                      bgcolor: '#383a3a',
-                      color: 'white',
-                      // padding: '0px',
-                      borderTopLeftRadius: '0px',
-                      borderBottomLeftRadius: '0px',
-                      borderTopRightRadius: '8px',
-                      borderBottomRightRadius: '8px',
+                      <ListItem
+                        button
+                        onClick={() =>
+                          item.hasSubmenu
+                            ? handleToggle(item.title)
+                            : navigate(item.path)
+                        }
+                        style={{
+                          backgroundColor:
+                            location.pathname === item.path
+                              ? "#FFEDEC"
+                              : "inherit",
+                          color:
+                            location.pathname === item.path ? "black" : "white",
+                        }}
+                      >
+                        <ListItemIcon className="w-8 cursor-pointer" sx={{ color:location.pathname === item.path ? "black" : "white", }}>{item.icon}</ListItemIcon>
+                        {isSidebarOpen && (
+                          <li className="montserrat-text-normal list-none cursor-pointer">
+                            {item.title}
+                          </li>
+                        )}
+                        {item.hasSubmenu &&
+                          isSidebarOpen &&
+                          (openMenu === item.title ? (
+                            <ExpandLess />
+                          ) : (
+                            <ExpandMore />
+                          ))}
+                      </ListItem>
+                    </Tooltip>
+                    {item.hasSubmenu && (
+                      <Collapse in={openMenu === item.title}>
+                        <List disablePadding className="pl-6">
+                          {item.submenu.map((subItem, subIndex) => (
+                            <ListItemButton
+                              key={subIndex}
+                              onClick={() => navigate(subItem.path)}
+                              style={{
+                                backgroundColor:
+                                  location.pathname === subItem.path
+                                    ? "#FFEDEC"
+                                    : "inherit",
+                                color:
+                                  location.pathname === subItem.path
+                                    ? "black"
+                                    : "white",
+                              }}
+                            >
+                              <ListItemIcon>{subItem.icon}</ListItemIcon>
+                              {isSidebarOpen && (
+                                <li className="montserrat-text-normal list-none">
+                                  {subItem.title}
+                                </li>
+                              )}
+                            </ListItemButton>
+                          ))}
+                        </List>
+                      </Collapse>
+                    )}
+                  </React.Fragment>
+                ))}
+              </List>
+            </nav>
+          </div>
+          <div>
+            <nav>
+              <List>
+                <Tooltip
+                  title="Logout"
+                  placement="right"
+                  disableHoverListener={isSidebarOpen}
+                  componentsProps={{
+                    tooltip:{
+                      sx:{
+                        bgcolor: '#383a3a',
+                        color: 'white',
+                        // padding: '0px',
+                        borderTopLeftRadius: '0px',
+                        borderBottomLeftRadius: '0px',
+                        borderTopRightRadius: '8px',
+                        borderBottomRightRadius: '8px',
+                      }
                     }
-                  }
-                }}
-                slotProps={{
-                  popper: {
-                    sx: {
-                      [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
-                        {
-                          marginTop: "0px",
-                        },
-                      [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
-                        {
-                          marginBottom: "0px",
-                        },
-                      [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
-                        {
-                          marginLeft: "0px",
-                        },
-                      [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
-                        {
-                          marginRight: "0px",
-                        },
+                  }}
+                  slotProps={{
+                    popper: {
+                      sx: {
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginTop: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginBottom: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginLeft: "0px",
+                          },
+                        [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                          {
+                            marginRight: "0px",
+                          },
+                      },
                     },
-                  },
-                }}
-              >
-                <ListItem onClick={handleLogout} button className="cursor-pointer">
-                  <ListItemIcon>
-                    <ExitToApp className="text-white" />
-                  </ListItemIcon>
-                  {isSidebarOpen && (
-                    <li className="montserrat-text-normal list-none">Logout</li>
-                  )}
-                </ListItem>
-              </Tooltip>
-            </List>
-          </nav>
-        </div>
-      </Box>
-    </div>
+                  }}
+                >
+                  <ListItem onClick={handleLogout} button className="cursor-pointer">
+                    <ListItemIcon>
+                      <ExitToApp className="text-white" />
+                    </ListItemIcon>
+                    {isSidebarOpen && (
+                      <li className="montserrat-text-normal list-none">Logout</li>
+                    )}
+                  </ListItem>
+                </Tooltip>
+              </List>
+            </nav>
+          </div>
+        </Box>
+      </div>
+    </>
   );
 };
 
