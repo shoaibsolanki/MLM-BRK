@@ -99,24 +99,7 @@ const UserMange = () => {
     }
   ];
 
-  // const data = [
-  //   {
-  //     sno: 1,
-  //     userId: "U001",
-  //     name: "John Doe",
-  //     password: "password123",
-  //     sponsorId: "S001",
-  //     activationStatus: "Active",
-  //     mobileNumber: "1234567890",
-  //     mobileVerification: "Verified",
-  //     emailId: "john.doe@example.com",
-  //     emailVerification: "Verified",
-  //     gender: "Male",
-  //     creationDate: "2023-01-01",
-  //   },
-  //   // Add more data as needed
-  // ];
-
+  
   const handleEdit = (row) => {
     // Handle edit action
     console.log("Edit row:", row);
