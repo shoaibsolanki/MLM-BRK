@@ -158,6 +158,14 @@ class DataService {
   })
  }
 
+ GetMLMTree(id){
+  return http.get(`customer/getMLMTree/${id}`)
+ }
+
+
+
+ 
+
 
 
 
