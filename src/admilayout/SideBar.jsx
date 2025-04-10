@@ -15,7 +15,6 @@ import {
   ListSubheader,
 } from "@mui/material";
 import {
-  Home,
   Settings,
   ExitToApp,
   Inventory2,
@@ -31,17 +30,26 @@ import { useNavigate, useLocation } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import StorageIcon from "@mui/icons-material/Storage";
 import {
+  Home,
+  Layers,
+  Package,
+  Users,
+  ShoppingCart,
+  Image,
+  GalleryVertical,
+  User,
+  IndianRupee,
   Gift,
   GiftIcon,
-  Grid,
-  HomeIcon,
-  Image,
-  IndianRupee,
-  Layers,
-  ListOrdered,
-  Package,
-  ShoppingCart,
-  Users,
+  ShieldCheck,
+  BadgePercent,
+  Repeat,
+  Award,
+  Gem,
+  Star,
+  Sparkle,
+  Trophy,
+  Megaphone,
 } from "lucide-react";
 
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
@@ -66,22 +74,22 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const menuItems = [
     {
       title: "Dashboard",
-      icon: <HomeIcon  size={18} />,
+      icon: <Home size={18} />,
       path: "/admin",
     },
     {
       title: "Manage Category",
-      icon: <Layers  size={18} />,
+      icon: <Layers size={18} />,
       path: "/admin/categories",
     },
     {
       title: "Manage Sub Category",
-      icon: <Layers  size={18} />,
+      icon: <Layers size={18} />,
       path: "/admin/subcategories",
     },
     {
       title: "Manage Product",
-      icon: <Package  size={18} />,
+      icon: <Package size={18} />,
       path: "/admin/products",
       hasSubmenu: true,
       submenu: [
@@ -95,27 +103,10 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         },
       ],
     },
-    
-    // {
-    //   title: "Manage Sub Product",
-    //   icon: <Package  size={18} />,
-    //   path: "/admin/subproducts",
-    //   hasSubmenu: true,
-    //   submenu: [
-    //     {
-    //       title: "Add Sub Product",
-    //       path: "/admin/subproducts/add",
-    //     },
-    //     {
-    //       title: "Sub Product List",
-    //       path: "/admin/subproducts/list",
-    //     },
-    //   ],
-    // },
     {
-      title:"Manage Sub Product",
-      icon:<Package size={18}/>,
-      path:"/admin/combo",
+      title: "Manage Sub Product",
+      icon: <Package size={18} />,
+      path: "/admin/combo",
       hasSubmenu: true,
       submenu: [
         {
@@ -127,10 +118,10 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
           path: "/admin/combo/list",
         },
       ],
-      },
+    },
     {
       title: "Manage Distributor",
-      icon: <Users  size={18} />,
+      icon: <Users size={18} />,
       path: "/admin/distributors",
       hasSubmenu: true,
       submenu: [
@@ -144,60 +135,49 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         },
       ],
     },
-    // {
-    //   title: "Manage Slider",
-    //   icon: <Image  size={18} />,
-    //   path: "/admin/sliders",
-    // },
-    // {
-    //   title: "Manage Gallery",
-    //   icon: <Grid  size={18} />,
-    //   path: "/admin/gallery",
-    // },
     {
       title: "Manage User",
-      icon: <Users  size={18} />,
+      icon: <User size={18} />,
       path: "/admin/users",
     },
     {
       title: "Manage Order",
-      icon: <ShoppingCart  size={18} />,
+      icon: <ShoppingCart size={18} />,
       path: "/admin/orders",
     },
     {
       title: "RP Bonus Manage",
-      icon: <ShoppingCart  size={18} />,
+      icon: <BadgePercent size={18} />,
       path: "/admin/bonus",
     },
     {
       title: "RP Transactions",
-      icon: <ShoppingCart  size={18} />,
+      icon: <Repeat size={18} />,
       path: "/admin/rp/transactions",
     },
     {
       title: "RP Value Exchange",
-      icon: <ShoppingCart  size={18} />,
+      icon: <IndianRupee size={18} />,
       path: "/admin/rp/exchange",
     },
-
     {
       title: "Manage Complaint",
-      icon: <ShoppingCart  size={18} />,
+      icon: <ShieldCheck size={18} />,
       path: "/admin/Complaint",
     },
     {
       title: "Manage Slider",
-      icon: <ShoppingCart  size={18} />,
+      icon: <Image size={18} />,
       path: "/admin/slider",
     },
     {
       title: "Manage KYC",
-      icon: <ShoppingCart  size={18} />,
+      icon: <ShieldCheck size={18} />,
       path: "/admin/KYC",
     },
     {
       title: "Income",
-      icon: <IndianRupee  size={18} />,
+      icon: <IndianRupee size={18} />,
       hasSubmenu: true,
       submenu: [
         {
@@ -232,34 +212,34 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     },
     {
       title: "Manage Gift",
-      icon: <Gift  size={18} />,
+      icon: <Gift size={18} />,
       path: "/admin/gift",
     },
     {
       title: "Gift Orders",
-      icon: <GiftIcon  size={18} />,
+      icon: <GiftIcon size={18} />,
       path: "/admin/gift/orders",
     },
-    {
-      title: "Gift Coupon",
-      icon: <GiftIcon  size={18} />,
-      path: "/admin/gift/coupon",
-    },
-    {
-      title: "Schemes",
-      icon: <Layers  size={18} />,
-      hasSubmenu: true,
-      submenu: [
-        {
-          title: "Progressive bonus",
-          path: "/admin/scheme/progressive",
-        },
-        {
-          title: "Successive bonus",
-          path: "/admin/scheme/successive",
-        },
-      ],
-    },
+    // {
+    //   title: "Gift Coupon",
+    //   icon: <GiftIcon size={18} />,
+    //   path: "/admin/gift/coupon",
+    // },
+    // {
+    //   title: "Schemes",
+    //   icon: <Trophy size={18} />,
+    //   hasSubmenu: true,
+    //   submenu: [
+    //     {
+    //       title: "Progressive bonus",
+    //       path: "/admin/scheme/progressive",
+    //     },
+    //     {
+    //       title: "Successive bonus",
+    //       path: "/admin/scheme/successive",
+    //     },
+    //   ],
+    // },
   ];
 
   return (
