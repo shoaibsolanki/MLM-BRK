@@ -173,6 +173,14 @@ class DataService {
   })
  }
  
+ GetAllOrderBypage(saasId, page, size){
+  return http.get(`/order/retailler-view-order/${saasId}/${page}/${size}`)
+ }
+
+
+
+
+
  
 
 
