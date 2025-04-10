@@ -7,7 +7,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     setIsSidebarOpen(!isSidebarOpen);
   };
   return (
-    <nav className="bg-[#383a3a] p-4">
+    <nav className="bg-[#383a3a] p-4 md:w-[100%]">
       <div className="container mx-10 flex justify-between items-center w-fit">
         {/* <IconButton onClick={toggleSidebar} className="md:hidden">
                             {isSidebarOpen ? <Close style={{color:"white"}}/> : <Menu style={{color:"white"}} />}
