@@ -4,14 +4,6 @@ import CustomDataTable from "./Microcomponents/DataTable";
 import DataService from '../services/requestApi'
 import { useEffect, useState } from "react";
 const Dashboard = () => {
-  const stats = [
-    { value: "5601", label: "Total User" },
-    { value: "5", label: "Total Orders" },
-    { value: "26", label: "Total Product" },
-    { value: "1", label: "Total Pending KYC" },
-    { value: "1", label: "Total Approved KYC" },
-    { value: "1", label: "Complaint" },
-  ];
 
   const columns = [
     { name: 'S.NO', selector: row => row.sno, sortable: true },
@@ -83,27 +75,14 @@ const Dashboard = () => {
           </Card>
 
           {/* Dynamic Statistics Cards */}
-          {dashboardData &&<>
-            <Card  className="flex flex-col items-center justify-center p-4">
+          {dashboardData.map((stat, index) => (
+            <Card key={index} className="flex flex-col items-center justify-center p-4">
               <CardContent className="text-center">
-                <h2 className="text-3xl font-bold">{dashboardData.customerCount}</h2>
-                <p className="text-gray-600">Total User</p>
+                <h2 className="text-3xl font-bold">{stat.value}</h2>
+                <p className="text-gray-600">{stat.label}</p>
               </CardContent>
             </Card>
-            <Card  className="flex flex-col items-center justify-center p-4">
-              <CardContent className="text-center">
-                <h2 className="text-3xl font-bold">{dashboardData.productCount}</h2>
-                <p className="text-gray-600">Total Products</p>
-              </CardContent>
-            </Card>
-            <Card  className="flex flex-col items-center justify-center p-4">
-              <CardContent className="text-center">
-                <h2 className="text-3xl font-bold">{dashboardData.complaintCount}</h2>
-                <p className="text-gray-600">Total Complaint</p>
-              </CardContent>
-            </Card>
-          </>
-         }
+          ))}
         </div>
         {/* Data Tables */}
         {/* <div className="w-full mt-4">
