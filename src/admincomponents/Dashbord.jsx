@@ -83,19 +83,32 @@ const Dashboard = () => {
           </Card>
 
           {/* Dynamic Statistics Cards */}
-          {stats.map((stat, index) => (
-            <Card key={index} className="flex flex-col items-center justify-center p-4">
+          {dashboardData &&<>
+            <Card  className="flex flex-col items-center justify-center p-4">
               <CardContent className="text-center">
-                <h2 className="text-3xl font-bold">{stat.value}</h2>
-                <p className="text-gray-600">{stat.label}</p>
+                <h2 className="text-3xl font-bold">{dashboardData.customerCount}</h2>
+                <p className="text-gray-600">Total User</p>
               </CardContent>
             </Card>
-          ))}
+            <Card  className="flex flex-col items-center justify-center p-4">
+              <CardContent className="text-center">
+                <h2 className="text-3xl font-bold">{dashboardData.productCount}</h2>
+                <p className="text-gray-600">Total Products</p>
+              </CardContent>
+            </Card>
+            <Card  className="flex flex-col items-center justify-center p-4">
+              <CardContent className="text-center">
+                <h2 className="text-3xl font-bold">{dashboardData.complaintCount}</h2>
+                <p className="text-gray-600">Total Complaint</p>
+              </CardContent>
+            </Card>
+          </>
+         }
         </div>
         {/* Data Tables */}
-        <div className="w-full mt-4">
+        {/* <div className="w-full mt-4">
           <CustomDataTable columns={columns} data={data} title="User Data" />
-        </div>
+        </div> */}
         <div className="w-full ">
           <CustomDataTable columns={columnsNewOrders} data={dataNewOrders} title="New Orders" />
         </div>
