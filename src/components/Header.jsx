@@ -20,6 +20,8 @@ const navItems = [
 const Header = () => {
   const { searchKeyword, setSearchKeyword, setSearchResults,logout } = useAuth();
   const { cart, totalItems } = useCart();
+  const isAuthenticated = localStorage.getItem("token");
+
 
   const [inputValue, setInputValue] = useState(searchKeyword);
   const { saasid, storeid } = useAuth();
@@ -58,11 +60,17 @@ const Header = () => {
 
   const handleNavigation = (path) => {
     if (path === '/refer') {
-      setShowReferralModal(true);
+      if (isAuthenticated) {
+        setShowReferralModal(true);
+      } else {
+        // Optional: navigate to login or show alert
+        setIsModalOpen(true); // or show a toast
+      }
     } else {
       navigate(path);
     }
   };
+  
   const clearSearch = () => {
     setInputValue("");
     setSearchKeyword("");
@@ -71,7 +79,6 @@ const Header = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  const isAuthenticated = localStorage.getItem("token");
 
 
   const [showReferralModal, setShowReferralModal] = useState(false);
@@ -143,10 +150,14 @@ const Header = () => {
         <div className="flex items-center gap-4">
            {/* Profile Icon */}
   <div className="hidden md:flex items-center justify-center w-10 h-10 bg-gray-100 rounded-full">
-    <User onClick={()=>
-      navigate("/profile")
-
-    } size={20} className="text-gray-600 cursor-pointer" />
+    <User   onClick={() => {
+    if (isAuthenticated) {
+      navigate("/profile");
+    } else {
+      setIsModalOpen(true); // or show a toast
+      // Or show alert/toast if not logged in
+    }
+  }} size={20} className="text-gray-600 cursor-pointer" />
   </div>
          {isAuthenticated?
          <button 
