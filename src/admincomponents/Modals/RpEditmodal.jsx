@@ -1,9 +1,10 @@
 import React from "react";
 import { Modal, Box, TextField, Button } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-
-const RpEditModal = ({ open, handleClose, onSubmit }) => {
-    const { control, handleSubmit } = useForm({
+import DataService from '../../services/requestApi'
+import { useSnackbar } from "notistack";
+const RpEditModal = ({ open, handleClose ,selected, fetchData}) => {
+    const { control,setValue, handleSubmit } = useForm({
         defaultValues: {
             type: "",
             rp: "",
@@ -12,9 +13,35 @@ const RpEditModal = ({ open, handleClose, onSubmit }) => {
             storeId: "",
         },
     });
+   
+    const {enqueueSnackbar } = useSnackbar()
 
-    const onSubmitForm = (data) => {
-        onSubmit(data);
+    React.useEffect(() => {
+        if (selected) {
+            setValue("type", selected.type || "");
+            setValue("rp", selected.rp || "");
+            setValue("value", selected.value || "");
+            setValue("saasId", selected.saasId || "");
+            setValue("storeId", selected.storeId || "");
+        }
+    }, [selected, setValue]);
+
+
+    const onSubmitForm = async (data) => {
+        try {
+            const response = await DataService.UpdateRpValue(data);
+            if (response?.data?.status) {
+                enqueueSnackbar("Update successful", { variant: "success" });
+                fetchData();
+                handleClose();
+            } else {
+                console.error("Update failed:", response?.data?.message || "Unknown error");
+                enqueueSnackbar(response?.data?.message || "Failed to update RP value. Please try again.", { variant: "error" });
+            }
+        } catch (error) {
+            console.error("Error updating RP value:", error);
+            enqueueSnackbar("An error occurred while updating RP value. Please check your connection and try again.", { variant: "error" });
+        }
     };
 
     return (
@@ -63,7 +90,7 @@ const RpEditModal = ({ open, handleClose, onSubmit }) => {
                             />
                         )}
                     />
-                    <Controller
+                    {/* <Controller
                         name="saasId"
                         control={control}
                         render={({ field }) => (
@@ -86,7 +113,7 @@ const RpEditModal = ({ open, handleClose, onSubmit }) => {
                                 variant="outlined"
                             />
                         )}
-                    />
+                    /> */}
                     <div className="flex justify-end space-x-4">
                         <Button variant="outlined" onClick={handleClose}>
                             Cancel
