@@ -177,6 +177,10 @@ class DataService {
   return http.get(`/order/retailler-view-order/${saasId}/${page}/${size}`)
  }
 
+ GetIncomeByDesignations(saasId, designation){
+  return http.get(`/customer/designations/${saasId}/${designation}`)
+ }
+
 
 
 

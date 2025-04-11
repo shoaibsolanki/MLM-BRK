@@ -181,33 +181,33 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       hasSubmenu: true,
       submenu: [
         {
-          title: "Performance Bonus",
-          path: "/admin/income/Performance",
+          title: "Beginner",
+          path: "/admin/income/Beginner",
         },
         {
-          title: "Weekly Matching income",
-          path: "/admin/income/weekly",
+          title: "Starter",
+          path: "/admin/income/Starter",
         },
         {
-          title: "Director income",
-          path: "/admin/income/director",
+          title: "Opener income",
+          path: "/admin/income/Opener",
         },
         {
-          title: "Pearl Director",
-          path: "/admin/income/pearl",
+          title: "Runner Director",
+          path: "/admin/income/Runner",
         },
         {
-          title: "Emerald Director",
-          path: "/admin/income/Emerald",
+          title: "Winner Director",
+          path: "/admin/income/Winner",
         },
         {
-          title: "Diamond Director",
-          path: "/admin/income/diamond",
+          title: "Star Director",
+          path: "/admin/income/Star",
         },
-        {
-          title: "Double Director",
-          path: "/admin/income/double",
-        },
+        // {
+        //   title: "Double Director",
+        //   path: "/admin/income/double",
+        // },
       ],
     },
     {
