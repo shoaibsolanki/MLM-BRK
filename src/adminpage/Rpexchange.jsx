@@ -6,6 +6,8 @@ import RpEditModal from '../admincomponents/Modals/RpEditmodal';
 const Rpexchange = () => {
     const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
     const [data, setData] = useState([])
+    const [open , setOpen] = useState(false)
+    const [selected , setSeleted] = useState('')
     const GetValue=async()=>{
         try {
             const response  = await DataService.GetRpBonusvalue(saasId)
@@ -63,7 +65,9 @@ const Rpexchange = () => {
             name: 'Action',
             cell: row => (
                 
-                    <Edit className='cursor-pointer'/>
+                    <Edit className='cursor-pointer' onClick={()=>{setOpen(true)
+                        setSeleted(row)
+                    }}/>
             ),
         },
     ];
@@ -71,8 +75,9 @@ const Rpexchange = () => {
 
   return (
     <div>
-        <CustomDataTable  columns={columns} data={data}/>
-        <RpEditModal />
+
+        <CustomDataTable title={"Rp Value Exchange"} columns={columns} data={data}/>
+        <RpEditModal fetchData={GetValue} selected={selected} open={open} handleClose={()=> setOpen(false)}/>
     </div>
   )
 }

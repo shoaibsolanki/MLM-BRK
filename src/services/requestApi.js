@@ -180,7 +180,10 @@ class DataService {
  GetIncomeByDesignations(saasId, designation){
   return http.get(`/customer/designations/${saasId}/${designation}`)
  }
-
+  
+ UpdateRpValue(data){
+  return http.post(`/RpBonus/create-rp-value`, data)
+ }
 
 
 
