@@ -5,6 +5,8 @@ import Layout from './Layout/Layout';
 import NotFound from './components/NotFound';
 import ProtectedRouteForAdmin from './ProtectedRouteForAdmin';
 import { CircularProgress } from '@mui/material';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // Lazy load components
 const Home = lazy(() => import('./page/Home'));
@@ -45,6 +47,17 @@ const CustomerTreeview = lazy(()=> import('./adminpage/CutomerTreeView'))
 const Slider = lazy(()=> import('./adminpage/MangeSlider'))
 const LeveWiseIncome = lazy(()=> import('./adminpage/Income/LeveWiseIncome'))
 function App() {
+  function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+  }
+
+  ScrollToTop();
   return (
     <>
       {/* Combined Routes Start */}
