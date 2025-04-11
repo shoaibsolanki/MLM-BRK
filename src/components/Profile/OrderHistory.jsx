@@ -38,6 +38,7 @@ const Orders = ({ className = "" }) => {
             key={index}
             className="bg-white shadow-md rounded-lg p-4 border border-gray-200"
           >
+            <div className="flex justify-between items-center mb-4">
             <div className="flex flex-col mb-4">
               <div className="text-lg font-medium">
                 Order ID: {order.order_id}
@@ -55,6 +56,16 @@ const Orders = ({ className = "" }) => {
                   {order.status}
                 </span>
               </div>
+            </div>
+            <div className="flex flex-col mb-4">
+              <div className="text-lg font-medium">
+                Total Order: {order?.order_value}
+              </div>
+              <div className="text-sm text-gray-600">
+                Point Redeemed: {order?.redeemRp?redeemRp:0}
+              </div>
+            
+            </div>
             </div>
             <div className="flex flex-col">
               {order.Orderdetail?.map((item, idx) => (
