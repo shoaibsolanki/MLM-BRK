@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import CustomDataTable from "../admincomponents/Microcomponents/DataTable";
-import { Edit } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 import { Button } from "@mui/material";
 import DataService from '../services/requestApi'
+import { Link } from "react-router-dom";
 const UserMange = () => {
   
   const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
@@ -80,6 +81,18 @@ const UserMange = () => {
       sortable: true,
     },
     {
+      name: "View",
+      cell: (row) => (
+       <Link to={`/admin/Cutomertree/${row.customerId}`}
+       >
+        <Eye />
+       </Link>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+    {
       name: "Action",
       cell: (row) => <Edit />,
       ignoreRowClick: true,
@@ -99,24 +112,7 @@ const UserMange = () => {
     }
   ];
 
-  // const data = [
-  //   {
-  //     sno: 1,
-  //     userId: "U001",
-  //     name: "John Doe",
-  //     password: "password123",
-  //     sponsorId: "S001",
-  //     activationStatus: "Active",
-  //     mobileNumber: "1234567890",
-  //     mobileVerification: "Verified",
-  //     emailId: "john.doe@example.com",
-  //     emailVerification: "Verified",
-  //     gender: "Male",
-  //     creationDate: "2023-01-01",
-  //   },
-  //   // Add more data as needed
-  // ];
-
+  
   const handleEdit = (row) => {
     // Handle edit action
     console.log("Edit row:", row);

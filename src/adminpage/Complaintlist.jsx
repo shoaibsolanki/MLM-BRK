@@ -23,11 +23,11 @@ const Complaintlist = () => {
 
 
     const columns = [
-        { name: 'Name', selector: row => row.name, sortable: true },
+        { name: 'Name', selector: row => row.customer_name, sortable: true },
         { name: 'Mobile', selector: row => row.mobile, sortable: true },
         { name: 'Email', selector: row => row.email, sortable: true },
-        { name: 'Subject', selector: row => row.subject, sortable: true },
-        { name: 'Complaint', selector: row => row.complaint, sortable: true },
+        { name: 'Subject', selector: row => row.issue, sortable: true },
+        { name: 'Complaint', selector: row => row.issue_description, sortable: true },
         { name: 'Date', selector: row => row.date, sortable: true },
     ];
 

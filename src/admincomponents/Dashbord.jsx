@@ -1,16 +1,9 @@
 import React from "react";
 import { Card, CardContent, Button } from "@mui/material";
 import CustomDataTable from "./Microcomponents/DataTable";
-
+import DataService from '../services/requestApi'
+import { useEffect, useState } from "react";
 const Dashboard = () => {
-  const stats = [
-    { value: "5601", label: "Total User" },
-    { value: "5", label: "Total Orders" },
-    { value: "26", label: "Total Product" },
-    { value: "1", label: "Total Pending KYC" },
-    { value: "1", label: "Total Approved KYC" },
-    { value: "1", label: "Complaint" },
-  ];
 
   const columns = [
     { name: 'S.NO', selector: row => row.sno, sortable: true },
@@ -49,6 +42,22 @@ const Dashboard = () => {
     // Add more data as needed
   ];
 
+    const [dashboardData, setDashboardData] = useState([]);
+    const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
+    const fetchDashboardData = async () => {
+      try {
+        const response = await DataService.DashBoardDataGet(saasId);
+        setDashboardData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchDashboardData();
+    }, []);
+
+
   return (
     <>
       <div>
@@ -66,7 +75,7 @@ const Dashboard = () => {
           </Card>
 
           {/* Dynamic Statistics Cards */}
-          {stats.map((stat, index) => (
+          {dashboardData.map((stat, index) => (
             <Card key={index} className="flex flex-col items-center justify-center p-4">
               <CardContent className="text-center">
                 <h2 className="text-3xl font-bold">{stat.value}</h2>
@@ -76,9 +85,9 @@ const Dashboard = () => {
           ))}
         </div>
         {/* Data Tables */}
-        <div className="w-full mt-4">
+        {/* <div className="w-full mt-4">
           <CustomDataTable columns={columns} data={data} title="User Data" />
-        </div>
+        </div> */}
         <div className="w-full ">
           <CustomDataTable columns={columnsNewOrders} data={dataNewOrders} title="New Orders" />
         </div>

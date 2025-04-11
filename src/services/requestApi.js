@@ -5,6 +5,9 @@ class DataService {
   Login(data) {
     return http.post("/auth/user-login", data);
   }
+  DashBoardDataGet(saasId){
+    return http.get(`dashboard/get-dashboard-details/${saasId}`)
+  }
   GetMasterCategory(saasid, storeid){
     return http.get(`/Master-category/get-list-master/${saasid}/${storeid}`)
   }
@@ -132,6 +135,62 @@ class DataService {
  CreateGifts(data){
   return http.post(`/gifts`, data)
  }
+ AddThumbnailImage(id, file){
+  return http.post(`/item/save-image/${id}
+`,file , {
+  headers: { "Content-Type": "multipart/form-data"}
+})
+ }
+
+ EditGift(id, data){
+  return http.put(`gifts/${id}`, data)
+ }
+ DeleteGift(id){
+  return http.delete(`/gifts/${id}`)
+ }
+
+ UpdateItem(id,data){
+  return http.put(`/item/update-item/${id}`,data)
+ }
+ 
+ ImagesUpdate(id , formData){
+  return http.patch(`/item/update-item-images/${id}`, formData, {
+    headers:{
+      "Content-Type":"multipart/form-data"
+    }
+  })
+ }
+
+ GetMLMTree(id){
+  return http.get(`customer/getMLMTree/${id}`)
+ }
+
+ UpdateSlider(saasId,formData){
+  return http.post(`saas-master/save-brandlogo/${saasId}`, formData, {
+    headers:{
+      "Content-Type":"multipart/form-data"
+    }
+  })
+ }
+ 
+ GetAllOrderBypage(saasId, page, size){
+  return http.get(`/order/retailler-view-order/${saasId}/${page}/${size}`)
+ }
+
+
+
+
+
+ 
+
+
+ 
+
+
+
+
+
+
 
 
 

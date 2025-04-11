@@ -41,7 +41,8 @@ const Rpbonusemange = lazy(()=> import('./adminpage/Rpbonusemange'))
 const Rptransactions = lazy(()=> import('./adminpage/Rptransactions'))
 const Rpexchange = lazy(()=> import('./adminpage/Rpexchange'))
 const Giftmange = lazy(()=> import('./adminpage/Mangegift'))
-
+const CustomerTreeview = lazy(()=> import('./adminpage/CutomerTreeView'))
+const Slider = lazy(()=> import('./adminpage/MangeSlider'))
 function App() {
   return (
     <>
@@ -89,6 +90,8 @@ function App() {
               <Route path="rp/transactions" element={<ProtectedRouteForAdmin Component={Rptransactions} />} />
               <Route path="rp/exchange" element={<ProtectedRouteForAdmin Component={Rpexchange} />} />
               <Route path="gift" element={<ProtectedRouteForAdmin Component={Giftmange} />} />
+              <Route path="Cutomertree/:Custid" element={<ProtectedRouteForAdmin Component={CustomerTreeview} />} />
+              <Route path="Slider" element={<ProtectedRouteForAdmin Component={Slider} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />

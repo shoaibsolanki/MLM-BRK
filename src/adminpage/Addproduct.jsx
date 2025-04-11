@@ -10,6 +10,11 @@ import axios from 'axios';
 const AddProduct = () => {
   const { enqueueSnackbar } = useSnackbar();
   const {storeId,saasId} = JSON.parse(localStorage.getItem('user_data'))
+  const [tumbnailimage, setTumbnailimage] = useState(null)
+  const handletumbnail = (e)=>{
+    const file = e.target.files[0]
+    setTumbnailimage(file)
+  }
   const [productData, setProductData] = useState({
     item_name: "",
     price: 0,
@@ -115,6 +120,7 @@ const AddProduct = () => {
         if(response.data.status){
           enqueueSnackbar('Product Added Successfully', { variant:"success"})
           handleUpload(response.data.data.item_id)
+          AddThumbnailImage(response.data.data.item_id)
             setProductData({
             item_name: "",
             price: 0,
@@ -153,12 +159,22 @@ const AddProduct = () => {
         enqueueSnackbar('Failed to add product. Please try again later.', { variant: 'error' });
       }
      }
- 
-    const [imageFields, setImageFields] = useState(Array(3).fill(null));
+         
+     const AddThumbnailImage=async(id)=>{
+      try {
 
-    const handleAddImageField = () => {
-      setImageFields((prevFields) => [...prevFields, null]);
-    };
+        const formData = new FormData()
+        if (!tumbnailimage) {
+          console.log("Thumbnail image not found");
+          return;
+        }
+        formData.append('file', tumbnailimage);
+        const response =await DataService.AddThumbnailImage(id , formData)
+      } catch (error) {
+        console.log(error)
+      }
+     }
+    
      
     const [files, setFiles] = useState(Array(3).fill(null));
     
@@ -181,11 +197,6 @@ const AddProduct = () => {
 
     const handleUpload = async (id) => {
       const formData = new FormData();
-      // files.forEach((file) => {
-      //   if (file) {
-      //     formData.append("file", file);
-      //   }
-      // });
       const validFiles = files.filter(file => file !== null); // Filter out null values
       validFiles.forEach((file) => {
         formData.append("file", file);
@@ -202,6 +213,7 @@ const AddProduct = () => {
         console.error("Upload Failed:", error);
       }
     };
+
 
   return (
     <div className="p-6 bg-white rounded">
@@ -378,11 +390,11 @@ const AddProduct = () => {
             variant="outlined"
           />
         </div>
-        {/* <div className="form-group">
+         <div className="form-group">
           <label className="block mb-2">Thumbnail Image</label>
-          <input type="file" className="block w-full text-sm text-gray-500  border-2 p-1 rounded" />
+          <input onChange={handletumbnail} type="file" className="block w-full text-sm text-gray-500  border-2 p-1 rounded" />
           <small className="text-gray-500">270px X 200px (jpg, jpeg, png, gif, svg)</small>
-        </div> */}
+        </div> 
          {/* <div> */}
       {files.map((file, index) => (
         <div className="form-group" key={index}>
@@ -393,17 +405,7 @@ const AddProduct = () => {
             <Trash />
           </IconButton>
       </div>
-        // <div key={index} style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
-          
-        //   <input
-        //     type="file"
-        //     onChange={(event) => handleFileChange(event, index)}
-        //     accept="image/*"
-        //   />
-        //   <IconButton onClick={() => removeFileInput(index)} color="error">
-        //     <Trash />
-        //   </IconButton>
-        // </div>
+      
       ))}
       
     {/* </div> */}

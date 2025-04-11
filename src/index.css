@@ -18,7 +18,8 @@ body {
   box-sizing: border-box;
 }
 .content-wrapper{
-  width: 100vh;
+  background:"#f2f2f2";
+  /* width: 100vh; */
   flex-grow: 1;
   padding: 1.5rem 1.7rem;
 }

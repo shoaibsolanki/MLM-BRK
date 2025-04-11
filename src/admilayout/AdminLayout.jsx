@@ -10,7 +10,7 @@ const AdminLayout = ({isSidebarOpen, setIsSidebarOpen }) => {
             <div className='flex'>
 
             <SideBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-            <div className="content-wrapper">
+            <div className="content-wrapper md:w-[100vh] w-[100%]">
              <Outlet/>
             </div>
             </div>
