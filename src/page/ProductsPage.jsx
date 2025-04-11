@@ -47,6 +47,7 @@ const ProductsPage = () => {
     if (response.status) {
       setProducts(response.data.data || []);
       setTitle("All Products");
+      setExpandedCategory(null);
     } else {
       setProducts([]);
     }

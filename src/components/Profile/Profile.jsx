@@ -3,11 +3,12 @@ import ProfileHeader from './ProfileHeader';
 import Transactions from './Transactions';
 import { Award, ChartBar, CircleHelp, House, LogOut, Settings, ShoppingBag, Users, X,CreditCard,History } from 'lucide-react';
 import Orders from './OrderHistory';
+import TeamStructure from './TeamStructure';
 const tabItems = [
   { id: 'order-history', label: 'Order History', icon: <History size={16} /> },
 
   // { id: 'dashboard', label: 'Dashboard', icon: <House size={16} /> },
-  // { id: 'team', label: 'Team', icon: <Users size={16} /> },
+  { id: 'team', label: 'Team', icon: <Users size={16} /> },
   // { id: 'products', label: 'Products', icon: <ShoppingBag size={16} /> },
   { id: 'transactions', label: 'Transactions', icon: <CreditCard size={16} /> },
 ];
@@ -110,6 +111,8 @@ const Profile = () => {
 
       {activeTab === 'transactions' && <Transactions customerId={profile.id} />}
       {activeTab === 'order-history' && <Orders  />}
+      {activeTab === 'team' && <TeamStructure  />}
+
 
         </div>
       </div>
