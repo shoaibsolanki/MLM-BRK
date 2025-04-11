@@ -21,7 +21,7 @@ import { useAuth } from "../contexts/AuthConext";
 import { useNavigate } from "react-router-dom";
 import HorizontalLinearAlternativeLabelStepper from "../components/MicroComponant/HorizontalLinearAlternativeLabelStepper";
 import { BASEURL } from "../services/http-common";
-
+import { Switch, FormControlLabel } from '@mui/material';
 
 const CartItem = ({
   item,
@@ -150,12 +150,20 @@ const Cart = () => {
     handleIncrease,
     handleDecrease,
   } = useCart();
-  const { authData, isAuthenticated } = useAuth();
+  const { authData, isAuthenticated , rewardPoint,GetRewardPoint,useRewards,setUseRewards} = useAuth();
   const { id, saasId, storeId } = authData;
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
 
+
+// Calculate discounted total
+const rewardValue = rewardPoint?.points ?? 0;
+const discountedTotal = Math.max(totalPrice - rewardValue, 0);
+  
+    useEffect(() => {
+        GetRewardPoint(id);
+    }, []);
   useEffect(() => {
     if (authData && authData.id) {
       setUserId(authData.id);
@@ -356,6 +364,7 @@ const Cart = () => {
                 {totalPrice}
               </span>
             </div>
+        
             <div className="max-md:hidden">
               <Box bgcolor="#ffff" p={2} borderRadius={2}>
                 <Grid  container>
@@ -430,6 +439,27 @@ const Cart = () => {
                 <Typography variant="body1">Subtotal</Typography>
                 <Typography variant="body1">₹{totalPrice}</Typography>
               </Box>
+              <Box display="flex" justifyContent="space-between" my={1}>
+              <FormControlLabel
+      control={
+        <Switch
+        checked={useRewards}
+        onChange={(e) => setUseRewards(e.target.checked)}
+          color="primary"
+          size="small"
+        />
+      }
+      label="Use Points"
+    />
+    <div>
+    {useRewards && <Typography className="text-red-500 fw-bold" variant="body1"> - {useRewards? Math.min(rewardPoint?.points, totalPrice) :""} Points</Typography>}
+
+    <Typography className="text-green-500 fw-bold" variant="body1">
+  {useRewards ? Math.max(rewardValue - totalPrice, 0) : rewardValue} Points
+</Typography>
+
+                </div>
+              </Box>
               <TextField
                 label="Enter coupon code"
                 variant="outlined"
@@ -442,7 +472,7 @@ const Cart = () => {
               </Select>
               <Box display="flex" justifyContent="space-between" my={2}>
                 <Typography variant="body1">Total amount</Typography>
-                <Typography variant="body1">₹{totalPrice}</Typography>
+                <Typography variant="body1">₹{useRewards ? discountedTotal : totalPrice}</Typography>
               </Box>
               <div className="flex justify-center">
                 <button

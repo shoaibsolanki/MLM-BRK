@@ -95,6 +95,20 @@ export const AuthProvider = ({ children }) => {
       console.error(error);
     }
   };
+// reward functiolity 
+const [useRewards, setUseRewards] = useState(false);
+
+   const [rewardPoint, setRewardPoint] = useState([])
+    const GetRewardPoint = async (id)=>{
+      try {
+        const response = await DataService.GetRewardPoint(id)
+        if(response.data.status){
+          setRewardPoint(response.data.data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   // console.log(allOrders);
   // useEffect(() => {
   //   if(store_id,saas_id,id){
@@ -215,6 +229,10 @@ export const AuthProvider = ({ children }) => {
         setStores,
         stores,
         hasMore,
+        rewardPoint,
+        GetRewardPoint,
+        useRewards,
+        setUseRewards,
        
       }}
     >

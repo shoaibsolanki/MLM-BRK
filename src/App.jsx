@@ -14,6 +14,8 @@ const Support = lazy(() => import('./page/Support'));
 const Cart = lazy(() => import('./page/Cart'));
 const Checkout = lazy(() => import('./page/Checkout'));
 const Profile = lazy(() => import('./components/Profile/Profile'));
+const CreateKyc = lazy(() => import('./components/KYC/CreateKyc'));
+
 
 
 const CustomerRegstration = lazy(()=> import('./components/Registration/CustomerRegstration'))
@@ -61,6 +63,8 @@ function App() {
               <Route path="/support" element={<Support />} />
               <Route   path="/customer-registration/:organization/:referralCode" element={<CustomerRegstration />} />  
               <Route path="/cart" element={<Cart />} />
+              <Route path="/kyc" element={<CreateKyc />} />
+
 
 
             </Route>

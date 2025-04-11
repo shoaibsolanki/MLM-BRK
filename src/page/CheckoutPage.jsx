@@ -15,6 +15,8 @@ const CheckoutPage = () => {
     login,
     isAuthenticated,
     getOrderHistory,
+    useRewards,
+    rewardPoint
   } = useAuth();
   const { cart, totalPrice, clearCart, totalPricePlusDeliveryCharge } =
     useCart();
@@ -29,7 +31,16 @@ const CheckoutPage = () => {
   const [showNewAddressForm, setShowNewAddressForm] = useState(true);
   const [selectedAddress, setSelectedAddress] = useState();
   const [selectedMethod, setSelectedMethod] = useState("cod");
+  const [deliveryMethod, setDeliveryMethod] = useState('Delivery')
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const storedData = JSON.parse(localStorage.getItem("store_data"));
+  const { deliveryCharges, } = storedData;
+
   useEffect(() => {
+console.log("selectedMethod",selectedMethod)
+
     if (showNewAddressForm) {
       setSelectedAddress(null);
     }
@@ -47,6 +58,7 @@ const CheckoutPage = () => {
   const {
     register,
     handleSubmit,
+    isSubmitting,
     formState: { errors },
   } = useForm();
 
@@ -70,11 +82,13 @@ const CheckoutPage = () => {
       document.body.removeChild(script);
     };
   }, []);
-
+// Calculate discounted total
+const rewardValue = rewardPoint?.points ?? 0;
+const discountedTotal = Math.max(totalPrice - rewardValue, 0);
   const createRazorpayOrder = async () => {
     try {
       const data = {
-        amount: totalPricePlusDeliveryCharge * 100,
+        amount: useRewards ? discountedTotal : totalPrice,
         currency: "INR",
       };
 
@@ -83,7 +97,7 @@ const CheckoutPage = () => {
       )}`;
 
       const response = await axios.post(
-        `${BASEURL.ENDPOINT_URL}rezar/pay/1`,
+        `${BASEURL.ENDPOINT_URL}/rezar/pay/${useRewards ? discountedTotal : totalPrice}/${storeId}`,
         data,
         {
           headers: {
@@ -108,7 +122,7 @@ const CheckoutPage = () => {
         key: "rzp_test_USk6kNFvt2WXOE",
         amount: totalPricePlusDeliveryCharge * 100,
         currency: "INR",
-        name: "FastSide",
+        name: "BRK",
         description: "Test Transaction",
         image: "",
         order_id: orderId,
@@ -117,7 +131,6 @@ const CheckoutPage = () => {
           await handlePlaceOrder(formData, response);
           setIsPaymentSuccessful(true);
           clearCart();
-          navigate("/cart/checkout/summary");
         },
         prefill: {
           name: `${formData.first_name} ${formData.last_name}`,
@@ -138,7 +151,18 @@ const CheckoutPage = () => {
       console.error("Error handling Razorpay payment:", error);
     }
   };
-
+  const onSubmit = async (data) => {
+    // If online selected and reward points are enough to cover the total
+    if (
+      selectedMethod === "online" &&
+      useRewards &&
+      rewardPoint?.points >= totalPrice
+    ) {
+      await handlePlaceOrder(data, {}, "paid"); // Directly place order, no Razorpay
+    } else {
+      handleRazorpayPayment(data); // Proceed with Razorpay flow
+    }
+  };
   const deleteAddress = async (id, saasId, storeId) => {
     try {
       const response = await DataService.DeleteAddress(id, saasId, storeId);
@@ -147,10 +171,75 @@ const CheckoutPage = () => {
     }
   };
 
-  const onSubmit = async (data) => {
-    handleRazorpayPayment(data);
-  };
+ 
+  const onCodSubmit = async (data,paymentResponse) => {
+    try {
+      if(!data.address_id && deliveryMethod == "Delivery"){
+        console.log(data.address_id);
+         setSnackbar({
+          open: true,
+          message: "Please select an address",
+          severity: "error",
+        });
+        return;
+      }
+      const updatedCart = cart.map((item) => ({ ...item ,new_price:item?.price *item?.productQty }));
+      if(updatedCart?.length == 0 ){
+        setSnackbar({
+          open: true,
+          message: "Cart is empty",
+          severity: "error",
+        });
+        return;
+      }
+      setIsLoading(true)
+      const orderInformations = {
+        address_id: deliveryMethod == "Pickup"?"":data.address_id,
+        customer_id: id,
+        customer_name: name,
+        mobile_number: mobileNumber,
+        saas_id: saasId,
+        store_id: storeId,
+        order_tax: 0,
+        order_value: totalPrice,
+        order_discount: 0,
+        status: "pending",
+        redeemRp:useRewards?rewardPoint?.points:"",
+        deliveryCharges:deliveryCharges,
+        payment_type: selectedMethod,
+        order_qty: TotalOrderQeuntity,
+        razorpay_order_id: selectedMethod=="online"?paymentResponse.razorpay_order_id:"",
+        razorpay_payment_id: selectedMethod=="online"?paymentResponse.razorpay_payment_id:"",
+        order_date: new Date(),
+        order_type: deliveryMethod,
+        item_list: updatedCart,
+      };
 
+      localStorage.setItem("orderInformations", JSON.stringify(cart));
+      const response = await DataService.CreateOrder(orderInformations);
+
+      localStorage.setItem("orderMaster", JSON.stringify(response?.data));
+      console.log("Order placed:", response);
+
+      if (response.status === 200) {
+        console.log("Order placed");
+        setSnackbar({
+          open: true,
+          message:response?.data?.message,
+          severity: "success",
+        });
+        await getOrderHistory(storeId,saasId,id);
+
+        clearCart();
+        setIsPaymentSuccessful(true);
+        navigate("/profile");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+      setIsLoading(false);
+    }
+  };
   const handleSaveAddress = async (data) => {
     const addressForSave = {
       address: `${data.street},${data.city},${data.state}`,
@@ -169,8 +258,20 @@ const CheckoutPage = () => {
   };
   console.log("savedaddress", savedAddresses);
   const [customerName, setCustomerName] = useState();
-  const handlePlaceOrder = async (data, paymentResponse) => {
+  const handlePlaceOrder = async (data, paymentResponse = {}, paymentTypeOverride = null) => {
+
+    
     try {
+      const updatedCart = cart.map((item) => ({ ...item ,new_price:item?.price *item?.productQty }));
+      if(updatedCart?.length == 0 ){
+        setSnackbar({
+          open: true,
+          message: "Cart is empty",
+          severity: "error",
+        });
+        return;
+      }
+
       const orderInformations = {
         address_id: data.address_id,
         customer_id: id,
@@ -182,13 +283,17 @@ const CheckoutPage = () => {
         order_value: totalPrice,
         order_discount: 0,
         status: "pending",
-        payment_type: "COD",
+        payment_type: paymentTypeOverride || selectedMethod,
         order_qty: TotalOrderQeuntity,
-        razorpay_order_id: paymentResponse.razorpay_order_id,
-        razorpay_payment_id: paymentResponse.razorpay_payment_id,
-        order_date: new Date(),
+        redeemRp: useRewards ? Math.min(rewardPoint?.points, totalPrice) : "",
+        deliveryCharges:deliveryCharges,
+        razorpay_order_id:
+        (paymentTypeOverride || selectedMethod) === "online" ? paymentResponse.razorpay_order_id : "",
+      razorpay_payment_id:
+        (paymentTypeOverride || selectedMethod) === "online" ? paymentResponse.razorpay_payment_id : "",
+      order_date: new Date(),
         order_type: "",
-        item_list: cart,
+        item_list: updatedCart,
       };
 
       localStorage.setItem("orderInformations", JSON.stringify(cart));
@@ -202,7 +307,10 @@ const CheckoutPage = () => {
         getOrderHistory();
 
         clearCart();
+        
         setIsPaymentSuccessful(true);
+        navigate("/profile");
+
       }
     } catch (error) {
       console.error("Error placing order:", error);
@@ -223,8 +331,10 @@ const CheckoutPage = () => {
   const getSavedData = async () => {
     try {
       const response = await DataService.GetSavedAddress(id, saasId, storeId);
-      console.log("Saved addresses:", response.data.data);
       setSavedAddresses(response.data.data);
+      if (response.data.data.length > 0) {
+        setSelectedAddress(response.data.data[0].id);
+      }
     } catch (error) {
       console.error("Error fetching saved addresses:", error);
     }
@@ -257,173 +367,7 @@ const CheckoutPage = () => {
     setSnackbar({ open: false, message: "", severity: "" });
   };
 
-  const onSubmitFirstStep = async (data) => {
-    if (data.mobile_numbers.length !== 10) {
-      setSnackbar({
-        open: true,
-        message: "Phone number must be 10 digits!",
-        severity: "error",
-      });
-      return;
-    }
-    try {
-      setPhoneNumber(data.mobile_numbers);
-      const response = await axios.get(
-        `${BASEURL.ENDPOINT_URL}otp/resend-otp/${data.mobile_numbers}`
-      );
-
-      if (response.status === 200) {
-        setSnackbar({
-          open: true,
-          message: "OTP sent successfully!",
-          severity: "success",
-        });
-
-        setStep(2);
-      }
-    } catch (error) {
-      if (error.response.data.message == "User Already Registered") {
-        setSnackbar({
-          open: true,
-          message: "User Already Registered!",
-          severity: "error",
-        });
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-      } else {
-        setSnackbar({
-          open: true,
-          message: "Error resending OTP. Please try again later.",
-          severity: "error",
-        });
-      }
-    }
-  };
-
-  const onSubmitSecondStep = async (data) => {
-    try {
-      const response = await axios.post(
-        `${BASEURL.ENDPOINT_URL}otp/validate-otp`,
-        {
-          mobile_no: phoneNumber,
-          otp: data.otp,
-        }
-      );
-      if (response.status === 200) {
-        setSnackbar({
-          open: true,
-          message: "OTP validated successfully!",
-          severity: "success",
-        });
-        setStep(3);
-      }
-    } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Failed to validate OTP.",
-        severity: "error",
-      });
-    }
-  };
-
-  const onSubmitThirdStep = async (data) => {
-    if (data.password !== data.confirmPassword) {
-      setSnackbar({
-        open: true,
-        message: "Passwords do not match.",
-        severity: "error",
-      });
-      return;
-    }
-
-    const today = new Date();
-    const currentDate = today.toLocaleDateString();
-
-    try {
-      const response = await axios.post(
-        `${BASEURL.ENDPOINT_URL}customer/create`,
-        {
-          sub_centre_id: 1,
-          mobile_number: phoneNumber,
-          password: data.password,
-          address_3: "Building 5",
-          discount_percent: 10.0,
-          email: "admin123@gmail.com",
-          name: `${data.first_name} ${data.last_name}`,
-          card_number: Math.ceil(Math.random() * 10000),
-          store_id: "33001",
-          saas_id: "33",
-          city: "city",
-          state: "state",
-          country: "India",
-          preferred_language: "English",
-          customer_since: currentDate,
-          payment_terms: 30,
-          credit_limit: 10000.0,
-          sales_representative: "Jane Smith",
-          gender: "male",
-          occupation: "occ",
-          income_level: 50000,
-          source_of_acq: "online",
-          customer_type: "CUSTOMER",
-        }
-      );
-      if (response.status === 200) {
-        setCustomerName(data.first_name, data.last_name);
-        setSnackbar({
-          open: true,
-          message: "Registration successful!",
-          severity: "success",
-        });
-        // Registration successful, handle next steps
-        handleLoginSubmit(data.password);
-      }
-    } catch (error) {
-      setSnackbar({
-        open: true,
-        message: "Failed to register.",
-        severity: "error",
-      });
-    }
-  };
-
-  const handleLoginSubmit = async (password) => {
-    try {
-      const response = await axios.post(
-        `${BASEURL.ENDPOINT_URL}auth/user-login`,
-        {
-          user_name: phoneNumber,
-          password: password,
-        }
-      );
-      const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
-      if (response.data.status) {
-        const token = response.data.data.jwt_response;
-        const user = response.data.data.customer_data;
-        // Handle login success, e.g., store token, navigate to dashboard, etc.
-        setSnackbar({
-          open: true,
-          message: "Login successful!",
-          severity: "success",
-        });
-
-        if (token && user) {
-          login(user, token);
-          if (redirectUrl) {
-            setTimeout(() => {
-              sessionStorage.removeItem("redirectAfterLogin");
-              navigate(redirectUrl);
-            }, 1000);
-          }
-        }
-      } else {
-        // Handle login failure
-      }
-    } catch (error) {
-      // Handle error
-    }
-  };
+ 
 
   //fetching states:---
   const [states, setStates] = useState([]);
@@ -456,148 +400,6 @@ const CheckoutPage = () => {
 
   return (
     <div className="w-full mx-auto p-4">
-      {/* {!isAuthenticated && (
-        <div className="border border-gray-300 p-6 mb-6 rounded-md">
-          <h2 className="text-lg font-semibold mb-4">Register Information</h2>
-
-          {step === 1 && (
-            <form
-              onSubmit={handleSubmit(onSubmitFirstStep)}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              <div className="form-group">
-                <label htmlFor="firstName" className="text-sm font-semibold">
-                  First Name
-                </label>
-                <input
-                  {...register("first_name", { required: true })}
-                  type="text"
-                  id="firstName"
-                  placeholder="First name"
-                  className="bg-white mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
-                {errors.first_name && <span>This field is required</span>}
-              </div>
-              <div className="form-group">
-                <label htmlFor="lastName" className="text-sm font-semibold">
-                  Last Name
-                </label>
-                <input
-                  {...register("last_name", { required: true })}
-                  type="text"
-                  id="lastName"
-                  placeholder="Last name"
-                  className="bg-white mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
-                {errors.last_name && <span>This field is required</span>}
-              </div>
-              <div className="form-group">
-                <label htmlFor="phoneNumber" className="text-sm font-semibold">
-                  Phone Number
-                </label>
-                <input
-                  {...register("mobile_numbers", { required: false })}
-                  type="number"
-                  id="phoneNumber"
-                  placeholder="Phone number"
-                  className="bg-white mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
-                {errors.mobile_numbers && <span>This field is required</span>}
-              </div>
-              <button
-                type="submit"
-                className=" h-12 mt-5 bg-second text-white text-lg font-semibold hover:bg-yellow-600 transition-colors"
-              >
-                Next
-              </button>
-            </form>
-          )}
-
-          {step === 2 && (
-            <form
-              onSubmit={handleSubmit(onSubmitSecondStep)}
-              className="grid grid-cols-1 gap-4"
-            >
-              <div className="form-group">
-                <label htmlFor="otp" className="text-sm font-semibold">
-                  Enter OTP
-                </label>
-                <input
-                  {...register("otp", { required: true })}
-                  type="text"
-                  id="otp"
-                  placeholder="OTP"
-                  className="bg-white mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
-                {errors.otp && <span>This field is required</span>}
-              </div>
-              <button
-                type="submit"
-                className=" h-12 mt-5 bg-second text-white text-lg font-semibold hover:bg-yellow-600 transition-colors"
-              >
-                Validate OTP
-              </button>
-            </form>
-          )}
-
-          {step === 3 && (
-            <form
-              onSubmit={handleSubmit(onSubmitThirdStep)}
-              className="grid grid-cols-1 gap-4"
-            >
-              <div className="form-group">
-                <label htmlFor="password" className="text-sm font-semibold">
-                  Password
-                </label>
-                <input
-                  {...register("password", { required: true })}
-                  type="password"
-                  id="password"
-                  placeholder="Password"
-                  className="bg-white mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
-                {errors.password && <span>This field is required</span>}
-              </div>
-              <div className="form-group">
-                <label
-                  htmlFor="confirmPassword"
-                  className="text-sm font-semibold"
-                >
-                  Confirm Password
-                </label>
-                <input
-                  {...register("confirmPassword", { required: true })}
-                  type="password"
-                  id="confirmPassword"
-                  placeholder="Confirm Password"
-                  className="bg-white mt-1 p-2 border border-gray-300 rounded-md w-full"
-                />
-                {errors.confirmPassword && <span>This field is required</span>}
-              </div>
-              <button
-                type="submit"
-                className="h-12 mt-5 bg-second text-white text-lg font-semibold hover:bg-yellow-600 transition-colors"
-              >
-                Register
-              </button>
-            </form>
-          )}
-
-          <Snackbar
-            open={snackbar.open}
-            autoHideDuration={2000}
-            onClose={handleCloseSnackbar}
-          >
-            <Alert
-              onClose={handleCloseSnackbar}
-              severity={snackbar.severity}
-              sx={{ width: "100%" }}
-            >
-              {snackbar.message}
-            </Alert>
-          </Snackbar>
-        </div>
-      )} */}
 
       {showNewAddressForm && isAuthenticated ? (
         <div className="bg-white border  border-gray-300 p-6 mb-6 rounded-md">
@@ -754,7 +556,7 @@ const CheckoutPage = () => {
                           value={item.id.toString()}
                           checked={selectedAddress === item.id}
                           onChange={() => handleAddressSelect(item.id)}
-                          className="accent-[#F1A10A] h-5 w-5 mt-1 md:mt-0"
+                          className="accent-[#09147e] h-5 w-5 mt-1 md:mt-0"
                         />
                         <span className="text-lg font-semibold ml-2">
                           {item.address}
@@ -805,7 +607,7 @@ const CheckoutPage = () => {
         </>
       )}
 
-      {!showNewAddressForm ? (
+      {!showNewAddressForm && isAuthenticated ? (
         <div className="bg-white p-4 border-[1px] rounded-md">
           <h3 className="text-primary uppercase font-medium text-sm">
             <span className="bg-light py-[1px] px-[3px] text-sm rounded-sm mr-1 ">
@@ -821,18 +623,41 @@ const CheckoutPage = () => {
               type="radio"
               name="paymentMethod"
               value="online"
-              checked
+              checked ={selectedMethod === "online"}
               onChange={() => handlePaymentChange("online")}
               className="mr-2 bg-[#00B207] text-[#00B207]"
             />
             <h3 className="font-semibold text-[#4D4D4D]  ">Pay online</h3>
           </div>
-          <button
+          <div
+            onClick={() => handlePaymentChange("COD")}
+            className={`mt-2 p-4  rounded-md flex gap-2 items-center bg-light `}
+          >
+            <input
+              type="radio"
+              name="paymentMethod"
+              value="Cash on Delivery"
+              checked ={selectedMethod === "COD"}
+              onChange={() => handlePaymentChange("COD")}
+              className="mr-2 bg-[#00B207] text-[#00B207]"
+            />
+            <h3 className="font-semibold text-[#4D4D4D]  ">Cash On Delivery</h3>
+          </div>
+          {selectedMethod == "online"? <button
             onClick={handleSubmit(onSubmit)}
+            disabled={isSubmitting}
             className="w-full mt-4 py-2 bg-[#00B207] text-white rounded-full text-lg  hover:bg-[#017f05]transition-colors mx-auto"
           >
             Pay and Place Order
-          </button>
+          </button>:
+          
+          <button
+            onClick={handleSubmit(onCodSubmit)}
+            disabled={isLoading}
+            className="w-full mt-4 py-2 bg-[#00B207] text-white rounded-full text-lg  hover:bg-[#017f05]transition-colors mx-auto"
+          >
+           {isLoading?"Order Booking..." :"Place Order"}
+          </button>}
         </div>
       ) : (
         ""

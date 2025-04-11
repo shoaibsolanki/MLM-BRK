@@ -180,7 +180,7 @@ const Header = () => {
       </div>
 
       {/* Mobile Drawer */}
-      <MobileDrawer isOpen={isDrawerOpen} onClose={toggleDrawer} navItems={navItems} />
+      <MobileDrawer logout={logout} setIsModalOpen={setIsModalOpen} isAuthenticated={isAuthenticated} isOpen={isDrawerOpen} onClose={toggleDrawer} navItems={navItems} />
 
       {/* Refer And Earn Modal */}
       <ReferAndEarnModal isOpen={isModalOpen} onClose={handleCloseModal} />

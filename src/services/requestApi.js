@@ -146,8 +146,8 @@ class DataService {
     return http.get(`/category/get-list/${saasid}/${storeid}`)
   }
  
-  getProductbyitemId(ID){
-    return http.get(`/item/view-item-detil/${ID}`)
+  getProductbyitemId(ID,storeid){
+    return http.get(`/item/view-item-detil/${ID}/${storeid}`)
   }
   getReferName(ID){
     return http.get(`/customer/getReferName/${ID}`)
@@ -198,6 +198,11 @@ class DataService {
       `customer/get-all-customer-address-app/${id}/${saasId}/${storeId}`
     );
   }
+  Getkycstatus(saasId, storeId,id) {
+    return http.get(
+      `kyc/get-kyc-customer/${saasId}/${storeId}/${id}`
+    );
+  }
   OrderHistory(storeId, saasId, id) {
     return http.get(
       `order/view-order-detail-fastside/${storeId}/${saasId}/${id}`
@@ -205,6 +210,9 @@ class DataService {
   }
   CreateOrder(data) {
     return http.post(`/order/create/order/master`, data);
+  }
+  CreateKYC(data) {
+    return http.post(`/kyc/create`, data);
   }
   SaveAddress(data, id) {
     return http.post(`customer/create-address/${id}`, data);

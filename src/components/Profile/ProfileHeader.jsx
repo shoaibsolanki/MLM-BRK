@@ -1,23 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Calendar, Facebook, Gem, Instagram, Mail, Pen, Phone, Twitter, X } from 'lucide-react';
-import DataService from "../../services/requestApi"; // Import DataService
+import { useAuth } from '../../contexts/AuthConext';
+import { useNavigate } from 'react-router-dom';
+import DataService from "../../services/requestApi";
+import KycStatus from './KycStatus';
 
 const ProfileHeader = ({ profile, updateProfile }) => {
+const {
+  rewardPoint,GetRewardPoint
+  } = useAuth();
+const  navigate = useNavigate();
 
-
- const [data, setData] = useState([])
-  const GetRewardPoint = async ()=>{
-    try {
-      const response = await DataService.GetRewardPoint(profile?.id)
-      if(response.data.status){
-        setData(response.data.data)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
   useEffect(() => {
-      GetRewardPoint();
+      GetRewardPoint(profile?.id);
   }, []);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -48,6 +43,10 @@ const ProfileHeader = ({ profile, updateProfile }) => {
     });
   };
 
+
+  //kyc status
+  
+  
   return (
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       {/* Header background */}
@@ -157,36 +156,35 @@ const ProfileHeader = ({ profile, updateProfile }) => {
                 <div className="flex flex-col-3 md:items-end mt-3 md:mt-0">
   <div className="mx-2 flex items-center space-x-2 text-sm text-gray-700 font-medium bg-indigo-50 px-3 py-2 rounded-lg shadow-sm">
     <Gem size={18} className="text-indigo-600" />
-    <span>{data?.points ?? 0} Ponits</span>
+    <span>{rewardPoint?.points ?? 0} Ponits</span>
   </div>
   <div className="mx-2 flex items-center space-x-2 text-sm text-gray-700 font-medium bg-indigo-50 px-3 py-2 rounded-lg shadow-sm">
     <Gem size={18} className="text-indigo-600" />
-    <span>{data?.monthlyRp ?? 0} Monthly RP</span>
+    <span>{rewardPoint?.monthlyRp ?? 0} Monthly RP</span>
   </div>
   <div className="mx-2 flex items-center space-x-2 text-sm text-gray-700 font-medium bg-indigo-50 px-3 py-2 rounded-lg shadow-sm">
     <Gem size={18} className="text-indigo-600" />
-    <span>{data?.monthlyRp ?? 0} Total RP</span>
+    <span>{rewardPoint?.totalRp ?? 0} Total RP</span>
   </div>
 </div>
               </div>
 
-              {/* Contact details */}
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-                <div className="flex items-center text-sm text-gray-600">
-                  <Mail size={16} className="mr-2" />
-                  <span>{profile.email}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Phone size={16} className="mr-2" />
-                  <span>{profile.phone}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Calendar size={16} className="mr-2" />
-                  <span>Member since {formatDate(profile.joinDate)}</span>
-                </div>
-              </div>
-
-              {/* Bio */}
+                      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Mail size={16} className="mr-2" />
+                        <span>{profile.email}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Phone size={16} className="mr-2" />
+                        <span>{profile.phone}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Calendar size={16} className="mr-2" />
+                        <span>Member since {formatDate(profile.joinDate)}</span>
+                      </div>
+                      </div>
+                  <KycStatus userId={profile?.id} />
+                      {/* Bio */}
               <div className="mt-5">
                 <h3 className="text-sm font-medium text-gray-700 mb-1">About</h3>
                 <p className="text-gray-600">{profile.bio}</p>

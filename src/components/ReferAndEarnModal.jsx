@@ -26,6 +26,8 @@ const ReferAndEarnModal = ({ isOpen, onClose }) => {
         localStorage.setItem('token', response.data.data.jwt_response);
         localStorage.setItem('user_data', JSON.stringify(response.data.data.user_data));
         localStorage.setItem('authData', JSON.stringify(response.data.data.customer_data));
+        localStorage.setItem('store_data', JSON.stringify(response.data.data.store_data));
+
         enqueueSnackbar(response.data.message, { variant: 'success' });
         navigate('/');
     window.location.reload();

@@ -1,8 +1,17 @@
 import { LogIn, User, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const MobileDrawer = ({ isOpen, onClose, navItems }) => {
+const MobileDrawer = ({ isOpen, onClose, navItems ,isAuthenticated,setIsModalOpen,logout}) => {
   if (!isOpen) return null;
-
+  const navigate = useNavigate();
+const profilenaviagte = ()=>{
+  onClose()
+  navigate("/profile")
+}
+const loginmodal = ()=>{
+  onClose()
+  setIsModalOpen(true)
+}
   return (
     <div className="fixed inset-0 z-50 md:hidden">
       {/* Backdrop */}
@@ -16,10 +25,10 @@ const MobileDrawer = ({ isOpen, onClose, navItems }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-4 bg-[#2874f0] text-white">
           <div className="flex items-center">
-            <User size={24} className="mr-2" />
+            <User  onClick={profilenaviagte} size={24} className="mr-2" />
             <div>
               <div className="font-medium">Hello, User</div>
-              <div className="text-xs">Welcome to Flipkart</div>
+              <div className="text-xs">Welcome to BRK</div>
             </div>
           </div>
           <button onClick={onClose} className="text-white">
@@ -29,10 +38,17 @@ const MobileDrawer = ({ isOpen, onClose, navItems }) => {
         
         {/* Login Button */}
         <div className="p-4 border-b">
-          <button className="flex items-center justify-center w-full bg-[#2874f0] text-white py-2 px-4 rounded-sm">
+          {isAuthenticated ?<button 
+         onClick={() =>logout()}
+          
+          className="flex items-center justify-center w-full bg-[#2874f0] text-white py-2 px-4 rounded-sm">
             <LogIn size={16} className="mr-2" />
-            <span>Login / Sign Up</span>
-          </button>
+            <span>Logout </span>
+          </button>:<button 
+           onClick={loginmodal} className="flex items-center justify-center w-full bg-[#2874f0] text-white py-2 px-4 rounded-sm">
+            <LogIn size={16} className="mr-2" />
+            <span>Login </span>
+          </button>}
         </div>
         
         {/* Navigation Items */}

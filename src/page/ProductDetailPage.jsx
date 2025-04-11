@@ -3,9 +3,12 @@ import { useState, useEffect } from 'react';
 import DataService from "../services/requestApi.js";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCart } from '../contexts/CartContext.jsx';
+import { useAuth } from '../contexts/AuthConext.jsx';
 
 const ProductDetailPage = () => {
   const { productId } = useParams();
+  const { storeid } = useAuth();
+
   const [product, setProduct] = useState(null);
   const [productImages, setProductImages] = useState([]); // State for images
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -19,7 +22,7 @@ const ProductDetailPage = () => {
   const fetchProduct = async () => {
     setLoading(true);
     try {
-      const response = await DataService.getProductbyitemId(productId);
+      const response = await DataService.getProductbyitemId(productId,storeid);
       if (response.status) {
         setProduct(response.data.data);
       } else {
@@ -83,8 +86,8 @@ const ProductDetailPage = () => {
     setCurrentImageIndex(index);
   };
  const { addToCart, cart } = useCart();
-  const AddedItem = cart?.find((el) => el.productId === product.item_id);
-  console.log("AddedItem",cart)
+  const AddedItem = cart?.find((el) => el.item_id == productId);
+  console.log("AddedItem",AddedItem)
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumbs */}
@@ -167,17 +170,28 @@ const ProductDetailPage = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">{product?.item_name}</h1>
           <p className="text-2xl font-semibold text-gray-900 mb-6">
           ₹{product?.price?.toFixed(2)}
+          
           </p>
           
           <div className="prose prose-sm text-gray-700 mb-6">
             <p>{product?.description}</p>
+            <p className="mt-2 text-md font-semibold text-green-500">
+            {product?.rp} RP
+          </p>
           </div>
 
-          <button  style={{
-          backgroundColor: AddedItem ? "blue" : "#de9b15",
-        }} onClick={() => addToCart(product)} className="bg-primary w-full md:w-auto px-6 py-3 rounded-md  text-white font-medium hover:bg-blue-700 focus:outline-none">
-            Add to Cart{AddedItem ? AddedItem.product_qty : ""}
-          </button>
+          <button
+  onClick={() => addToCart(product)}
+  className="bg-primary relative flex items-center justify-center gap-2 w-full md:w-auto px-6 py-3 rounded-md text-white font-medium hover:bg-blue-700 focus:outline-none transition-all duration-300"
+>
+  Add to Cart
+
+  {AddedItem?.product_qty > 0 && (
+    <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full shadow-md">
+      {AddedItem.product_qty}
+    </span>
+  )}
+</button>
         </div>
       </div>
     </div>

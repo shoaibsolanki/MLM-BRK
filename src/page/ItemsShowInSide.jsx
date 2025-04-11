@@ -18,7 +18,11 @@ const ItemsShowInSide = ({ items }) => {
   const [discount, setDiscount] = useState(0);
   const [total, setTotal] = useState(totalPrice);
   const [isLoading, setIsLoading] = useState(true);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated,useRewards,rewardPoint } = useAuth();
+
+  // Calculate discounted total
+const rewardValue = rewardPoint?.points ?? 0;
+const discountedTotal = Math.max(totalPrice - rewardValue, 0);
 
   useEffect(() => {
     // Simulate loading time
@@ -131,7 +135,7 @@ const ItemsShowInSide = ({ items }) => {
 
         <div className="flex justify-between text-lg font-semibold">
           <p>Total</p>
-          <p>₹ {totalPricePlusDeliveryCharge}</p>
+          <p>₹{useRewards ? discountedTotal : totalPrice}</p>
         </div>
       </div>
     </div>
