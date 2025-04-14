@@ -1,14 +1,38 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Modal, Box, Button, TextField } from '@mui/material';
-
-const EditRpBonusModal = ({ open, handleClose, onSubmit }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
-
-    const onFormSubmit = (data) => {
-        // onSubmit(data);
-        handleClose();
+import DataService from '../../services/requestApi'
+import { useSnackbar } from 'notistack';
+const EditRpBonusModal = ({ open, handleClose, selectedrow ,GetRpData}) => {
+    const { register,setValue, handleSubmit, formState: { errors } } = useForm();
+    const {enqueueSnackbar} = useSnackbar()
+    const onFormSubmit = async (data) => {
+        try {
+           const response = await DataService.UpdateRpBounse(selectedrow.id, data);
+           if(response.data.status){
+               enqueueSnackbar('RP bonus updated successfully!', { variant: 'success' });
+               handleClose();
+               GetRpData()
+           }else{
+               enqueueSnackbar(response.data.message || 'Failed to update RP bonus', { variant: 'error' });
+           }
+        } catch (error) {
+            console.error('Error updating RP bonus:', error);
+            enqueueSnackbar(error.response?.data?.message || 'Failed to update RP bonus', {
+                variant: 'error'
+            });
+        }
     };
+
+    React.useEffect(() => {
+        if (selectedrow) {
+            setValue('start_rp', selectedrow.start_rp);
+            setValue('end_rp', selectedrow.end_rp);
+            setValue('bonus', selectedrow.bonus);
+            setValue('title', selectedrow.title);
+        }
+    }, [selectedrow]);
+
 
     return (
         <Modal open={open} onClose={handleClose}>
@@ -56,6 +80,16 @@ const EditRpBonusModal = ({ open, handleClose, onSubmit }) => {
                             error={!!errors.bonus}
                             helperText={errors.bonus?.message}
                         />
+                    </div>
+                    <div>
+                         <TextField
+                                                label="Title"
+                                                type="Text"
+                                                fullWidth
+                                                {...register("title", { required: "title is required" })}
+                                                error={!!errors.title}
+                                                helperText={errors.title?.message}
+                                            />
                     </div>
                     <div className="flex justify-end space-x-4">
                         <Button onClick={handleClose} variant="outlined" color="secondary">
