@@ -74,22 +74,22 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const menuItems = [
     {
       title: "Dashboard",
-      icon: <Home size={18} />,
+      icon: <Home size={20} />,
       path: "/admin",
     },
     {
       title: "Manage Category",
-      icon: <Layers size={18} />,
+      icon: <Layers size={20} />,
       path: "/admin/categories",
     },
     {
       title: "Manage Sub Category",
-      icon: <Layers size={18} />,
+      icon: <Layers size={20} />,
       path: "/admin/subcategories",
     },
     {
       title: "Manage Product",
-      icon: <Package size={18} />,
+      icon: <Package size={20} />,
       path: "/admin/products",
       hasSubmenu: true,
       submenu: [
@@ -105,7 +105,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     },
     {
       title: "Manage Sub Product",
-      icon: <Package size={18} />,
+      icon: <Package size={20} />,
       path: "/admin/combo",
       hasSubmenu: true,
       submenu: [
@@ -121,7 +121,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     },
     {
       title: "Manage Distributor",
-      icon: <Users size={18} />,
+      icon: <Users size={20} />,
       path: "/admin/distributors",
       hasSubmenu: true,
       submenu: [
@@ -137,47 +137,47 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     },
     {
       title: "Manage User",
-      icon: <User size={18} />,
+      icon: <User size={20} />,
       path: "/admin/users",
     },
     {
       title: "Manage Order",
-      icon: <ShoppingCart size={18} />,
+      icon: <ShoppingCart size={20} />,
       path: "/admin/orders",
     },
     {
       title: "RP Bonus Manage",
-      icon: <BadgePercent size={18} />,
+      icon: <BadgePercent size={20} />,
       path: "/admin/bonus",
     },
     {
       title: "RP Transactions",
-      icon: <Repeat size={18} />,
+      icon: <Repeat size={20} />,
       path: "/admin/rp/transactions",
     },
     {
       title: "RP Value Exchange",
-      icon: <IndianRupee size={18} />,
+      icon: <IndianRupee size={20} />,
       path: "/admin/rp/exchange",
     },
     {
       title: "Manage Complaint",
-      icon: <ShieldCheck size={18} />,
+      icon: <ShieldCheck size={20} />,
       path: "/admin/Complaint",
     },
     {
       title: "Manage Slider",
-      icon: <Image size={18} />,
+      icon: <Image size={20} />,
       path: "/admin/slider",
     },
     {
       title: "Manage KYC",
-      icon: <ShieldCheck size={18} />,
+      icon: <ShieldCheck size={20} />,
       path: "/admin/KYC",
     },
     {
       title: "Income",
-      icon: <IndianRupee size={18} />,
+      icon: <IndianRupee size={20} />,
       hasSubmenu: true,
       submenu: [
         {
@@ -212,22 +212,22 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     },
     {
       title: "Manage Gift",
-      icon: <Gift size={18} />,
+      icon: <Gift size={20} />,
       path: "/admin/gift",
     },
     {
       title: "Gift Orders",
-      icon: <GiftIcon size={18} />,
+      icon: <GiftIcon size={20} />,
       path: "/admin/gift/orders",
     },
     // {
     //   title: "Gift Coupon",
-    //   icon: <GiftIcon size={18} />,
+    //   icon: <GiftIcon size={20} />,
     //   path: "/admin/gift/coupon",
     // },
     // {
     //   title: "Schemes",
-    //   icon: <Trophy size={18} />,
+    //   icon: <Trophy size={20} />,
     //   hasSubmenu: true,
     //   submenu: [
     //     {
@@ -260,7 +260,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             isSidebarOpen ? "w-[250px]" : "w-[60px]"
           }`}
         >
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto overflow-x-hidden">
             <div className="flex items-center mb-4">
               <Avatar
                 className="cursor-pointer left-2"
@@ -358,7 +358,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
                             location.pathname === item.path ? "black" : "white",
                         }}
                       >
-                        <ListItemIcon className="w-8 cursor-pointer" sx={{ color:location.pathname === item.path ? "black" : "white", }}>{item.icon}</ListItemIcon>
+                        <ListItemIcon className="w-8 cursor-pointer " sx={{ color:location.pathname === item.path ? "black" : "white", }}>{item.icon}</ListItemIcon>
                         {isSidebarOpen && (
                           <li className="montserrat-text-normal list-none cursor-pointer">
                             {item.title}
