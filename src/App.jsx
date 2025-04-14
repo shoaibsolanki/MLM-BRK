@@ -46,6 +46,8 @@ const Giftmange = lazy(()=> import('./adminpage/Mangegift'))
 const CustomerTreeview = lazy(()=> import('./adminpage/CutomerTreeView'))
 const Slider = lazy(()=> import('./adminpage/MangeSlider'))
 const LeveWiseIncome = lazy(()=> import('./adminpage/Income/LeveWiseIncome'))
+const Vieworder = lazy(()=> import('./admincomponents/Vieworder'))
+const Kyclist = lazy(()=> import('./adminpage/Kyclist'))
 function App() {
   function ScrollToTop() {
     const { pathname } = useLocation();
@@ -107,6 +109,8 @@ function App() {
               <Route path="Cutomertree/:Custid" element={<ProtectedRouteForAdmin Component={CustomerTreeview} />} />
               <Route path="Slider" element={<ProtectedRouteForAdmin Component={Slider} />} />
               <Route path="income/:name" element={<ProtectedRouteForAdmin Component={LeveWiseIncome} />} />
+              <Route path="vieworder/:id" element={<ProtectedRouteForAdmin Component={Vieworder} />} />
+              <Route path="KYC" element={<ProtectedRouteForAdmin Component={Kyclist} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />
