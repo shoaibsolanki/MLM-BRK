@@ -94,6 +94,14 @@ const AddRpBonusModal = ({ open, handleClose ,GetRpData}) => {
                         error={!!errors.bonus}
                         helperText={errors.bonus?.message}
                     />
+                    <TextField
+                        label="Title"
+                        type="Text"
+                        fullWidth
+                        {...register("title", { required: "title is required" })}
+                        error={!!errors.title}
+                        helperText={errors.title?.message}
+                    />
                     <div className="flex justify-end space-x-2">
                         <Button onClick={handleClose} variant="outlined" color="secondary">
                             Cancel
