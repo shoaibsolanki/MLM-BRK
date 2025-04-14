@@ -3,6 +3,7 @@ import CustomDataTable from '../admincomponents/Microcomponents/DataTable';
 import { File } from 'lucide-react';
 import DataService from '../services/requestApi';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const OrderMange = () => {
     const [page, setPage] = useState(1);
@@ -10,6 +11,7 @@ const OrderMange = () => {
     const [data, setData] = useState([]);
     const [count , setCount] = useState("")
     const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
+    const navigate = useNavigate()
     useEffect(() => {
         fetchOrdersByPage()
     }, [page, size]);
@@ -57,52 +59,15 @@ const OrderMange = () => {
         {
             name: 'Action',
             cell: row => (
-                <button onClick={() => handlePrint(row)}>
-                    <File />
-                </button>
+                <div className="flex gap-2">
+                    <File className='cursor-pointer' onClick={()=> navigate(`/admin/vieworder/${row?.order_id}`)}/>
+                </div>
             ),
         },
     ];
 
-    // const data = [
-    //     {
-    //         orderNumber: '001',
-    //         userName: 'John Doe',
-    //         paymentMode: 'Credit Card',
-    //         totalAmount: '$100.00',
-    //         orderStatus: 'Shipped',
-    //         orderDate: '2023-10-01',
-    //     },
-    //     {
-    //         orderNumber: '002',
-    //         userName: 'Jane Smith',
-    //         paymentMode: 'PayPal',
-    //         totalAmount: '$150.00',
-    //         orderStatus: 'Processing',
-    //         orderDate: '2023-10-02',
-    //     },
-    //     {
-    //         orderNumber: '003',
-    //         userName: 'Alice Johnson',
-    //         paymentMode: 'Debit Card',
-    //         totalAmount: '$200.00',
-    //         orderStatus: 'Delivered',
-    //         orderDate: '2023-10-03',
-    //     },
-    //     {
-    //         orderNumber: '004',
-    //         userName: 'Bob Brown',
-    //         paymentMode: 'Credit Card',
-    //         totalAmount: '$250.00',
-    //         orderStatus: 'Cancelled',
-    //         orderDate: '2023-10-04',
-    //     },
-    // ];
-
-    const handlePrint = (row) => {
-        // Implement your print functionality here
-        console.log('Print', row);
-    };
+ 
+    
 
     const fetchOrdersByPage = async () => {
         try {
