@@ -185,7 +185,17 @@ class DataService {
   return http.post(`/RpBonus/create-rp-value`, data)
  }
 
-
+ UpdateRpBounse(id,data){
+  return http.put(`RpBonus/upadte-rpBonusValue/${id}`,data)
+ }
+ 
+ ViewOrderDetail(id){
+  return http.get(`/order/viewOrderDetails/${id}`)
+ }
+  
+ GetListkyc(saasId){
+  return http.get(`/kyc/get-kyc/${saasId}`)
+ }
 
 
  
