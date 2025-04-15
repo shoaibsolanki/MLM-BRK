@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import CustomDataTable from '../admincomponents/Microcomponents/DataTable'
 import DataService from '../services/requestApi'
 import { Edit, Eye } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 const Kyclist = () => {
     const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
     const [data, setData] = useState([])
+    const navigate = useNavigate()
     const GetKycData= async()=>{
         try {
             const response = await DataService.GetListkyc(saasId)
@@ -56,7 +58,7 @@ const Kyclist = () => {
         name: 'Action',
         cell: row => (
             <div className="flex gap-2">
-              <Eye className='cursor-pointer'/>
+              <Eye className='cursor-pointer' onClick={()=>navigate(`/admin/userkyc/${row?.customerId}`)} />
             </div>
         ),
     },
