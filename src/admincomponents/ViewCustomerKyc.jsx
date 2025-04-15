@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Button } from "@mui/material"
 import { useSnackbar } from "notistack"
 import { ArrowBack } from "@mui/icons-material"
+import { Image } from "antd"
 export default function UserKYCScreen() {
   const [userData, setUserData] = useState({})
   const {enqueueSnackbar} = useSnackbar()
@@ -127,14 +128,17 @@ export default function UserKYCScreen() {
           <p>{panNO || '-'}</p>
         </div>
       </div>
-
+      <Image.PreviewGroup
+    preview={{
+      onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`),
+    }}>
       <div className="border-t pt-6 mt-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div>
             <h2 className="font-semibold mb-2">Bank Image</h2>
             <div className="w-32 h-32 bg-gray-200 rounded flex items-center justify-center overflow-hidden">
               {bankImg ? (
-                <img src={bankImg} alt="Bank" className="w-full h-full object-cover" />
+                <Image  src={bankImg} alt="Bank" className="w-full h-full object-cover" />
               ) : (
                 <User className="w-16 h-16 text-gray-400" />
               )}
@@ -144,7 +148,7 @@ export default function UserKYCScreen() {
             <h2 className="font-semibold mb-2">Aadhar Front</h2>
             <div className="w-32 h-32 bg-sky-400 rounded flex items-center justify-center overflow-hidden">
               {aadharFrontImg ? (
-                <img src={aadharFrontImg} alt="Aadhar Front" className="w-full h-full object-cover" />
+                <Image src={aadharFrontImg} alt="Aadhar Front" className="w-full h-full object-cover" />
               ) : (
                 <User className="w-16 h-16 text-white" />
               )}
@@ -154,7 +158,7 @@ export default function UserKYCScreen() {
             <h2 className="font-semibold mb-2">Aadhar Back</h2>
             <div className="w-32 h-32 bg-red-900 rounded flex items-center justify-center overflow-hidden">
               {aadharBackImg ? (
-                <img src={aadharBackImg} alt="Aadhar Back" className="w-full h-full object-cover" />
+                <Image src={aadharBackImg} alt="Aadhar Back" className="w-full h-full object-cover" />
               ) : (
                 <User className="w-16 h-16 text-white" />
               )}
@@ -167,7 +171,7 @@ export default function UserKYCScreen() {
             <h2 className="font-semibold mb-2">Pancard Image</h2>
             <div className="w-32 h-32 bg-sky-400 rounded flex items-center justify-center overflow-hidden">
               {pancardImg ? (
-                <img src={pancardImg} alt="Pancard" className="w-full h-full object-cover" />
+                <Image src={pancardImg} alt="Pancard" className="w-full h-full object-cover" />
               ) : (
                 <User className="w-16 h-16 text-white" />
               )}
@@ -177,7 +181,7 @@ export default function UserKYCScreen() {
             <h2 className="font-semibold mb-2">GST Image</h2>
             <div className="w-32 h-32 bg-red-900 rounded flex items-center justify-center overflow-hidden">
               {gstImg ? (
-                <img src={gstImg} alt="GST" className="w-full h-full object-cover" />
+                <Image src={gstImg} alt="GST" className="w-full h-full object-cover" />
               ) : (
                 <User className="w-16 h-16 text-white" />
               )}
@@ -185,6 +189,7 @@ export default function UserKYCScreen() {
           </div>
         </div>
       </div>
+      </Image.PreviewGroup>
     { status == 'Pending' && <Button onClick={()=>{UpdateKycStatus('Approved')}} sx={{marginTop:"10px"}} variant="contained" color="success"  >Approve Kyc </Button>}
     </div>
   )
