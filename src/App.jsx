@@ -47,6 +47,7 @@ const CustomerTreeview = lazy(()=> import('./adminpage/CutomerTreeView'))
 const Slider = lazy(()=> import('./adminpage/MangeSlider'))
 const LeveWiseIncome = lazy(()=> import('./adminpage/Income/LeveWiseIncome'))
 const Vieworder = lazy(()=> import('./admincomponents/Vieworder'))
+const UserKYCScreen = lazy(()=> import('./admincomponents/ViewCustomerKyc'))
 const Kyclist = lazy(()=> import('./adminpage/Kyclist'))
 function App() {
   function ScrollToTop() {
@@ -111,6 +112,7 @@ function App() {
               <Route path="income/:name" element={<ProtectedRouteForAdmin Component={LeveWiseIncome} />} />
               <Route path="vieworder/:id" element={<ProtectedRouteForAdmin Component={Vieworder} />} />
               <Route path="KYC" element={<ProtectedRouteForAdmin Component={Kyclist} />} />
+              <Route path="userkyc/:id" element={<ProtectedRouteForAdmin Component={UserKYCScreen} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />
