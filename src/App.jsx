@@ -26,6 +26,8 @@ const CustomerRegstration = lazy(()=> import('./components/Registration/Customer
 
 const Login = lazy(() => import('./AdminPages/Login'));
 const Adminhome = lazy(() => import('./adminpage/Adminhome'));
+const AllGallery = lazy(() => import('./adminpage/Gallery/AllGallery'));
+
 const Dashboard = lazy(() => import('./admincomponents/Dashbord'));
 const Category = lazy(() => import('./adminpage/Category'));
 const SubCategoryPage = lazy(() => import('./adminpage/SubCategoryPage'));
@@ -92,6 +94,8 @@ function App() {
             {/* Admin Routes */}
             <Route path="/admin" element={<ProtectedRouteForAdmin Component={Adminhome} />}>
               <Route index element={<ProtectedRouteForAdmin Component={Dashboard} />} />
+              <Route  path="AllGallery" element={<ProtectedRouteForAdmin Component={AllGallery} />} />
+
               <Route path="categories" element={<ProtectedRouteForAdmin Component={Category} />} />
               <Route path="subcategories" element={<ProtectedRouteForAdmin Component={SubCategoryPage} />} />
               <Route path="products/add" element={<ProtectedRouteForAdmin Component={AddProduct} />} />
