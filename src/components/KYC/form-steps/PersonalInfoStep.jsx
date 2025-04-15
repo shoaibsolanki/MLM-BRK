@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import FormField from '../ui/FormField';
 
-const PersonalInfoStep = () => {
+const PersonalInfoStep = ({handleFileChange}) => {
   const { register, formState: { errors } } = useFormContext();
 
   return (
@@ -12,7 +12,7 @@ const PersonalInfoStep = () => {
       </div>
       
       <div className="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-        <div className="sm:col-span-3">
+        {/* <div className="sm:col-span-3">
           <FormField
             label="Applicant Name"
             id="applicant_name"
@@ -24,9 +24,9 @@ const PersonalInfoStep = () => {
               minLength: { value: 3, message: "Name must be at least 3 characters" }
             })}
           />
-        </div>
+        </div> */}
 
-        <div className="sm:col-span-3">
+        {/* <div className="sm:col-span-3">
           <FormField
             label="Father's Name"
             id="father_name"
@@ -37,9 +37,9 @@ const PersonalInfoStep = () => {
               minLength: { value: 3, message: "Name must be at least 3 characters" }
             })}
           />
-        </div>
+        </div> */}
 
-        <div className="sm:col-span-3">
+        {/* <div className="sm:col-span-3">
           <FormField
             label="Email Address"
             id="email"
@@ -67,9 +67,9 @@ const PersonalInfoStep = () => {
               minLength: { value: 4, message: "Username must be at least 4 characters" }
             })}
           />
-        </div>
+        </div> */}
 
-        <div className="sm:col-span-3">
+        {/* <div className="sm:col-span-3">
           <FormField
             label="Mobile Number"
             id="mobile_number"
@@ -84,7 +84,7 @@ const PersonalInfoStep = () => {
               }
             })}
           />
-        </div>
+        </div> */}
 
         <div className="sm:col-span-3">
           <FormField
@@ -118,7 +118,7 @@ const PersonalInfoStep = () => {
           />
         </div>
 
-        <div className="sm:col-span-3">
+        {/* <div className="sm:col-span-3">
           <FormField
             label="Date of Birth"
             id="date_of_birth"
@@ -128,9 +128,9 @@ const PersonalInfoStep = () => {
               required: "Date of birth is required" 
             })}
           />
-        </div>
+        </div> */}
 
-        <div className="sm:col-span-3">
+        {/* <div className="sm:col-span-3">
           <FormField
             label="Nationality"
             id="nationality"
@@ -140,8 +140,26 @@ const PersonalInfoStep = () => {
               required: "Nationality is required" 
             })}
           />
-        </div>
+        </div> */}
+
+
       </div>
+      <div className="sm:col-span-3">
+{['aadharFront', 'aadharBackImg', 'pan'].map((field) => (
+        <div className='mt-2' key={field}>
+          <label className="block text-sm font-medium text-gray-700 capitalize">
+            {field.replace(/([A-Z])/g, ' $1')}
+          </label>
+          <input
+            type="file"
+            name={field}
+            accept="image/*"
+            onChange={handleFileChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+      ))}
+        </div>
     </div>
   );
 };

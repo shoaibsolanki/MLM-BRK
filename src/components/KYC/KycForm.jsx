@@ -6,6 +6,7 @@ import AddressStep from './form-steps/AddressStep';
 import BankDetailsStep from './form-steps/BankDetailsStep';
 import ApplicationDetailsStep from './form-steps/ApplicationDetailsStep';
 import { useAuth } from '../../contexts/AuthConext';
+import { notistack } from "notistack"; // Import Notistack
 
 import DataService from "../../services/requestApi";
 
@@ -13,14 +14,14 @@ const KycForm = ({ onSubmitSuccess }) => {
   const [currentStep, setCurrentStep] = useState(0);
   
   const { authData } = useAuth();
-  const { id, saasId, storeId } = authData;
+  const { id, saasId, storeId ,mobileNumber,name,dob,email} = authData;
 
   const methods = useForm({
     defaultValues: {
       customer_id: id,
-      applicant_name: '',
+      applicant_name: name,
       father_name: '',
-      mobile_number: '',
+      mobile_number: mobileNumber,
       status: 'Pending',
       addhaar_number: '',
       communication_address: '',
@@ -30,10 +31,10 @@ const KycForm = ({ onSubmitSuccess }) => {
       account_number: '',
       ifsc_code: '',
       pan_no: '',
-      date_of_birth: '',
-      nationality: '',
-      email: '',
-      user_name: '',
+      date_of_birth: dob,
+      nationality: 'Indian',
+      email: email,
+      user_name: name,
       date_of_application: new Date().toISOString().split('T')[0],
       store_id: storeId,
       saas_id: saasId
@@ -75,6 +76,37 @@ const KycForm = ({ onSubmitSuccess }) => {
     }
   };
 
+  // document upload state
+  const [files, setFiles] = useState({
+    bank: null,
+    aadharFront: null,
+    aadharBackImg: null,
+    pan: null,
+    gst: null,
+  });
+
+  const handleFileChange = (e) => {
+    const { name, files: selectedFiles } = e.target;
+    setFiles((prev) => ({ ...prev, [name]: selectedFiles[0] }));
+  };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    Object.entries(files).forEach(([key, file]) => {
+      if (file) formData.append(key, file);
+    });
+
+    try {
+      const res = await DataService.kycDocumentUpload(saasId, storeId, id, formData);
+      console.log('Upload success:', res.data);
+      // optionally show success UI
+    } catch (error) {
+      console.error('Upload error:', error);
+      // optionally show error UI
+    }
+  };
+
+
 const onSubmit = async (data) => {
     try {
         console.log('Form submitted:', data);
@@ -83,6 +115,7 @@ const onSubmit = async (data) => {
 
         if (response?.status === 200) {
             onSubmitSuccess();
+            handleUpload()
             notistack.enqueueSnackbar('KYC submitted successfully!', { variant: 'success' });
         } else {
             throw new Error('Failed to submit KYC');
@@ -96,11 +129,11 @@ const onSubmit = async (data) => {
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return <PersonalInfoStep />;
+        return <PersonalInfoStep handleFileChange={handleFileChange} />;
       case 1:
         return <AddressStep />;
       case 2:
-        return <BankDetailsStep />;
+        return <BankDetailsStep handleFileChange={handleFileChange}/>;
     //   case 3:
         // return <ApplicationDetailsStep />;
       default:

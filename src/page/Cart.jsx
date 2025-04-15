@@ -188,6 +188,14 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
     //   navigate("/login");
     // }
   };
+  const [kycApproved, setKycApproved] = useState(false);
+
+  useEffect(() => {
+    const status = localStorage.getItem('kycStatus');
+    if (status === 'Approved') {
+      setKycApproved(true);
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -439,7 +447,7 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
                 <Typography variant="body1">Subtotal</Typography>
                 <Typography variant="body1">₹{totalPrice}</Typography>
               </Box>
-              <Box display="flex" justifyContent="space-between" my={1}>
+              {kycApproved &&(<Box display="flex" justifyContent="space-between" my={1}>
               <FormControlLabel
       control={
         <Switch
@@ -459,7 +467,7 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
 </Typography>
 
                 </div>
-              </Box>
+              </Box>)}
               <TextField
                 label="Enter coupon code"
                 variant="outlined"

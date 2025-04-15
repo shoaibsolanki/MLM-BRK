@@ -111,7 +111,7 @@ const Profile = () => {
 
       {activeTab === 'transactions' && <Transactions customerId={profile.id} />}
       {activeTab === 'order-history' && <Orders  />}
-      {activeTab === 'team' && <TeamStructure  />}
+      {activeTab === 'team' && <TeamStructure customerId={profile.id} />}
 
 
         </div>

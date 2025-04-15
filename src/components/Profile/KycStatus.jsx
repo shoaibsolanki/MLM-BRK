@@ -16,8 +16,9 @@ const KycStatus = ({ userId }) => {
   const getkycData = async () => {  
     try {
       const response = await DataService.Getkycstatus(saasid, storeid,id);
-    
+      const kycStatus = response.data?.data?.status;
       if (response?.data?.status) {
+        localStorage.setItem('kycStatus', kycStatus);
         setKycStatus(response?.data?.data?.status);
         setKycData(response?.data?.data);
 
@@ -96,7 +97,7 @@ const KycStatus = ({ userId }) => {
   }
 
   // KYC is active
-  if (kycData.status === "Active") {
+  if (kycData.status === "Approved") {
     return (
       <div className="w-full max-w-xs mt-3 bg-green-50 px-4 py-3 rounded-lg shadow-md">
         <div className="flex items-center justify-between">

@@ -12,7 +12,7 @@ import ReferralModal from './MicroComponant/ReferralModal';
 const navItems = [
   { label: 'Home', path: '/' },
   { label: 'Products', path: '/products' },
-  // { label: 'Gallery', path: '/gallery' },
+  { label: 'Gallery', path: '/gallery' },
   { label: 'Help & Support', path: '/support' },
   { label: 'Refer And Earn', path: '/refer' }
 ];

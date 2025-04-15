@@ -4,17 +4,47 @@ import { useAuth } from '../../contexts/AuthConext';
 import { useNavigate } from 'react-router-dom';
 import DataService from "../../services/requestApi";
 import KycStatus from './KycStatus';
-
+import { LinearProgress, Typography, Box } from '@mui/material';
 const ProfileHeader = ({ profile, updateProfile }) => {
 const {
   rewardPoint,GetRewardPoint
-  } = useAuth();
+,saasid  } = useAuth();
 const  navigate = useNavigate();
+    const [RpData, setRpData] = useState([])
+
+ const GetRpData = async ()=>{
+        try {
+            const response  = await DataService.GetRpData(saasid)
+            if (response.data.status){
+                setRpData(response.data.data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+   
+  
 
   useEffect(() => {
+    GetRpData()
+
       GetRewardPoint(profile?.id);
   }, []);
 
+  const filteredLevels = RpData.filter(level => level.type === 'Monthly_Rp_Bonus');
+
+  const matchedLevel = rewardPoint?.totalRp
+    ? filteredLevels.find(level =>
+        rewardPoint.totalRp >= level.start_rp &&
+        rewardPoint.totalRp <= level.end_rp
+      )
+    : null;
+  
+  const progress = matchedLevel
+    ? ((rewardPoint.totalRp - matchedLevel.start_rp) / (matchedLevel.end_rp - matchedLevel.start_rp)) * 100
+    : 0;
+  
+    console.log("progress",progress)
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: profile.name,
@@ -48,21 +78,26 @@ const  navigate = useNavigate();
   
   
   return (
+    <>
     <div className="bg-white rounded-xl shadow-sm overflow-hidden">
       {/* Header background */}
-      <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-32 relative">
-        {!isEditing && (
-          <button 
-            onClick={() => setIsEditing(true)}
-            className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
-          >
-            <Pen size={16} className="text-gray-700" />
-          </button>
-        )}
-      </div>
+    {/* RP Progress Section */}
+  
 
-      <div className="px-6 pb-6 relative">
-        {/* Avatar */}
+
+    <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-36 relative rounded-t-xl shadow-md">
+      {!isEditing && (
+        <button
+          onClick={() => setIsEditing(true)}
+          className="absolute top-4 right-4 bg-white p-3 rounded-full shadow-lg hover:bg-gray-100 transition duration-200"
+        >
+          <Pen size={18} className="text-gray-700" />
+        </button>
+      )}
+    </div>
+
+    <div className="px-6 pb-6 relative">
+      {/* Avatar */}
         <div className="absolute -top-16 left-6">
           <img 
             src={profile.avatar} 
@@ -183,6 +218,7 @@ const  navigate = useNavigate();
                         <span>Member since {formatDate(profile.joinDate)}</span>
                       </div>
                       </div>
+           
                   <KycStatus userId={profile?.id} />
                       {/* Bio */}
               <div className="mt-5">
@@ -194,6 +230,50 @@ const  navigate = useNavigate();
         </div>
       </div>
     </div>
+    {matchedLevel && (
+  <div className="bg-white p-5 mt-3 rounded-xl shadow-sm border border-gray-100 mb-6">
+    <h3 className="text-lg font-semibold text-gray-800 mb-4">Your RP Progress</h3>
+
+    <div className="border-b pb-4">
+      <div className="flex justify-between items-center mb-2">
+        <div className="font-medium text-gray-800">
+          RP Level : <span className="text-indigo-600">{matchedLevel.title || 'N/A'}</span>
+        </div>
+        <div className="text-sm text-indigo-600">{progress.toFixed(0)}% complete</div>
+      </div>
+
+      <div className="flex items-center text-sm text-gray-600 mb-2">
+        <span>RP Range: {matchedLevel.start_rp} - {matchedLevel.end_rp}</span>
+        <span className="mx-2">|</span>
+        <span>Your RP : <span className="font-medium">{rewardPoint?.totalRp}</span></span>
+      </div>
+
+      {/* Progress Bar */}
+      <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+        <div
+          className="bg-indigo-600 h-2 rounded-full"
+          style={{ width: `${progress}%` }}
+        ></div>
+      </div>
+
+      {/* Next Title */}
+      {(() => {
+        const nextLevel = RpData.find(
+          level => level.start_rp > matchedLevel.end_rp && level.title
+        );
+        return nextLevel ? (
+          <div className="text-sm text-gray-700">
+            Next Level: <span className="text-indigo-600 font-medium">{nextLevel.title}</span> 
+            <span className="ml-2">(at {nextLevel.start_rp} RP)</span>
+          </div>
+        ) : (
+          <div className="text-sm text-gray-500">You're at the highest level!</div>
+        );
+      })()}
+    </div>
+  </div>
+)}
+    </>
   );
 };
 

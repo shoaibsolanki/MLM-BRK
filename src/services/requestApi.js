@@ -286,5 +286,21 @@ class DataService {
   GetPointHistory(customerId){
     return http.get(`/customer/get-rp-by-custm/${customerId}`)
    }
+   GetGalleryLink(saasId, storeId) {
+    return http.get(
+      `item/get-gallery-image/${saasId}/${storeId}`
+    );
+  }
+  GetTeamHistory(customerId){
+    return http.get(`/customer/mlm-level/${customerId}`)
+   }
+
+   kycDocumentUpload(saasId, storeId, customerId, formData) {
+    return http.patch(`/kyc/add-documentImg/${saasId}/${storeId}/${customerId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  }
 }
 export default new DataService();

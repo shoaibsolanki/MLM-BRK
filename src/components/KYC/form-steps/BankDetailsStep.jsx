@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import FormField from '../ui/FormField';
 
 
-const BankDetailsStep = () => {
+const BankDetailsStep = ({handleFileChange}) => {
   const { register, formState: { errors } } = useFormContext();
 
   return (
@@ -68,6 +68,22 @@ const BankDetailsStep = () => {
               }
             })}
           />
+        </div>
+        <div className="sm:col-span-3">
+{['bank'].map((field) => (
+        <div key={field}>
+          <label className="block text-sm font-medium text-gray-700 capitalize">
+            {field.replace(/([A-Z])/g, ' $1')}
+          </label>
+          <input
+            type="file"
+            name={field}
+            accept="image/*"
+            onChange={handleFileChange}
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          />
+        </div>
+      ))}
         </div>
       </div>
       

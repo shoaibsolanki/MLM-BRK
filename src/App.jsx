@@ -8,6 +8,7 @@ import { CircularProgress } from '@mui/material';
 
 // Lazy load components
 const Home = lazy(() => import('./page/Home'));
+const Gallery = lazy(() => import('./page/Gallery'));
 const ProductsPage = lazy(() => import('./page/ProductsPage'));
 const ProductDetailPage = lazy(() => import('./page/ProductDetailPage'));
 const Support = lazy(() => import('./page/Support'));
@@ -55,6 +56,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/gallery" element={<Gallery />} />   
 
               <Route path="products" element={<ProductsPage />} />
               <Route path="profile" element={<Profile />} />

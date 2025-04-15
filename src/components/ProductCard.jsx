@@ -4,43 +4,42 @@ import AddToCartButton from './MicroComponant/AddToCartButton';
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="group">
-      <div className="overflow-hidden rounded-lg bg-white shadow transition hover:shadow-md">
-        <div className="relative h-64 overflow-hidden">
-          <Link to={`/product/${product.item_id}`} className="group">
-            <img
-              src={`${BASEURL.ENDPOINT_URL}/item/get-image/${product?.item_id}`}
-              alt={product?.name}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-          </Link>
+    <div className="group border rounded-lg bg-white shadow-sm hover:shadow-md transition-transform duration-300 hover:scale-105 max-w-xs">
+      <Link to={`/product/${product.item_id}`} className="block">
+        <div className="relative h-48 overflow-hidden">
+          <img
+            src={`${BASEURL.ENDPOINT_URL}/item/get-image/${product?.item_id}`}
+            alt={product?.name}
+            className="h-full w-full object-cover"
+          />
         </div>
-        <div className="flex justify-between p-4">
-          <div className="">
-            <h3 className="text-lg font-medium text-gray-900 group-hover:text-blue-600 truncate">
-              {product?.item_name}
-            </h3>
-            <p className="text-sm text-gray-500 mt-1 line-clamp-2">
-              {product?.description?.substring(0, 100)}...
-            </p>
-            {product?.price !== product?.actual_price && (
-              <>
-                <p className="mt-2 text-lg font-semibold text-gray-500">
-                  MRP :₹ <span className="text-gray-500 line-through">{product?.actual_price?.toFixed(2)}</span>
-                </p>
-                <p className="mt-2 text-lg font-semibold text-red-700">
-                  OFF : ₹ {product?.actual_price - product?.price }
-                </p>
-              </>
-            )}
-            <p className="mt-2 text-lg font-semibold text-green-500">
-              DP : ₹{product?.price?.toFixed(2)}
-            </p>
-            <p className="mt-2 text-md font-semibold text-gray-900">
-              RP : {product?.rp}
-            </p>
-          </div>
-
+      </Link>
+      <div className="p-3">
+        <h3 className="text-sm font-medium text-gray-900 truncate">
+          {product?.item_name}
+        </h3>
+        <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+          {product?.description?.substring(0, 100)}...
+        </p>
+        <div className="mt-2 flex items-center space-x-2">
+          <p className="text-sm font-bold text-green-600">
+            DP: ₹{product?.price?.toFixed(2)}
+          </p>
+          {product?.price !== product?.actual_price && product?.actual_price > 0 && (
+            <>
+              <p className="text-xs text-gray-500 line-through">
+                MRP: ₹{product?.actual_price?.toFixed(2)}
+              </p>
+              <p className="text-xs text-red-600">
+                OFF: ₹{(product?.actual_price - product?.price).toFixed(2)}
+              </p>
+            </>
+          )}
+        </div>
+        <p className="text-xs font-medium text-gray-700 mt-1">
+          RP: {product?.rp}
+        </p>
+        <div className="mt-3">
           <AddToCartButton item={product} />
         </div>
       </div>
