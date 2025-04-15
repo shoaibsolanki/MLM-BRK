@@ -82,7 +82,7 @@ const Mangegift = () => {
           Add Gift
         </Button>
       </div>
-      <CustomDataTable title="User Data" data={gifts} columns={columns} />
+      <CustomDataTable title="Gift Management" data={gifts} columns={columns} />
       <EditGiftModal fetchGifts={fetchGifts} open={editOpen} handleClose={()=> setEditOpen(false)}  selectedGift={selectedGift}/>
       <CreateGiftModal
         open={open}

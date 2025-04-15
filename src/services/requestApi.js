@@ -180,10 +180,30 @@ class DataService {
  GetIncomeByDesignations(saasId, designation){
   return http.get(`/customer/designations/${saasId}/${designation}`)
  }
+  
+ UpdateRpValue(data){
+  return http.post(`/RpBonus/create-rp-value`, data)
+ }
 
+ UpdateRpBounse(id,data){
+  return http.put(`RpBonus/upadte-rpBonusValue/${id}`,data)
+ }
+ 
+ ViewOrderDetail(id){
+  return http.get(`/order/viewOrderDetails/${id}`)
+ }
+  
+ GetListkyc(saasId){
+  return http.get(`/kyc/get-kyc/${saasId}`)
+ }
 
+ GetCustomerKycDetail(saasId, storeId, id){
+  return http.get(`kyc/get-AllkycDetail-customer/${saasId}/${storeId}/${id}`)
+ }
 
-
+ UpdateKycForCutomer(saasId, storeId, customerId, status){
+  return http.patch(`/kyc/update-kyc-customer/${saasId}/${storeId}/${customerId}/${status}`)
+ } 
 
  
 

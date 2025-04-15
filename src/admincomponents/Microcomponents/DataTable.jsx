@@ -41,7 +41,7 @@ const CustomDataTable = ({ columns, data, title , handlePageChange ,handleRowsPe
             title={title}
             columns={columns}
             data={data}
-            pagination
+            pagination = {count || false}
             paginationServer
             paginationPerPage={10} // Default per page limit
             paginationRowsPerPageOptions={[10, 25, 50, 100]} // Allow users to select

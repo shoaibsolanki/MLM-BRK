@@ -92,13 +92,13 @@ const UserMange = () => {
       allowOverflow: true,
       button: true,
     },
-    {
-      name: "Action",
-      cell: (row) => <Edit />,
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    },
+    // {
+    //   name: "Action",
+    //   cell: (row) => <Edit />,
+    //   ignoreRowClick: true,
+    //   allowOverflow: true,
+    //   button: true,
+    // },
     {
         name: "Change Sponsor",
         cell: (row)=>{return(

@@ -5,6 +5,8 @@ import Layout from './Layout/Layout';
 import NotFound from './components/NotFound';
 import ProtectedRouteForAdmin from './ProtectedRouteForAdmin';
 import { CircularProgress } from '@mui/material';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // Lazy load components
 const Home = lazy(() => import('./page/Home'));
@@ -45,7 +47,21 @@ const Giftmange = lazy(()=> import('./adminpage/Mangegift'))
 const CustomerTreeview = lazy(()=> import('./adminpage/CutomerTreeView'))
 const Slider = lazy(()=> import('./adminpage/MangeSlider'))
 const LeveWiseIncome = lazy(()=> import('./adminpage/Income/LeveWiseIncome'))
+const Vieworder = lazy(()=> import('./admincomponents/Vieworder'))
+const UserKYCScreen = lazy(()=> import('./admincomponents/ViewCustomerKyc'))
+const Kyclist = lazy(()=> import('./adminpage/Kyclist'))
 function App() {
+  function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+  }
+
+  ScrollToTop();
   return (
     <>
       {/* Combined Routes Start */}
@@ -96,6 +112,9 @@ function App() {
               <Route path="Cutomertree/:Custid" element={<ProtectedRouteForAdmin Component={CustomerTreeview} />} />
               <Route path="Slider" element={<ProtectedRouteForAdmin Component={Slider} />} />
               <Route path="income/:name" element={<ProtectedRouteForAdmin Component={LeveWiseIncome} />} />
+              <Route path="vieworder/:id" element={<ProtectedRouteForAdmin Component={Vieworder} />} />
+              <Route path="KYC" element={<ProtectedRouteForAdmin Component={Kyclist} />} />
+              <Route path="userkyc/:id" element={<ProtectedRouteForAdmin Component={UserKYCScreen} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />

@@ -11,6 +11,7 @@ const Rpbonusemange = () => {
     const [RpData, setRpData] = useState([])
     const [open , setOpen] = useState(false)
     const [edimodal, setEditmodal] = useState(false)
+    const [selectedrow, setSelectedRow] = useState('')
     const handleClose =()=>{
         setOpen(false)
     }
@@ -29,11 +30,7 @@ const Rpbonusemange = () => {
     useEffect(() => {
       GetRpData()
     }, [])
-    
 
-    const handleEdit = row => {
-        console.log('Edit action for:', row);
-    };
 
     const handleDelete = async(id) => {
         try {
@@ -79,6 +76,11 @@ const Rpbonusemange = () => {
             sortable: true,
         },
         {
+            name: 'Designation',
+            selector: row => row.title,
+            sortable: true,
+        },
+        {
             name: 'Status',
             selector: row => row.status,
             sortable: true,
@@ -87,7 +89,9 @@ const Rpbonusemange = () => {
             name: 'Actions',
             cell: row => (
                 <div className='flex'>
-                    <Edit className='cursor-pointer' onClick={()=>setEditmodal(true)}/>
+                    <Edit className='cursor-pointer' onClick={()=>{setEditmodal(true)
+                        setSelectedRow(row)
+                    }}/>
                     <Trash className='cursor-pointer' onClick={()=>handleDelete(row.id)}/>
                 </div>
             ),
@@ -111,7 +115,7 @@ const Rpbonusemange = () => {
                     </div>
         <CustomDataTable columns={columns} data={RpData} title={"Rp Management"}/>
         <AddRpBonusModal GetRpData={GetRpData} open={open} handleClose={handleClose}/>
-        <EditRpBonusModal open={edimodal} handleClose={()=>setEditmodal(false)} />
+        <EditRpBonusModal GetRpData={GetRpData} selectedrow={selectedrow} open={edimodal} handleClose={()=>setEditmodal(false)} />
     </div>
   )
 }

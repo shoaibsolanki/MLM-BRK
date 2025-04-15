@@ -76,8 +76,7 @@ const LeveWiseIncome = () => {
 
   return (
     <>
-    <h1>{name} Income</h1>
-     <CustomDataTable columns={columns} data={data}/>
+     <CustomDataTable title={`${name} Income`} columns={columns} data={data}/>
     </>
   )
 }
