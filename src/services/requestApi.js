@@ -197,6 +197,13 @@ class DataService {
   return http.get(`/kyc/get-kyc/${saasId}`)
  }
 
+ GetCustomerKycDetail(saasId, storeId, id){
+  return http.get(`kyc/get-AllkycDetail-customer/${saasId}/${storeId}/${id}`)
+ }
+
+ UpdateKycForCutomer(saasId, storeId, customerId, status){
+  return http.patch(`/kyc/update-kyc-customer/${saasId}/${storeId}/${customerId}/${status}`)
+ } 
 
  
 
