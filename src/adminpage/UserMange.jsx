@@ -4,8 +4,18 @@ import { Edit, Eye } from "lucide-react";
 import { Button } from "@mui/material";
 import DataService from '../services/requestApi'
 import { Link } from "react-router-dom";
+import UpdateUserModal from "../admincomponents/Modals/UpdateUserModal";
+import UpdateSponormodal from "../admincomponents/Modals/UpdateSponormodal";
 const UserMange = () => {
-  
+  const [open, setOpen] = useState(false);
+  const [selectedrow, setSelectedRow] = useState('')
+  const [cutid , setCustId ] = useState('')
+  const [updateSponsor, setupdateSponor] = useState(false)
+    const handleOpen = (row) =>{ 
+      setOpen(true)
+      setSelectedRow(row)
+    };
+    const handleClose = () => setOpen(false);
   const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
   const [data, setData] = useState([])
 
@@ -92,17 +102,17 @@ const UserMange = () => {
       allowOverflow: true,
       button: true,
     },
-    // {
-    //   name: "Action",
-    //   cell: (row) => <Edit />,
-    //   ignoreRowClick: true,
-    //   allowOverflow: true,
-    //   button: true,
-    // },
+    {
+      name: "Action",
+      cell: (row) => <Edit className="cursor-pointer " onClick={()=>{handleOpen(row)}}/>,
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
     {
         name: "Change Sponsor",
         cell: (row)=>{return(
-            <Button variant="contained" color="secondary" size="small" o nClick={() => handleEdit(row)}>
+            <Button variant="contained" color="secondary" size="small" onClick={() => handleEdit(row)}>
             Change Sponsor
         </Button>
         )},
@@ -116,6 +126,8 @@ const UserMange = () => {
   const handleEdit = (row) => {
     // Handle edit action
     console.log("Edit row:", row);
+    setupdateSponor(true)
+    setCustId(row.customerId)
   };
 
   return (
@@ -125,6 +137,8 @@ const UserMange = () => {
         columns={columns}
         data={data}
       />
+      <UpdateUserModal GetUsers={GetUsers} open={open} handleClose={handleClose} selectedrow={selectedrow}/>
+      <UpdateSponormodal GetUsers={GetUsers} open={updateSponsor} handleClose={()=>{setupdateSponor(false)}} id={cutid} />
     </div>
   );
 };
