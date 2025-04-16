@@ -88,6 +88,11 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       path: "/admin/subcategories",
     },
     {
+      title: "Gallery",
+      icon: <GalleryVertical size={20} />,
+      path: "/admin/AllGallery",
+    },
+    {
       title: "Manage Product",
       icon: <Package size={20} />,
       path: "/admin/products",

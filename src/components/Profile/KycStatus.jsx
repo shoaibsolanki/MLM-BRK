@@ -19,10 +19,22 @@ const KycStatus = ({ userId }) => {
       const kycStatus = response.data?.data?.status;
       if (response?.data?.status) {
         localStorage.setItem('kycStatus', kycStatus);
+
         setKycStatus(response?.data?.data?.status);
         setKycData(response?.data?.data);
+        getwalletAmount()
+      }
+    } catch (error) {
+      console.error("Error fetching saved addresses:", error);
+    }
+  };
+  const [wallet, setWallets] = useState(null);
 
-
+  const getwalletAmount = async () => {  
+    try {
+      const response = await DataService.GetwalletByCustomId(storeid,id);
+      if (response?.data?.status) {
+        setWallets(response?.data?.data);
       }
     } catch (error) {
       console.error("Error fetching saved addresses:", error);
@@ -113,7 +125,7 @@ const KycStatus = ({ userId }) => {
         <div className="mt-3 flex justify-between items-center">
           <span className="text-xs text-green-700">Wallet Balance</span>
           <span className="text-sm font-bold text-green-700">
-            ₹{kycData.walletBalance?.toFixed(2) || '0.00'}
+            ₹{wallet?.balance?.toFixed(2) || '0.00'}
           </span>
         </div>
       </div>

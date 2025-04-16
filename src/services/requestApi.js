@@ -204,6 +204,14 @@ class DataService {
  UpdateKycForCutomer(saasId, storeId, customerId, status){
   return http.patch(`/kyc/update-kyc-customer/${saasId}/${storeId}/${customerId}/${status}`)
  } 
+//Add gallery image
+Addgallery(saasId, storeId, formData) {
+  return http.post(`item/add-gallery-image/${saasId}/${storeId}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
+}
 
  GetOrderDetail(saasId,storeId,orderId){
   return http.get(`/order/get-ordermaster-details/${saasId}/${storeId}/${orderId}`)
@@ -335,7 +343,9 @@ UpdateOrderByid(storeId, saasId, orderId, status){
   GetTeamHistory(customerId){
     return http.get(`/customer/mlm-level/${customerId}`)
    }
-
+   GetwalletByCustomId(storeid,customerId){
+    return http.get(`/wallet/get-customer-wallet/${storeid}/${customerId}`)
+   }
    kycDocumentUpload(saasId, storeId, customerId, formData) {
     return http.patch(`/kyc/add-documentImg/${saasId}/${storeId}/${customerId}`, formData, {
       headers: {
