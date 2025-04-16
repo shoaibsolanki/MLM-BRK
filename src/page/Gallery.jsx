@@ -26,7 +26,14 @@ function Gallery() {
     <Box bgcolor="#f8f9fa" py={5}>
       <Container maxWidth="lg">
         {/* Breadcrumbs */}
-        <Box mb={4}>
+        <Box mb={2}
+          px={3}
+          py={2}
+          borderRadius={2}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          bgcolor="#e0f7fa">
           <Breadcrumbs aria-label="breadcrumb">
             <Typography color="text.primary">Gallery</Typography>
           </Breadcrumbs>
@@ -45,13 +52,17 @@ function Gallery() {
                   />
                 ) : item.type === 'link' ? (
                   <iframe
-                    src={item.value}
-                    title={`Video ${item.id}`}
-                    allowFullScreen
-                    width="100%"
-                    height="250"
-                    style={{ border: 0 }}
-                  ></iframe>
+                  src={
+                    item.value.includes('watch?v=')
+                      ? item.value.replace('watch?v=', 'embed/')
+                      : item.value
+                  }
+                  title={`Video ${item.id}`}
+                  width="100%"
+                  height="250"
+                  style={{ border: 0, borderRadius: '8px' }}
+                  allowFullScreen
+                />
                 ) : null}
               </Box>
             </Grid>

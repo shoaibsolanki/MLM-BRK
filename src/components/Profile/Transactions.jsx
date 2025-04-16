@@ -14,7 +14,7 @@ const Transactions = ({ customerId }) => {
             const formattedData = res.data.data
               .filter(item => {
                 const type = item.transactionType?.toUpperCase();
-                return ['ISSUED', 'REDEEMED'].includes(type);
+                return ['ISSUED', 'REDEEMED',"Monthly_Rp_To_Points","MONTHLY_RP_BONUS","EARLY_PURCHASE_BONUS","6_MONTHS_AVG_RP_BONUS","12_MONTHS_AVG_RP_BONUS"].includes(type);
               })
               .map((item) => {
                 const type = item.transactionType?.toUpperCase();
@@ -23,7 +23,8 @@ const Transactions = ({ customerId }) => {
                 return {
                   id: item.id,
                   type,
-                  amount,
+                  amount:item.transactionAmount || 0,
+                  rp: item.rp || 0,
                   description: item.description || type || '—',
                   date: item.createdAt,
                   status: item.status || 'completed',
@@ -67,6 +68,14 @@ const Transactions = ({ customerId }) => {
               <option value="ALL">All</option>
               <option value="ISSUED">Issued</option>
               <option value="REDEEMED">Redeemed</option>
+              <option value="EARLY_PURCHASE_BONUS">EARLY_PURCHASE_BONUS</option>
+              <option value="MONTHLY_RP_BONUS">MONTHLY_RP_BONUS</option>
+              <option value="Monthly_Rp_To_Points">Monthly_Rp_To_Points</option>
+              <option value="6_MONTHS_AVG_RP_BONUS">6_MONTHS_AVG_RP_BONUS</option>
+              <option value="12_MONTHS_AVG_RP_BONUS">12_MONTHS_AVG_RP_BONUS</option>
+
+
+
             </select>
           </div>
         </div>
@@ -78,7 +87,9 @@ const Transactions = ({ customerId }) => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RP</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
               </tr>
             </thead>
@@ -89,13 +100,15 @@ const Transactions = ({ customerId }) => {
                     <div className="flex items-center">
                       <div
                         className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${
-                          tx.type === 'ISSUED' ? 'bg-green-100' : 'bg-red-100'
+                          tx.type === 'REDEEMED' ?  'bg-red-100':'bg-green-100'
                         }`}
                       >
-                        {tx.type === 'ISSUED' ? (
-                          <ArrowUpRight size={16} className="text-green-600" />
-                        ) : (
+                        {tx.type === 'REDEEMED' ? (
                           <ArrowDownLeft size={16} className="text-red-600" />
+
+                        ) : (
+                          <ArrowUpRight size={16} className="text-green-600" />
+
                         )}
                       </div>
                       <div className="ml-3">
@@ -106,8 +119,12 @@ const Transactions = ({ customerId }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{tx.description}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(tx.date)}</td>
-                  <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${tx.amount > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {tx.amount >= 0 ? '+' : ''}{tx.amount.toFixed(2)}
+                 
+ <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${tx?.type === 'REDEEMED' ?  'text-red-600':'text-green-600'}`}>
+                    {tx?.type === 'REDEEMED'  ? '-' : '+'}{tx?.rp?.toFixed(2)}
+                  </td>
+                  <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${tx?.type === 'REDEEMED' ?  'text-red-600':'text-green-600'}`}>
+                    {tx?.type === 'REDEEMED'  ? '-' : '+'}{tx?.amount.toFixed(2)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 capitalize">
