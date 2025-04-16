@@ -205,6 +205,27 @@ class DataService {
   return http.patch(`/kyc/update-kyc-customer/${saasId}/${storeId}/${customerId}/${status}`)
  } 
 
+ GetOrderDetail(saasId,storeId,orderId){
+  return http.get(`/order/get-ordermaster-details/${saasId}/${storeId}/${orderId}`)
+}
+
+GetAddress(saasId, storeId, addressId){
+  return http.get(`/customer/get-address/${saasId}/${storeId}/${addressId}`)
+}
+
+GetOrderItemData(saasId,storeId,orderId){
+  return http.get(`/order/view-order-detail-web/${storeId}/${saasId}/${orderId}`)
+}
+
+OnlineTransaction(data) {
+  return http.post("/transaction/save-transaction-omni", data);
+}
+
+UpdateOrderByid(storeId, saasId, orderId, status){
+  return http.put(`/order/update-status/${storeId}/${saasId}/${orderId}/${status}`)
+}
+
+
  
 
 
