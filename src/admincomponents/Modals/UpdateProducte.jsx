@@ -39,6 +39,7 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
       opening_qty: "",
       received_qty: "",
       UOM: "",
+      rp:""
     },
   });
 
@@ -75,6 +76,7 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
         opening_qty: selectedRow?.opening_qty || "",
         received_qty: selectedRow?.received_qty || "",
         UOM: selectedRow?.UOM || "",
+        rp:selectedRow?.rp || "",
       });
       getImagesByItemId();
     }
@@ -325,12 +327,12 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
                 {...register("tax")}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <TextField label="SaaS ID" fullWidth {...register("saas_id")} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField label="Store ID" fullWidth {...register("store_id")} />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
               <TextField label="Category" fullWidth {...register("category")} />
             </Grid>
@@ -355,6 +357,9 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField label="UOM" fullWidth {...register("UOM")} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField label="RP" fullWidth {...register("rp")} />
             </Grid>
 
             {addedimages?.map((image, index) => (
