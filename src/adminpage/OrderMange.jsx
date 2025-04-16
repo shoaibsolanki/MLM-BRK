@@ -4,17 +4,53 @@ import { File } from 'lucide-react';
 import DataService from '../services/requestApi';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import OrderDetailsModal from '../admincomponents/Modals/OrderDetailsModal';
 
 const OrderMange = () => {
     const [page, setPage] = useState(1);
     const [size, setSize] = useState(10);
     const [data, setData] = useState([]);
     const [count , setCount] = useState("")
-    const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
+    const [open, setOpen] = useState(false)
+  const [orderData , setOrderData]= useState({})
+  const [orderItem, setOrderItem] = useState([])
+  const [Address, setAddress] = useState({})
+  const [isLoading, setIsLoading]= useState(false)
+    const {  saasId ,storeId} = JSON.parse(localStorage.getItem("user_data"));
     const navigate = useNavigate()
     useEffect(() => {
         fetchOrdersByPage()
     }, [page, size]);
+
+    const getOrderDetail =async (orderId)=>{
+        setIsLoading(true)
+        try {
+          const res = await DataService.GetOrderDetail(saasId, storeId, orderId)
+          if(res.data.status){
+            setOrderData(res.data.data)
+            const address = await DataService.GetAddress(saasId, storeId, res.data.data.address_id)
+            if(address.data.status){
+              setAddress(address.data.data)
+            }
+            const orderItem = await DataService.GetOrderItemData(saasId, storeId, orderId)
+            if(orderItem.data.status){
+              setOrderItem(orderItem.data.data || [])
+            }
+            if(res.data.status && address.data.status && orderItem.data.status){
+              setIsLoading(false)
+              setOpen(true)
+            }
+          }
+        } catch (error) {
+          setIsLoading(false)
+          console.log(error)
+        }finally{
+          setIsLoading(false)
+        }
+      }
+
+
     const columns = [
         {
             name: 'Order ID',
@@ -53,14 +89,19 @@ const OrderMange = () => {
         },
         {
             name: 'Status',
-            selector: row => row.status,
+            selector: row => (<>
+            <div>{row.status}</div>
+            {row.status =='PENDING' && <Button variant='contained' onClick={()=>getOrderDetail(row.order_id)} >
+                Change
+                </Button>}
+            </>),
             sortable: true,
         },
         {
             name: 'Action',
             cell: row => (
                 <div className="flex gap-2">
-                    <File className='cursor-pointer' onClick={()=> navigate(`/admin/vieworder/${row?.order_id}`)}/>
+                    <File className='cursor-pointer' onClick={()=>row.status =='Dispatched'? navigate(`/admin/InvoiceView/${row?.order_id}`): navigate(`/admin/vieworder/${row?.order_id}`)}/>
                 </div>
             ),
         },
@@ -99,6 +140,7 @@ const OrderMange = () => {
                 columns={columns}
                 data={data}
             />
+            <OrderDetailsModal GetOrders={fetchOrdersByPage} open={open} onClose={()=>setOpen(false)} orderData={orderData} orderItems={orderItem} customerAddress={Address}/>
         </div>
     );
 };
