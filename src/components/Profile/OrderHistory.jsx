@@ -62,7 +62,7 @@ const Orders = ({ className = "" }) => {
                 Total Order: {order?.order_value}
               </div>
               <div className="text-sm text-gray-600">
-                Point Redeemed: {order?.redeemRp?redeemRp:0}
+                Point Redeemed: {order?.redeemRp?order.redeemRp:0}
               </div>
             
             </div>
