@@ -10,6 +10,7 @@ function AllGallery() {
   const [galleryItems, setGalleryItems] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [files, setFiles] = useState([]);
+  const [description, setDescription] = useState([]);
   const [links, setLinks] = useState(['']);
   const { saasId, storeId } = JSON.parse(localStorage.getItem("user_data"));
 
@@ -54,6 +55,8 @@ function AllGallery() {
     files.forEach(file => {
       formData.append('file', file);
     });
+
+    formData.append('description', description)
   
     // Append non-empty links
     links.forEach(link => {
@@ -125,16 +128,17 @@ function AllGallery() {
                   <iframe
                   src={
                     item.value.includes('watch?v=')
-                      ? item.value.replace('watch?v=', 'embed/')
-                      : item.value
+                    ? item.value.replace('watch?v=', 'embed/')
+                    : item.value
                   }
                   title={`Video ${item.id}`}
                   width="100%"
                   height="250"
                   style={{ border: 0, borderRadius: '8px' }}
                   allowFullScreen
-                />
+                  />
                 ) : null}
+                  <Typography>{item.description}</Typography>
               </Box>
             </Grid>
           ))}
@@ -158,18 +162,25 @@ function AllGallery() {
                 <CloseIcon />
               </IconButton>
             </Box>
-
             <input type="file" multiple onChange={handleFileChange} />
+            <Typography fontWeight={600}>Add Description</Typography>
+            <TextField
+                    fullWidth
+                    size="small"
+                    value={description}
+                    onChange={(e) => setDescription( e.target.value)}
+                  />
+
             <Box mt={2}>
               <Typography fontWeight={600}>Video Links:</Typography>
               {links.map((link, index) => (
                 <Box key={index} display="flex" alignItems="center" mt={1}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    value={link}
-                    onChange={(e) => handleLinkChange(index, e.target.value)}
-                  />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={link}
+                      onChange={(e) => handleLinkChange(index, e.target.value)}
+                    />
                   {links.length > 1 && (
                     <IconButton onClick={() => removeLink(index)} size="small">
                       <CloseIcon fontSize="small" />
