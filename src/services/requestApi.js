@@ -233,6 +233,14 @@ UpdateOrderByid(storeId, saasId, orderId, status){
   return http.put(`/order/update-status/${storeId}/${saasId}/${orderId}/${status}`)
 }
 
+UpdateUser(id,data){
+  return http.put(`customer/update/${id}`,data)
+}
+
+UpdateSponsor(customerId, referId){
+  return http.put(`/customer/update-refer-by/${customerId}/${referId}`)
+} 
+
 
  
 
