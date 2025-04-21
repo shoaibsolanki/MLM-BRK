@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import DataService from '../services/requestApi'
 // import Image from "next/image";
 import { useParams } from "react-router-dom";
+import printJS from "print-js";
+import { Print } from "@mui/icons-material";
 export default function InvoiceView() {
        const { id } = useParams();
         const [orderData, setOrderData] = useState({});
@@ -37,17 +39,46 @@ export default function InvoiceView() {
         storeAddress = 'Store address not available',
         storePhone = 'Phone not available',
         orderDate = "",
+        customerMobile,
+        customerEmail,
+        customerState,
         total = 0,
         orderDetails = [],
         invoiceNo = 'Not available',
+        customerName,
         invoiceDate,
         paymentMode,
         reedemPoint
       } = orderData || {};
+     
+      const handlePrint = () => {
+          printJS({
+            printable: 'printable-order',
+            type: 'html',
+            targetStyles: ['*'],
+            style: `
+              @page { margin: 10mm; }
+              body { font-family: Arial, sans-serif; }
+              table { width: 100%; border-collapse: collapse; }
+              th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+            `,
+          });
+        };
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">
+       <div className="mb-4 text-right print:hidden">
+              <button
+                onClick={handlePrint}
+                className="bg-red-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                <Print/> Print 
+              </button>
+            </div>
+      
       {/* Header */}
+      <div id="printable-order" className="bg-white p-4 print:p-0">
+      
       <div className="flex flex-col md:flex-row justify-between items-start border-b-2 border-yellow-400 pb-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 relative">
@@ -63,14 +94,14 @@ export default function InvoiceView() {
             <h1 className="text-xl font-bold text-yellow-600">
               BRK SOLUTIONS PVT. LTD.
             </h1>
-            <p className="text-xs">
+            <p className="text-xs text-nowrap">
               640, SHRI LAL NAGAR, GANDHI CHOWK JABALPUR-482001, RAJASTHAN INDIA
             </p>
-            <p className="text-xs">
+            <p className="text-xs text-nowrap">
               Mob# & No. : (+91-90642 31555 / E-mail ID: BRK@gmail.com)
             </p>
             <div className="grid grid-cols-2 gap-x-4 text-xs mt-1">
-              <p>GST NO. : 09AABCS7947R1Z2</p>
+              <p className="text-nowrap">GST NO. : 09AABCS7947R1Z2</p>
               <p>CIN NO. :</p>
               <p>DT#09AABCS7947R1Z2</p>
               <p>FSSAI NO. : 12323030000706</p>
@@ -80,7 +111,7 @@ export default function InvoiceView() {
         </div>
         <div className="mt-4 md:mt-0">
           <div className="border border-gray-300 p-2 text-sm">
-            <p className="font-bold">Original Copy</p>
+            <p className="font-bold text-nowrap">Original Copy</p>
           </div>
           <h2 className="text-lg font-bold mt-2">TAX INVOICE</h2>
         </div>
@@ -110,8 +141,7 @@ export default function InvoiceView() {
             </div>
             <div className="border border-gray-300 p-2" >
               <div className="grid grid-cols-2">
-              <p className="text-sm font-semibold">Place of Supply : {customerAddress}</p>
-                <p className="text-sm"></p>
+              <p className="text-sm font-semibold w-[250px] ">Place of Supply : {customerAddress}</p>
               </div>
             </div>
         </div>
@@ -162,7 +192,7 @@ export default function InvoiceView() {
                 "Contact No. 09876 543",
               ].map((field, idx) => ( */}
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">Name: {title =="Bill to Party" ?storeName:""}</p>
+                  <p className="text-sm font-semibold">Name: {title =="Bill to Party" ?storeName:customerName}</p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
@@ -178,15 +208,15 @@ export default function InvoiceView() {
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">State: {title =="Bill to Party" ?state:""}</p>
+                  <p className="text-sm font-semibold">State: {title =="Bill to Party" ?state:customerState}</p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">Mobile No: {title =="Bill to Party" ?storePhone:""}</p>
+                  <p className="text-sm font-semibold">Mobile No: {title =="Bill to Party" ?storePhone:customerMobile}</p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">Email :</p>
+                  <p className="text-sm font-semibold">Email : {title =="Bill to Party" ?"":customerEmail} </p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
               
@@ -217,34 +247,20 @@ export default function InvoiceView() {
               <td className="border border-gray-300 p-2 text-sm">{el.orderPrice}</td>
               
             </tr>)})}
-            {/* {[...Array(5)].map((_, i) => (
-              <tr key={i}>
-                {[...Array(7)].map((_, j) => (
-                  <td key={j} className="border border-gray-300 p-2 text-sm">{j === 0 ? i + 2 : ""}</td>
-                ))}
-              </tr>
-            ))} */}
+            <tr className="border text-center">
+              <td className="font-semibold border" colSpan={5}>Grand Total:</td>
+              <td >₹ {total}</td>
+            </tr>
+            <tr className="border text-center">
+              <td colSpan={4} className="border"></td>
+              <td className="border">TOTAL RP</td>
+              <td className="border">{reedemPoint}</td>
+            </tr>
           </tbody>
         </table>
       </div>
 
-      {/* Totals */}
-      <div className="grid grid-cols-2 mt-4">
-        <div className="text-sm">
-          <p className="font-semibold">Amount (in words):</p>
-          <p>Rupees ___________________________</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          {/* {["GRAND TOTAL", "TAX", "TOTAL Rs.","RP"].map((label, i) => ( */}
-            <React.Fragment >
-              <div className="text-right font-semibold">RP</div>
-              <div className="border border-gray-300 p-1 text-right">
-                {reedemPoint}
-              </div>
-            </React.Fragment>
-        {/* //   ))} */}
-        </div>
-      </div>
+      
 
       
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm border-t border-gray-300 pt-4">
@@ -278,6 +294,7 @@ export default function InvoiceView() {
       <p>Subject to "Jaisalmer" Jurisdiction only</p>
     </div>
   </div>
+</div>
 </div>
     </div>
   );
