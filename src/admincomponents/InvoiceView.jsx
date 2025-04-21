@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import DataService from '../services/requestApi'
 // import Image from "next/image";
-import logo from '../assets/sarvLogo.png'
 import { useParams } from "react-router-dom";
 export default function InvoiceView() {
        const { id } = useParams();
         const [orderData, setOrderData] = useState({});
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
+        const {storeName,storeLogo ,state} = JSON.parse(localStorage.getItem("store_data"));
     const GetOrderDate = async () => {
         try {
           setLoading(true);
@@ -36,7 +36,7 @@ export default function InvoiceView() {
         customerAddress = 'Address not available',
         storeAddress = 'Store address not available',
         storePhone = 'Phone not available',
-        orderDate = new Date(),
+        orderDate = "",
         total = 0,
         orderDetails = [],
         invoiceNo = 'Not available',
@@ -52,7 +52,7 @@ export default function InvoiceView() {
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 relative">
             <img
-              src={logo}
+              src={storeLogo}
               width={48}
               height={48}
               alt="Company logo"
@@ -90,25 +90,25 @@ export default function InvoiceView() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {/* Left */}
         <div className="grid grid-cols-1 gap-2">
-            <div className="border border-gray-300 p-2" key={1}>
+            <div className="border border-gray-300 p-2" >
               <div className="grid grid-cols-2">
                 <p className="text-sm font-semibold text-nowrap">Invoice no: {invoiceNo}</p>
                 <p className="text-sm"></p>
               </div>
             </div>
-            <div className="border border-gray-300 p-2" key={1}>
+            <div className="border border-gray-300 p-2" >
               <div className="grid grid-cols-2">
                 <p className="text-sm font-semibold text-nowrap">Invoice Date:{invoiceDate}</p>
                 <p className="text-sm"></p>
               </div>
             </div>
-            <div className="border border-gray-300 p-2" key={1}>
+            <div className="border border-gray-300 p-2">
               <div className="grid grid-cols-2">
                 <p className="text-sm font-semibold text-nowrap">Payment Mode:{paymentMode}</p>
                 <p className="text-sm"></p>
               </div>
             </div>
-            <div className="border border-gray-300 p-2" key={1}>
+            <div className="border border-gray-300 p-2" >
               <div className="grid grid-cols-2">
               <p className="text-sm font-semibold">Place of Supply : {customerAddress}</p>
                 <p className="text-sm"></p>
@@ -126,17 +126,17 @@ export default function InvoiceView() {
             </div>
             <div className="border border-gray-300 p-2" >
               <div className="grid grid-cols-2">
-                <p className="text-sm font-semibold">Supply Date : 23-12-2023 </p>
+                <p className="text-sm font-semibold">Supply Date : {orderDate} </p>
                 <p className="text-sm"></p>
               </div>
             </div>
-            <div className="border border-gray-300 p-2" key={1}>
+            <div className="border border-gray-300 p-2" >
               <div className="grid grid-cols-2">
                 <p className="text-sm font-semibold text-nowrap">Payment Mode:{paymentMode}</p>
                 <p className="text-sm"></p>
               </div>
             </div>
-            <div className="border border-gray-300 p-2" key={1}>
+            <div className="border border-gray-300 p-2" >
               <div className="grid grid-cols-2">
                 <p className="text-sm font-semibold text-nowrap">Transport Mode : Courier</p>
                 <p className="text-sm"></p>
@@ -162,15 +162,15 @@ export default function InvoiceView() {
                 "Contact No. 09876 543",
               ].map((field, idx) => ( */}
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">Name:</p>
+                  <p className="text-sm font-semibold">Name: {title =="Bill to Party" ?storeName:""}</p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">Address:</p>
+                  <p className="text-sm font-semibold">Address:{title =="Bill to Party" ?storeAddress:customerAddress}</p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">Supplier State:</p>
+                  <p className="text-sm font-semibold">Supplier State:{title =="Bill to Party" ?state:""}</p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
@@ -178,11 +178,11 @@ export default function InvoiceView() {
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">State:</p>
+                  <p className="text-sm font-semibold">State: {title =="Bill to Party" ?state:""}</p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
-                  <p className="text-sm font-semibold">Mobile No:</p>
+                  <p className="text-sm font-semibold">Mobile No: {title =="Bill to Party" ?storePhone:""}</p>
                   <div className={`border-b border-gray-300 h-6`}></div>
                 </div>
                 <div className="grid grid-cols-1" >
@@ -208,7 +208,7 @@ export default function InvoiceView() {
             </tr>
           </thead>
           <tbody>
-{orderDetails.map((el,ixd)=>{  return( <tr>
+{orderDetails.map((el,ixd)=>{  return( <tr key={ixd}>
               <td className="border border-gray-300 p-2 text-sm">{ixd}</td>
               <td className="border border-gray-300 p-2 text-sm">{el.name}</td>
               <td className="border border-gray-300 p-2 text-sm">{el.billQty}</td>
