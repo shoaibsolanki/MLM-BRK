@@ -31,7 +31,11 @@ const ProductCard = ({ product }) => {
                 MRP: ₹{product?.actual_price?.toFixed(2)}
               </p>
               <p className="text-xs text-red-600">
-                OFF: ₹{(product?.actual_price - product?.price).toFixed(2)}
+
+                Flat: 
+                {/* ₹{(product?.actual_price - product?.price).toFixed(2)} */}
+                 (
+                {((product?.actual_price - product?.price) / product?.actual_price * 100).toFixed(0)}% OFF)
               </p>
             </>
           )}

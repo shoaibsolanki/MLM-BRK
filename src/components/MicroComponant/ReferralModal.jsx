@@ -35,20 +35,52 @@ const ReferralModal = ({ onClose }) => {
   }, [id]);
 
   const copyToClipboard = () => {
-    const referralUrl = `${window.location.origin}/customer-registration/${organization}/${referralCode}`;
-
-    navigator.clipboard
-      .writeText(referralUrl)
-      .then(() => {
-        setCopied(true);
-        enqueueSnackbar("Referral link copied to clipboard!", { variant: "success" });
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
-        enqueueSnackbar("Failed to copy referral link", { variant: "error" });
-      });
+    const referralUrl = `https://${window.location.host}/customer-registration/${organization}/${referralCode}`;
+  
+    if (navigator.clipboard && window.isSecureContext) {
+      // ✅ Use Clipboard API
+      navigator.clipboard.writeText(referralUrl)
+        .then(() => {
+          setCopied(true);
+          enqueueSnackbar("Referral link copied to clipboard!", { variant: "success" });
+          setTimeout(() => setCopied(false), 2000);
+        })
+        .catch((err) => {
+          console.error("Clipboard API failed:", err);
+          fallbackCopyTextToClipboard(referralUrl);
+        });
+    } else {
+      // ❌ Fallback for insecure context (e.g., HTTP or IP)
+      fallbackCopyTextToClipboard(referralUrl);
+    }
   };
+  
+  const fallbackCopyTextToClipboard = (text) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed"; // avoid scrolling to bottom
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+  
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopied(true);
+        enqueueSnackbar("Referral link copied (fallback)!", { variant: "success" });
+        setTimeout(() => setCopied(false), 2000);
+      } else {
+        throw new Error("Fallback copy failed");
+      }
+    } catch (err) {
+      console.error("Fallback copy failed: ", err);
+      enqueueSnackbar("Failed to copy referral link", { variant: "error" });
+    }
+  
+    document.body.removeChild(textArea);
+  };
+  
+  
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -71,72 +103,72 @@ const ReferralModal = ({ onClose }) => {
 
         <h2 className="text-2xl font-bold mb-6 text-center">Share Your Referral Code</h2>
 
-        {/* Organization Selection Dropdown */}
-        <select
-          value={organization}
-          onChange={(e) => setOrganization(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg mb-4"
-        >
-          <option value="org1">Organization 1</option>
-          <option value="org2">Organization 2</option>
-        </select>
-
-        <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between mb-6">
-          <span className="font-mono text-lg font-medium">{referralCode || "Loading..."}</span>
-          <button
-            onClick={copyToClipboard}
-            className="text-blue-600 hover:text-blue-800 p-1 rounded-md transition-colors"
-            aria-label="Copy referral code"
+        
+          <select
+            value={organization}
+            onChange={(e) => setOrganization(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-lg mb-4"
           >
-            {copied ? <Check size={20} /> : <Copy size={20} />}
-          </button>
-        </div>
+            <option value="org1">Organization 1</option>
+            <option value="org2">Organization 2</option>
+          </select>
 
-        <p className="text-gray-600 mb-6 text-center">
-          Share this code with friends and you'll both get rewards when they join!
-        </p>
+          <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between mb-6">
+            <span className="font-mono text-lg font-medium">{referralCode || "Loading..."}</span>
+            <button
+              onClick={copyToClipboard}
+              className="text-blue-600 hover:text-blue-800 p-1 rounded-md transition-colors"
+              aria-label="Copy referral code"
+            >
+              {copied ? <Check size={20} /> : <Copy size={20} />}
+            </button>
+          </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <button
-            onClick={() =>
-              window.open(
-                `https://wa.me/?text=Join using my referral code: ${referralCode}`,
-                "_blank"
-              )
-            }
-            className="flex flex-col items-center justify-center bg-green-50 hover:bg-green-100 text-green-600 rounded-lg p-4 transition duration-200"
-          >
-            <Share2 size={24} />
-            <span className="mt-2 text-sm font-medium">WhatsApp</span>
-          </button>
+          <p className="text-gray-600 mb-6 text-center">
+            Share this code with friends and you'll both get rewards when they join!
+          </p>
 
-          <button
-            onClick={() =>
-              window.open(
-                `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&quote=Join using my referral code: ${referralCode}`,
-                "_blank"
-              )
-            }
-            className="flex flex-col items-center justify-center bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg p-4 transition duration-200"
-          >
-            <Facebook size={24} />
-            <span className="mt-2 text-sm font-medium">Facebook</span>
-          </button>
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <button
+              onClick={() =>
+                window.open(
+            `https://wa.me/?text=Join using my referral code: ${referralCode}`,
+            "_blank"
+                )
+              }
+              className="flex flex-col items-center justify-center bg-green-50 hover:bg-green-100 text-green-600 rounded-lg p-4 transition duration-200"
+            >
+              <Share2 size={24} />
+              <span className="mt-2 text-sm font-medium">WhatsApp</span>
+            </button>
+
+            <button
+              onClick={() =>
+                window.open(
+            `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&quote=Join using my referral code: ${referralCode}`,
+            "_blank"
+                )
+              }
+              className="flex flex-col items-center justify-center bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg p-4 transition duration-200"
+            >
+              <Facebook size={24} />
+              <span className="mt-2 text-sm font-medium">Facebook</span>
+            </button>
+
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`Join using my referral code: ${referralCode}`);
+                window.open("https://www.instagram.com", "_blank");
+              }}
+              className="flex flex-col items-center justify-center bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg p-4 transition duration-200"
+            >
+              <Instagram size={24} />
+              <span className="mt-2 text-sm font-medium">Instagram</span>
+            </button>
+          </div>
 
           <button
             onClick={() => {
-              navigator.clipboard.writeText(`Join using my referral code: ${referralCode}`);
-              alert("Referral code copied! Open Instagram to share.");
-            }}
-            className="flex flex-col items-center justify-center bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg p-4 transition duration-200"
-          >
-            <Instagram size={24} />
-            <span className="mt-2 text-sm font-medium">Instagram</span>
-          </button>
-        </div>
-
-        <button
-          onClick={() => {
             navigator
               .share({
                 title: "Join with my referral code",

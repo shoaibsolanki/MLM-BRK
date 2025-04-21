@@ -4,10 +4,11 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import DataService from "../services/requestApi.js";
 import ProductCard from "../components/ProductCard.jsx";
 import { useAuth } from "../contexts/AuthConext.jsx";
+import { BASEURL } from "../services/http-common.js";
 
 const ProductsPage = () => {
   const { categoryId, subcategoryId } = useParams();
-  const { saasid, storeid } = useAuth();
+  const { saasid, storeid ,searchKeyword, searchResults,setSearchResults,setSearchKeyword} = useAuth();
 
   const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("All Products");
@@ -70,6 +71,8 @@ const ProductsPage = () => {
       setActiveSubcategory(subcategoryId);
       setTitle(`Products in ${subcategory.category}`);
       setProducts(response.status ? response.data.data || [] : []);
+      setSearchKeyword("");
+      setSearchResults([]);
     }
   };
 
@@ -133,59 +136,75 @@ const ProductsPage = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Sidebar (Desktop) */}
-        <div className="hidden md:block md:w-64 flex-shrink-0">
-          <h2 className="text-lg font-semibold mb-4">Categories</h2>
-          <nav className="space-y-1">
-            <Link
-              to="/products"
-              className={`block px-3 py-2 rounded-md ${!categoryId ? "bg-blue-500 text-white" : "hover:bg-gray-50 text-gray-700"}`}
-              onClick={fetchAllProducts}
+          <div className="hidden md:block md:w-64 flex-shrink-0">
+            <h2 className="text-lg font-semibold mb-4">Categories</h2>
+            <nav className="space-y-1">
+              <Link
+                to="/products"
+                className={`block px-3 py-2 rounded-md ${!categoryId ? "bg-blue-500 text-white" : "hover:bg-gray-50 text-gray-700"}`}
+                onClick={fetchAllProducts}
+              >
+                All Products
+              </Link>
+
+              {categories.map((category) => (
+                <div key={category.masterCategoryId} className="border-t border-gray-100">
+            <button
+              onClick={() => setExpandedCategory(expandedCategory === category.masterCategoryId ? null : category.masterCategoryId)}
+              className={`w-full text-left px-3 py-2 flex justify-between items-center rounded-md ${
+                categoryId === category.masterCategoryId ? "bg-blue-500 text-white" : "hover:bg-gray-50 text-gray-700"
+              }`}
             >
-              All Products
-            </Link>
-
-            {categories.map((category) => (
-              <div key={category.masterCategoryId} className="border-t border-gray-100">
-                <button
-                  onClick={() => setExpandedCategory(expandedCategory === category.masterCategoryId ? null : category.masterCategoryId)}
-                  className={`w-full text-left px-3 py-2 flex justify-between items-center rounded-md ${
-                    categoryId === category.masterCategoryId ? "bg-blue-500 text-white" : "hover:bg-gray-50 text-gray-700"
-                  }`}
-                >
-                  <Link to={`/products/${category.masterCategoryId}`} className="w-full">
-                    {category.masterCategoryName}
-                  </Link>
-                  {expandedCategory === category.masterCategoryId ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                </button>
-   {expandedCategory === category.masterCategoryId && (
-            <div className="subcategory-list ml-4 mt-2 border-l-2 border-gray-300 pl-4">
-              {subcategories
-                .filter((sub) => sub.masterCategoryId == category.masterCategoryId)
-                .map((sub) => (
-                  <Link
-                      key={sub.id}
-                      to={`/products/${sub.masterCategoryId}/${sub.id}`}
-                      className={`block px-6 py-2 text-sm rounded-md ${
-                        activeSubcategory === sub.id ? "bg-blue-500 text-white" : "hover:bg-gray-50 text-gray-600"
-                      }`}
-                      onClick={() => fetchProducts(sub.id)}
-                    >
-                      {sub.category}
-                    </Link>
-                ))}
-            </div>
-          )}
+              <Link to={`/products/${category.masterCategoryId}`} className="w-full flex items-center space-x-2">
+                <img
+                  src={`${BASEURL.ENDPOINT_URL}/Master-category/get-master-image/${category.masterCategoryId}`}
+                  alt={category.name}
+                  className="w-8 h-8 object-cover rounded"
+                />
+                <span>{category.masterCategoryName}</span>
+              </Link>
+              {expandedCategory === category.masterCategoryId ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+            {expandedCategory === category.masterCategoryId && (
+              <div className="subcategory-list ml-4 mt-2 border-l-2 border-gray-300 pl-4">
+                {subcategories
+                  .filter((sub) => sub.masterCategoryId == category.masterCategoryId)
+                  .map((sub) => (
+              <Link
+                key={sub.id}
+                to={`/products/${sub.masterCategoryId}/${sub.id}`}
+                className={`block px-6 py-2 text-sm rounded-md ${
+                  activeSubcategory === sub.id ? "bg-blue-500 text-white" : "hover:bg-gray-50 text-gray-600"
+                }`}
+                onClick={() => fetchProducts(sub.id)}
+              >
+                {sub.category}
+              </Link>
+                  ))}
               </div>
-            ))}
-          </nav>
-        </div>
+            )}
+                </div>
+              ))}
+            </nav>
+          </div>
 
-        {/* Products Grid */}
+          {/* Products Grid */}
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-900 mb-6">{title}</h1>
 
-          {products.length === 0 ? (
+          {searchKeyword ? (
+            searchResults.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">No products found for the search keyword.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {searchResults.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )
+          ) : products.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500">No products found in this category.</p>
             </div>
