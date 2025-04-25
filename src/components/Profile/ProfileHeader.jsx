@@ -32,17 +32,35 @@ const  navigate = useNavigate();
   }, []);
 
   const filteredLevels = RpData.filter(level => level.type === 'Monthly_Rp_Bonus');
+console.log("Filterd data",filteredLevels)
+  let matchedLevel = filteredLevels.find(level => rewardPoint.totalRp  >= level.start_rp && rewardPoint.totalRp  <= level.end_rp);
 
-  const matchedLevel = rewardPoint?.totalRp
-    ? filteredLevels.find(level =>
-        rewardPoint.totalRp >= level.start_rp &&
-        rewardPoint.totalRp <= level.end_rp
-      )
-    : null;
+  // Step 2: If no match, find the level with the highest end_rp that is less than rp
+  if (!matchedLevel) {
+    const filtered = filteredLevels
+      .filter(level => rewardPoint.totalRp  > level.end_rp)
+      .sort((a, b) => b.end_rp - a.end_rp); // Sort descending by end_rp
   
-  const progress = matchedLevel
-    ? ((rewardPoint.totalRp - matchedLevel.start_rp) / (matchedLevel.end_rp - matchedLevel.start_rp)) * 100
-    : 0;
+    matchedLevel = filtered[0] || null;
+  }
+   
+    console.log("level",matchedLevel)
+  
+    let progress = 0;
+
+    if (matchedLevel) {
+      const { start_rp, end_rp } = matchedLevel;
+    
+      if (start_rp === end_rp) {
+        // Fixed-level RP (like exactly 30 RP)
+        progress = rewardPoint.totalRp >= start_rp ? 100 : 0;
+      } else {
+        progress = ((rewardPoint.totalRp - start_rp) / (end_rp - start_rp)) * 100;
+        console.log("progress in side if", progress, start_rp, end_rp)
+        // Clamp progress between 0 and 100
+        progress = Math.min(Math.max(progress, 0), 100);
+      }
+    }
   
     console.log("progress",progress)
   const [isEditing, setIsEditing] = useState(false);
@@ -195,7 +213,7 @@ const  navigate = useNavigate();
   </div>
   <div className="mx-2 flex items-center space-x-2 text-sm text-gray-700 font-medium bg-indigo-50 px-3 py-2 rounded-lg shadow-sm">
     <Gem size={18} className="text-indigo-600" />
-    <span>{rewardPoint?.monthlyRp ?? 0} Monthly RP</span>
+    <span>{rewardPoint?.bonusPoints ?? 0} Bonus Point</span>
   </div>
   <div className="mx-2 flex items-center space-x-2 text-sm text-gray-700 font-medium bg-indigo-50 px-3 py-2 rounded-lg shadow-sm">
     <Gem size={18} className="text-indigo-600" />
