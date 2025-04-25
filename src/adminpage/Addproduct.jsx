@@ -6,7 +6,8 @@ import DataService from '../services/requestApi'
 import { useSnackbar } from 'notistack';
 import { Add } from '@mui/icons-material';
 import { Trash } from 'lucide-react';
-import axios from 'axios';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 const AddProduct = () => {
   const { enqueueSnackbar } = useSnackbar();
   const {storeId,saasId} = JSON.parse(localStorage.getItem('user_data'))
@@ -22,6 +23,7 @@ const AddProduct = () => {
     discount: 0,
     special_description: "",
     description: "",
+    discount_type:"",
     opening_qty: 0,
     actual_price: 0,
     mrp: 0,
@@ -57,9 +59,25 @@ const AddProduct = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "discount" && productData.discount_type === "percentage" && value > 100) {
+      enqueueSnackbar('Discount percentage cannot exceed 100.', { variant: 'error' });
+      return;
+    }
+    if (name === "discount" && productData.discount_type === "flat" && value > Number(productData.actual_price)) {
+      enqueueSnackbar('Discount Not More then Mrp.', { variant: 'error' });
+      return;
+    }
+    console.log(name, value);
     setProductData({
       ...productData,
       [name]: value,
+    });
+  };
+  const handleQuillChange = (value) => {
+    console.log(value)
+    setProductData({
+      ...productData,
+      description: value, // Hardcoded the key here since ReactQuill doesn't provide event
     });
   };
 
@@ -109,12 +127,34 @@ const AddProduct = () => {
        }
      }, [selectedcategory])
    
+
+     useEffect(() => {
+      if (productData.discount_type === "percentage" && productData.discount) {
+        const discountValue = (productData.actual_price * productData.discount) / 100;
+        setProductData((prevData) => ({
+          ...prevData,
+          // discount: discountValue,
+          price: productData.actual_price - discountValue,
+        }));
+      }else if (productData.discount_type === "flat" && productData.discount) {
+        const discountValue = productData.discount;
+        setProductData((prevData) => ({
+          ...prevData,
+          // discount: discountValue,
+          price: productData.actual_price - discountValue,
+        }));
+      }
+     }, [productData.discount, productData.discount_type])
      
+
+       
      const addProduct = async () =>{
+      console.log(productData)
         if (!productData.item_name || !productData.price || !productData.description || !productData.actual_price) {
           enqueueSnackbar('Please fill in all required fields: Product Name, Price, Description, and MRP', { variant: 'error' });
           return;
         }
+       
       try {
         const response = await DataService.AddProduct(productData)
         if(response.data.status){
@@ -126,6 +166,7 @@ const AddProduct = () => {
             price: 0,
             price_pcs: 0,
             discount: 0,
+            discount_type:"",
             special_description: "",
             description: "",
             opening_qty: 0,
@@ -214,6 +255,28 @@ const AddProduct = () => {
       }
     };
 
+
+
+    const modules = {
+      toolbar: [
+        [{ 'font': [] }],
+        ['bold', 'underline', 'italic'],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'align': [] }],
+        [{ 'table': [] }],
+        ['link', 'image', 'video'],
+        ['clean'],
+        ['code-block']
+      ],
+    };
+  
+    const formats = [
+      'font', 'bold', 'underline', 'italic',
+      'color', 'background', 'list', 'bullet',
+      'align', 'link', 'image', 'video', 'clean',
+      'code-block'
+    ];
 
   return (
     <div className="p-6 bg-white rounded">
@@ -339,6 +402,44 @@ const AddProduct = () => {
             variant="outlined"
           />
         </div>
+
+        <div className="form-group">
+      <div className="form-group">
+        {/* <label className="block mb-2">Discount Type</label> */}
+        <div className="flex items-center my-2">
+          <label className="mr-4">
+            <input
+              type="radio"
+              name="discount_type"
+              value="percentage"
+              checked={productData.discount_type === "percentage"}
+              onChange={handleInputChange}
+            />
+            Percentage
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="discount_type"
+              value="flat"
+              checked={productData.discount_type === "flat"}
+              onChange={handleInputChange}
+            />
+            Flat
+          </label>
+        </div>
+      </div>
+          <TextField
+            name='discount'
+            type='number'
+            value={productData?.discount}
+            onChange={handleInputChange}
+            label="Discount"
+            fullWidth
+            variant="outlined"
+          />
+        </div>
+
         <div className="form-group">
           <TextField
           name='price'
@@ -349,16 +450,8 @@ const AddProduct = () => {
             variant="outlined"
           />
         </div>
-        <div className="form-group">
-          <TextField
-            name='description'
-            value={productData?.description}
-            onChange={handleInputChange}
-            label="Description"
-            fullWidth
-            variant="outlined"
-          />
-        </div>
+        
+        
         <div className="form-group">
           <TextField
             name='rp'
@@ -374,7 +467,7 @@ const AddProduct = () => {
             name='UOM'
             value={productData?.UOM}
             onChange={handleInputChange}
-            label="Weight"
+            label="Unit"
             fullWidth
             variant="outlined"
           />
@@ -407,6 +500,17 @@ const AddProduct = () => {
       </div>
       
       ))}
+      <div className='form-group md:col-span-3  md:h-[130px] h-[180px]'>
+      <ReactQuill 
+        theme="snow" 
+        name="description"
+        value={productData?.description} 
+        onChange={handleQuillChange} 
+        modules={modules} 
+        formats={formats}
+        style={{ height: '100px' , }}
+        />
+        </div>
       
     {/* </div> */}
         {/* {Array.from({ length: 7 }, (_, i) => (

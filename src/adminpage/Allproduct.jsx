@@ -5,6 +5,7 @@ import DataService from '../services/requestApi'
 import { useEffect, useState } from 'react';
 import UpdateProductModal from '../admincomponents/Modals/UpdateProducte';
 import { BASEURL } from '../services/http-common';
+import DOMPurify from 'dompurify'
 const Allproduct = () => {
     const {saasId , storeId} = JSON.parse(localStorage.getItem("user_data"))
     const [page, setPage] = useState(1)
@@ -39,7 +40,16 @@ const Allproduct = () => {
           sortable: false 
        },
        { name: 'Stock', selector: row => row.stock, sortable: true },
-       { name: 'Description', selector: row => row.description, sortable: true },
+       {
+        name: 'Description',
+        cell: row => (
+          <div
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.description) }}
+            style={{ maxWidth: '200px', overflow: 'hidden' }}
+          />
+        ),
+        sortable: true
+      },
        { name: 'Price', selector: row => row.price, sortable: true },
        { name: 'Actual Price', selector: row => row.actual_price, sortable: true },
        { name: 'Discount', selector: row => row.discount, sortable: true },
