@@ -220,11 +220,11 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       icon: <Gift size={20} />,
       path: "/admin/gift",
     },
-    {
-      title: "Gift Orders",
-      icon: <GiftIcon size={20} />,
-      path: "/admin/gift/orders",
-    },
+    // {
+    //   title: "Gift Orders",
+    //   icon: <GiftIcon size={20} />,
+    //   path: "/admin/gift/orders",
+    // },
     // {
     //   title: "Gift Coupon",
     //   icon: <GiftIcon size={20} />,
