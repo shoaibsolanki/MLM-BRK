@@ -16,9 +16,11 @@ const CheckoutPage = () => {
     isAuthenticated,
     getOrderHistory,
     useRewards,
-    rewardPoint
+    rewardPoint,
+    isBonusPoint,
+    setBonusPoint
   } = useAuth();
-  const { cart, totalPrice, clearCart, totalPricePlusDeliveryCharge } =
+  const { cart, totalPrice,totalMRp, clearCart, totalPricePlusDeliveryCharge } =
     useCart();
 
   const TotalOrderQeuntity = cart.reduce((total, item) => {
@@ -85,6 +87,7 @@ console.log("selectedMethod",selectedMethod)
 // Calculate discounted total
 const rewardValue = rewardPoint?.points ?? 0;
 const discountedTotal = Math.max(totalPrice - rewardValue, 0);
+const TotalBonus = isBonusPoint ? (rewardPoint.bonusPoints - totalMRp === 0 ? rewardPoint.bonusPoints : rewardPoint.bonusPoints - totalMRp) : 0;
   const createRazorpayOrder = async () => {
     try {
       const data = {
@@ -174,6 +177,7 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
  
   const onCodSubmit = async (data,paymentResponse) => {
     try {
+      console.log("Total Bonuse",TotalBonus , totalMRp,rewardPoint.bonusPoints)
       if(!data.address_id && deliveryMethod == "Delivery"){
         console.log(data.address_id);
          setSnackbar({
@@ -213,6 +217,7 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
         order_date: new Date(),
         order_type: deliveryMethod,
         item_list: updatedCart,
+        bonusPoints: TotalBonus
       };
 
       localStorage.setItem("orderInformations", JSON.stringify(cart));
@@ -222,6 +227,7 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
       console.log("Order placed:", response);
 
       if (response.status === 200) {
+        setBonusPoint(false)
         console.log("Order placed");
         setSnackbar({
           open: true,
@@ -238,6 +244,9 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
     } catch (error) {
       console.error("Error placing order:", error);
       setIsLoading(false);
+    }finally{
+      setIsLoading(false);
+      setBonusPoint(false)
     }
   };
   const handleSaveAddress = async (data) => {
@@ -294,6 +303,7 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
       order_date: new Date(),
         order_type: "",
         item_list: updatedCart,
+        bonusPoints:TotalBonus
       };
 
       localStorage.setItem("orderInformations", JSON.stringify(cart));
@@ -303,6 +313,7 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
       console.log("Order placed:", response);
 
       if (response.status === 200) {
+        setBonusPoint(false)
         console.log("Order placed");
         getOrderHistory();
 
@@ -314,6 +325,8 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
       }
     } catch (error) {
       console.error("Error placing order:", error);
+    }finally{
+      setBonusPoint(false)
     }
   };
 

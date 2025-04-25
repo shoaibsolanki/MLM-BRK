@@ -21,7 +21,7 @@ import { useAuth } from "../contexts/AuthConext";
 import { useNavigate } from "react-router-dom";
 import HorizontalLinearAlternativeLabelStepper from "../components/MicroComponant/HorizontalLinearAlternativeLabelStepper";
 import { BASEURL } from "../services/http-common";
-import { Switch, FormControlLabel } from '@mui/material';
+import { Switch, FormControlLabel } from "@mui/material";
 
 const CartItem = ({
   item,
@@ -35,7 +35,7 @@ const CartItem = ({
       <Grid container spacing={4} alignItems="center">
         <Grid item xs={2}>
           <img
-           src={`${BASEURL.ENDPOINT_URL}/item/get-image/${item?.item_id}`}
+            src={`${BASEURL.ENDPOINT_URL}/item/get-image/${item?.item_id}`}
             alt={item?.itemName}
             width={50}
             height={50}
@@ -149,21 +149,30 @@ const Cart = () => {
     cart,
     handleIncrease,
     handleDecrease,
+    totalMRp,
   } = useCart();
-  const { authData, isAuthenticated , rewardPoint,GetRewardPoint,useRewards,setUseRewards} = useAuth();
+  const {
+    authData,
+    isAuthenticated,
+    rewardPoint,
+    GetRewardPoint,
+    useRewards,
+    setUseRewards,
+    isBonusPoint,
+    setBonusPoint,
+  } = useAuth();
   const { id, saasId, storeId } = authData;
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Calculate discounted total
+  const rewardValue = rewardPoint?.points ?? 0;
+  const discountedTotal = Math.max(totalPrice - rewardValue, 0);
 
-// Calculate discounted total
-const rewardValue = rewardPoint?.points ?? 0;
-const discountedTotal = Math.max(totalPrice - rewardValue, 0);
-  
-    useEffect(() => {
-        GetRewardPoint(id);
-    }, []);
+  useEffect(() => {
+    GetRewardPoint(id);
+  }, []);
   useEffect(() => {
     if (authData && authData.id) {
       setUserId(authData.id);
@@ -191,8 +200,8 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
   const [kycApproved, setKycApproved] = useState(false);
 
   useEffect(() => {
-    const status = localStorage.getItem('kycStatus');
-    if (status === 'Approved') {
+    const status = localStorage.getItem("kycStatus");
+    if (status === "Approved") {
       setKycApproved(true);
     }
   }, []);
@@ -372,11 +381,11 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
                 {totalPrice}
               </span>
             </div>
-        
+
             <div className="max-md:hidden">
               <Box bgcolor="#ffff" p={2} borderRadius={2}>
-                <Grid  container>
-                  <Grid  item xs={4}>
+                <Grid container>
+                  <Grid item xs={4}>
                     <Typography variant="subtitle1" fontWeight="bold">
                       Product
                     </Typography>
@@ -437,7 +446,7 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
             </Box>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box  p={2} className="flex justify-center" bgcolor="#ffff">
+            <Box p={2} className="flex justify-center" bgcolor="#ffff">
               <Typography variant="subtitle1" fontWeight="bold">
                 Cart total
               </Typography>
@@ -445,29 +454,95 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
             <Box bgcolor="#ffff" p={2} borderRadius={2}>
               <Box display="flex" justifyContent="space-between" my={1}>
                 <Typography variant="body1">Subtotal</Typography>
-                <Typography variant="body1">₹{totalPrice}</Typography>
+                <Typography className="flex" variant="body1">
+                  ₹{totalPrice}{" "}
+                  <p className="line-through mx-3 text-red-500">₹{totalMRp}</p>{" "}
+                </Typography>
               </Box>
-              {kycApproved &&(<Box display="flex" justifyContent="space-between" my={1}>
-              <FormControlLabel
-      control={
-        <Switch
-        checked={useRewards}
-        onChange={(e) => setUseRewards(e.target.checked)}
-          color="primary"
-          size="small"
-        />
-      }
-      label="Use Points"
-    />
-    <div>
-    {useRewards && <Typography className="text-red-500 fw-bold" variant="body1"> - {useRewards? Math.min(rewardPoint?.points, totalPrice) :""} Points</Typography>}
+              {kycApproved && (
+                <>
+                  <Box display="flex" justifyContent="space-between" my={1}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={useRewards}
+                          onChange={(e) => setUseRewards(e.target.checked)}
+                          color="primary"
+                          size="small"
+                          disabled={rewardPoint?.points <= 0}
+                        />
+                      }
+                      label="Use Points"
+                    />
+                    <div>
+                      {useRewards && (
+                        <Typography
+                          className="text-red-500 fw-bold"
+                          variant="body1"
+                        >
+                          {" "}
+                          -{" "}
+                          {useRewards
+                            ? Math.min(rewardPoint?.points, totalPrice)
+                            : ""}{" "}
+                          Points
+                        </Typography>
+                      )}
 
-    <Typography className="text-green-500 fw-bold" variant="body1">
-  {useRewards ? Math.max(rewardValue - totalPrice, 0) : rewardValue} Points
-</Typography>
+                      <Typography
+                        className="text-green-500 fw-bold"
+                        variant="body1"
+                      >
+                        {useRewards
+                          ? Math.max(rewardValue - totalPrice, 0)
+                          : rewardValue}{" "}
+                        Points
+                      </Typography>
+                    </div>
+                  </Box>
 
-                </div>
-              </Box>)}
+                  {/* Bonuse point */}
+                  <Box display="flex" justifyContent="space-between" my={1}>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={isBonusPoint}
+                          onChange={(e) => setBonusPoint(e.target.checked)}
+                          color="primary"
+                          size="small"
+                          disabled={rewardPoint?.bonusPoints < totalMRp}
+                        />
+                      }
+                      label="Bonus Point (It will Apply on Mrp) "
+                    />
+                    <div>
+                      {isBonusPoint && (
+                        <Typography
+                          className="text-red-500 fw-bold"
+                          variant="body1"
+                        >
+                          {" "}
+                          -{" "}
+                          {isBonusPoint
+                            ? Math.min(rewardPoint?.bonusPoints, totalMRp)
+                            : ""}{" "}
+                          Points
+                        </Typography>
+                      )}
+
+                      <Typography
+                        className="text-green-500 fw-bold"
+                        variant="body1"
+                      >
+                        {isBonusPoint
+                          ? Math.max(rewardPoint?.bonusPoints - totalMRp, 0)
+                          : rewardPoint?.bonusPoints}{" "}
+                        Points
+                      </Typography>
+                    </div>
+                  </Box>
+                </>
+              )}
               <TextField
                 label="Enter coupon code"
                 variant="outlined"
@@ -480,7 +555,9 @@ const discountedTotal = Math.max(totalPrice - rewardValue, 0);
               </Select>
               <Box display="flex" justifyContent="space-between" my={2}>
                 <Typography variant="body1">Total amount</Typography>
-                <Typography variant="body1">₹{useRewards ? discountedTotal : totalPrice}</Typography>
+                <Typography variant="body1">
+                  ₹{useRewards ? discountedTotal : totalPrice}
+                </Typography>
               </Box>
               <div className="flex justify-center">
                 <button
