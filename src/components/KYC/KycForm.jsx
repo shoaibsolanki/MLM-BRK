@@ -4,8 +4,6 @@ import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import PersonalInfoStep from './form-steps/PersonalInfoStep';
 import AddressStep from './form-steps/AddressStep';
 import BankDetailsStep from './form-steps/BankDetailsStep';
-import ApplicationDetailsStep from './form-steps/ApplicationDetailsStep';
-import { useAuth } from '../../contexts/AuthConext';
 import { notistack } from "notistack"; // Import Notistack
 
 import DataService from "../../services/requestApi";

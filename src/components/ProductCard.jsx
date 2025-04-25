@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { BASEURL } from '../services/http-common';
 import AddToCartButton from './MicroComponant/AddToCartButton';
-
+import DOMPurify from 'dompurify'
 const ProductCard = ({ product }) => {
   return (
-    <div className="group border rounded-lg bg-white shadow-sm hover:shadow-md transition-transform duration-300 hover:scale-105 max-w-xs">
+    <div className="group border rounded-lg bg-white shadow-sm hover:shadow-md transition-transform duration-300 hover:scale-105 max-w-xs relative">
       <Link to={`/product/${product.item_id}`} className="block">
         <div className="relative h-48 overflow-hidden">
           <img
@@ -12,6 +12,13 @@ const ProductCard = ({ product }) => {
             alt={product?.name}
             className="h-full w-full object-cover"
           />
+          {product?.price !== product?.actual_price && product?.actual_price > 0 && (
+            <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+              {product?.discount_type === 'percentage'
+                ? `Flat ${product?.discount.toFixed(0)}% OFF`
+                : `Flat ₹${(product?.actual_price - product?.price).toFixed(2)} OFF`}
+            </div>
+          )}
         </div>
       </Link>
       <div className="p-3">
@@ -19,7 +26,10 @@ const ProductCard = ({ product }) => {
           {product?.item_name}
         </h3>
         <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-          {product?.description?.substring(0, 100)}...
+          <div
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
+            style={{ maxWidth: '200px', overflow: 'hidden' }}
+          />
         </p>
         <div className="mt-2 flex items-center space-x-2">
           <p className="text-sm font-bold text-green-600">
@@ -31,11 +41,9 @@ const ProductCard = ({ product }) => {
                 MRP: ₹{product?.actual_price?.toFixed(2)}
               </p>
               <p className="text-xs text-red-600">
-
-                Flat: 
-                {/* ₹{(product?.actual_price - product?.price).toFixed(2)} */}
-                 (
-                {((product?.actual_price - product?.price) / product?.actual_price * 100).toFixed(0)}% OFF)
+                {product?.discount_type === 'percentage'
+                  ? ` (${(product.discount).toFixed(0)}% OFF)`
+                  : `Flat ₹${(product?.discount).toFixed(2)} OFF`}
               </p>
             </>
           )}
