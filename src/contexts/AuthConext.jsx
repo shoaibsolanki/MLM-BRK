@@ -97,6 +97,7 @@ export const AuthProvider = ({ children }) => {
   };
 // reward functiolity 
 const [useRewards, setUseRewards] = useState(false);
+const [isBonusPoint, setBonusPoint] = useState(false);
 
    const [rewardPoint, setRewardPoint] = useState([])
     const GetRewardPoint = async (id)=>{
@@ -233,6 +234,8 @@ const [useRewards, setUseRewards] = useState(false);
         GetRewardPoint,
         useRewards,
         setUseRewards,
+        isBonusPoint,
+        setBonusPoint,
        
       }}
     >

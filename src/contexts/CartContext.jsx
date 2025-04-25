@@ -12,6 +12,7 @@ export const CartProvider = ({ children }) => {
   const { id, saasId, storeId } = authData;
   const [totalItems, setTotalItems] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [totalMRp, setTotalMRp] = useState(0);
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [totalPricePlusDeliveryCharge, setTotalPricePlusDeliveryCharge] =
     useState();
@@ -39,6 +40,7 @@ export const CartProvider = ({ children }) => {
   };
 
   let subTotal;
+  let totalMrp;
   const [wishlist, setWishlist] = useState(() => {
     if (typeof window !== "undefined" && localStorage) {
       const storedWishlist = localStorage.getItem("wishlist");
@@ -76,6 +78,10 @@ export const CartProvider = ({ children }) => {
         return total + product.price * product.product_qty;
       }, 0);
       setTotalPrice(subTotal);
+      totalMrp = fetchedCart?.reduce((total, product) => {
+        return total + product.actual_price * product.product_qty;
+      }, 0);
+      setTotalMRp(totalMrp);
       setTotalItems(fetchedCart?.length);
     } catch (error) {
       console.error("Error fetching cart items:", error);
@@ -211,8 +217,11 @@ export const CartProvider = ({ children }) => {
         const newTotalPrice = updatedCart.reduce((total, item) => {
           return total + item.price * item.product_qty;
         }, 0);
-
         setTotalPrice(newTotalPrice);
+        const newTotalMRP = updatedCart.reduce((total, item) => {
+          return total + item.actual_price * item.product_qty;
+        }, 0);
+        setTotalMRp(newTotalMRP)
 
         showAlert("Item Added to Cart", "success");
 
@@ -238,6 +247,10 @@ export const CartProvider = ({ children }) => {
         }, 0);
 
         setTotalPrice(totalNewPrice);
+        const newTotalMRP = updatedCart.reduce((total, item) => {
+          return total + item.actual_price * item.product_qty;
+        }, 0);
+        setTotalMRp(newTotalMRP)
 
         setTotalItems(updatedCart?.length);
         return updatedCart;
@@ -274,6 +287,7 @@ export const CartProvider = ({ children }) => {
     }
     setCart([]);
     setTotalPrice(0);
+    setTotalMRp(0)
     setTotalItems(0);
   };
 
@@ -291,7 +305,10 @@ export const CartProvider = ({ children }) => {
       }, 0);
 
       setTotalPrice(newTotalPrice);
-
+      const newTotalMRP = updatedCart.reduce((total, item) => {
+        return total + item.actual_price * item.product_qty;
+      }, 0);
+      setTotalMRp(newTotalMRP)
       return updatedCart;
     });
   };
@@ -314,7 +331,10 @@ export const CartProvider = ({ children }) => {
       }, 0);
 
       setTotalPrice(newTotalPrice);
-
+      const newTotalMRP = updatedCart.reduce((total, item) => {
+        return total + item.actual_price * item.product_qty;
+      }, 0);
+      setTotalMRp(newTotalMRP)
       return updatedCart;
     });
   };
@@ -327,6 +347,7 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         totalPrice,
+        totalMRp,
         cart,
         wishlist,
         subTotal,
