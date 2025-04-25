@@ -1,7 +1,7 @@
 import { LogIn, User, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const MobileDrawer = ({ isOpen, onClose, navItems ,isAuthenticated,setIsModalOpen,logout}) => {
+const MobileDrawer = ({ isOpen, onClose, navItems ,isAuthenticated,setIsModalOpen,logout,handleNavigation}) => {
   if (!isOpen) return null;
   const navigate = useNavigate();
 const profilenaviagte = ()=>{
@@ -57,7 +57,7 @@ const loginmodal = ()=>{
   {navItems.map((item, index) => (
     <a 
       key={index} 
-      href={item.path}  // yeh href ke liye correct property hai
+       onClick={() => {handleNavigation(item.path),onClose()}}// yeh href ke liye correct property hai
       className="block px-4 py-3 text-sm border-b border-gray-100 hover:bg-gray-50"
     >
       {item.label}  

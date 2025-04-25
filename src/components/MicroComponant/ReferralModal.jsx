@@ -156,15 +156,17 @@ const ReferralModal = ({ onClose }) => {
             </button>
 
             <button
-              onClick={() => {
-                navigator.clipboard.writeText(`Join using my referral code: ${referralCode}`);
-                window.open("https://www.instagram.com", "_blank");
-              }}
-              className="flex flex-col items-center justify-center bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg p-4 transition duration-200"
-            >
-              <Instagram size={24} />
-              <span className="mt-2 text-sm font-medium">Instagram</span>
-            </button>
+  onClick={() => {
+    const newWindow = window.open("https://www.instagram.com", "_blank"); // Open first
+    navigator.clipboard.writeText(`Join using my referral code: ${referralCode}`);
+    // You can optionally focus the new window
+    newWindow?.focus();
+  }}
+  className="flex flex-col items-center justify-center bg-purple-50 hover:bg-purple-100 text-purple-600 rounded-lg p-4 transition duration-200"
+>
+  <Instagram size={24} />
+  <span className="mt-2 text-sm font-medium">Instagram</span>
+</button>
           </div>
 
           <button

@@ -5,6 +5,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "../contexts/CartContext.jsx";
 import { useAuth } from "../contexts/AuthConext.jsx";
 import DOMPurify from "dompurify";
+import { ReviewCard } from '../components/RattingReview/ReviewCard.jsx';
+
 const ProductDetailPage = () => {
   const { productId } = useParams();
   const { storeid } = useAuth();
@@ -17,6 +19,7 @@ const ProductDetailPage = () => {
   useEffect(() => {
     fetchProduct();
     fetchImages();
+    fetchreview();
   }, [productId]);
 
   const fetchProduct = async () => {
@@ -42,6 +45,21 @@ const ProductDetailPage = () => {
         setProductImages(response.data.data.map((img) => img.image)); // Store images
       } else {
         setProductImages([]);
+      }
+    } catch (error) {
+      console.error("Error fetching images:", error);
+      setProductImages([]);
+    }
+  };
+  const [review, setreview] = useState([]); // State for images
+
+  const fetchreview = async () => {
+    try {
+      const response = await DataService.Getreview(productId);
+      if (response.status) {
+        setreview(response.data.data); // Store images
+      } else {
+        setreview([]);
       }
     } catch (error) {
       console.error("Error fetching images:", error);
@@ -93,6 +111,7 @@ const ProductDetailPage = () => {
   const AddedItem = cart?.find((el) => el.item_id == productId);
   console.log("AddedItem", AddedItem);
   return (
+    <>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Breadcrumbs */}
       <nav className="mb-6">
@@ -220,6 +239,23 @@ const ProductDetailPage = () => {
         </div>
       </div>
     </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+   {review.map((review) => (
+                 <ReviewCard
+                     key={review.reviewId}
+                     review={{
+                         id: review.reviewId.toString(),
+                         name: review.name,
+                         rating: review.rating,
+                         comment: review.review,
+                         date: new Date(review.createdAt).toISOString(),
+                         helpful: 0 // Assuming helpful count is not provided in the data
+                     }}
+                     onMarkHelpful={0}
+                 />
+             ))}
+             </div>
+    </>
   );
 };
 
