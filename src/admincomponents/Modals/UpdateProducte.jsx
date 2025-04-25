@@ -14,6 +14,8 @@ import { useSnackbar } from "notistack";
 import { Trash } from "lucide-react";
 import { useState } from "react";
 import { Add } from "@mui/icons-material";
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.snow.css';
 const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
   const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
   const { enqueueSnackbar } = useSnackbar();
@@ -21,16 +23,21 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     reset,
+    trigger, // Add this
+    setValue
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       item_name: "",
       item_code: "",
-      special_description: "",
+      description: "",
       price: "",
       actual_price: "",
       product_cost: "",
       discount: "",
+      discount_type: "",
       tax: "",
       saas_id: "",
       store_id: "",
@@ -39,9 +46,10 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
       opening_qty: "",
       received_qty: "",
       UOM: "",
-      rp:""
+      rp: "",
     },
   });
+  
 
   const style = {
     position: "absolute",
@@ -63,11 +71,12 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
       reset({
         item_name: selectedRow?.item_name || "",
         item_code: selectedRow?.item_code || "",
-        special_description: selectedRow?.special_description || "",
+        description: selectedRow?.description || "",
         price: selectedRow?.price || "",
         actual_price: selectedRow?.actual_price || "",
         product_cost: selectedRow?.product_cost || "",
         discount: selectedRow?.discount || "",
+        discount_type: selectedRow?.discount_type || "",
         tax: selectedRow?.tax || "",
         saas_id: saasId,
         store_id: storeId,
@@ -76,7 +85,7 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
         opening_qty: selectedRow?.opening_qty || "",
         received_qty: selectedRow?.received_qty || "",
         UOM: selectedRow?.UOM || "",
-        rp:selectedRow?.rp || "",
+        rp: selectedRow?.rp || "",
       });
       getImagesByItemId();
     }
@@ -175,8 +184,8 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
         setAddedimages(response.data.data); // Return the array of images
         if (response.data.data.length > 0) {
           setFiles(Array(0).fill(null));
-        }else{
-            setFiles(Array(3).fill(null));
+        } else {
+          setFiles(Array(3).fill(null));
         }
       } else {
         console.log("Failed to fetch images");
@@ -246,6 +255,62 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
     }
   };
 
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === "discount_type" || name === "actual_price" || name === "discount") {
+        const discountType = value.discount_type;
+        const actualPrice = parseFloat(value.actual_price || 0);
+        const discount = parseFloat(value.discount || 0);
+
+        let calculatedPrice = actualPrice;
+
+        if (discountType === "percentage") {
+          calculatedPrice = actualPrice - (actualPrice * discount) / 100;
+        } else if (discountType === "flat") {
+          calculatedPrice = actualPrice - discount;
+        }
+
+        if (!isNaN(calculatedPrice)) {
+          reset({ ...value, price: calculatedPrice.toFixed(2) });
+        }
+
+        trigger("discount"); // Trigger validation on "discount" field
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, trigger, reset]);
+
+
+  const modules = {
+    toolbar: [
+      [{ 'font': [] }],
+      ['bold', 'underline', 'italic'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      [{ 'align': [] }],
+      [{ 'table': [] }],
+      ['link', 'image', 'video'],
+      ['clean'],
+      ['code-block']
+    ],
+  };
+
+  const formats = [
+    'font', 'bold', 'underline', 'italic',
+    'color', 'background', 'list', 'bullet',
+    'align', 'link', 'image', 'video', 'clean',
+    'code-block'
+  ];
+   
+
+  const handleQuillChange = (value) => {
+    console.log(value)
+    setValue("description", value)
+  };
+
+
+
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
@@ -277,32 +342,84 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                label="Special Description"
-                fullWidth
-                multiline
-                rows={3}
-                {...register("special_description")}
-              />
+            <div className='form-group md:col-span-3  md:h-[150px] h-[190px]'>
+      <ReactQuill 
+        theme="snow" 
+        name="description"
+        value={watch("description")}
+        onChange={handleQuillChange} 
+        modules={modules} 
+        formats={formats}
+        style={{ height: '100px' , }}
+        />
+        </div>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Price"
-                type="number"
-                fullWidth
-                {...register("price", { required: "Price is required" })}
-                error={!!errors.price}
-                helperText={errors.price?.message}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Actual Price"
+                label="MRP Price"
                 type="number"
                 fullWidth
                 {...register("actual_price")}
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <div className="mb-2">
+                <label>
+                  <input
+                    type="radio"
+                    value="percentage"
+                    {...register("discount_type")}
+                  />
+                  Percentage
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="flat"
+                    {...register("discount_type")}
+                  />
+                  Flat
+                </label>
+              </div>
+              <TextField
+                label="Discount"
+                type="number"
+                fullWidth
+                {...register("discount", {
+                  validate: (value) => {
+                    const discountType = watch("discount_type");
+                    const actualPrice = parseFloat(watch("actual_price") || 0);
+                    console.log("DiscountType:", discountType, "ActualPrice:", actualPrice);
+                    if (discountType === "percentage" && value > 100) {
+                      return "Percentage discount cannot exceed 100.";
+                    }
+                    if (discountType === "flat" && value > actualPrice) {
+                      return "Flat discount cannot exceed actual price.";
+                    }
+                    return true;
+                  },
+                })}
+                error={!!errors.discount}
+                helperText={errors.discount?.message}
+              />
+            </Grid>
+
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Price"
+                type="number"
+                fullWidth
+                {...register("price", {
+                  required: "Price is required",
+                  validate: (value) =>
+                    value >= 0 || "Price cannot be less than 0",
+                })}
+                error={!!errors.price}
+                helperText={errors.price?.message}
+              />
+            </Grid>
+            
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Product Cost"
@@ -311,14 +428,7 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
                 {...register("product_cost")}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Discount"
-                type="number"
-                fullWidth
-                {...register("discount")}
-              />
-            </Grid>
+           
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Tax"
@@ -327,12 +437,6 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
                 {...register("tax")}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <TextField label="SaaS ID" fullWidth {...register("saas_id")} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField label="Store ID" fullWidth {...register("store_id")} />
-            </Grid> */}
             <Grid item xs={12} sm={6}>
               <TextField label="Category" fullWidth {...register("category")} />
             </Grid>
