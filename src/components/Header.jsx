@@ -191,7 +191,7 @@ const Header = () => {
       </div>
 
       {/* Mobile Drawer */}
-      <MobileDrawer logout={logout} setIsModalOpen={setIsModalOpen} isAuthenticated={isAuthenticated} isOpen={isDrawerOpen} onClose={toggleDrawer} navItems={navItems} />
+      <MobileDrawer handleNavigation={handleNavigation} logout={logout} setIsModalOpen={setIsModalOpen} isAuthenticated={isAuthenticated} isOpen={isDrawerOpen} onClose={toggleDrawer} navItems={navItems} />
 
       {/* Refer And Earn Modal */}
       <ReferAndEarnModal isOpen={isModalOpen} onClose={handleCloseModal} />

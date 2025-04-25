@@ -331,6 +331,9 @@ UpdateSponsor(customerId, referId){
   CreateOrder(data) {
     return http.post(`/order/create/order/master`, data);
   }
+  addreview(data) {
+    return http.post(`/review/add`, data);
+  }
   CreateKYC(data) {
     return http.post(`/kyc/create`, data);
   }
@@ -350,6 +353,10 @@ UpdateSponsor(customerId, referId){
   }
   GetTeamHistory(customerId){
     return http.get(`/customer/mlm-level/${customerId}`)
+   }
+
+   Getreview(itemid){
+    return http.get(`/review/item/${itemid}`)
    }
    GetwalletByCustomId(storeid,customerId){
     return http.get(`/wallet/get-customer-wallet/${storeid}/${customerId}`)
