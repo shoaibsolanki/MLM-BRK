@@ -83,6 +83,11 @@ const OrderMange = () => {
             sortable: true,
         },
         {
+            name: 'bonusPoints',
+            selector: row => row.bonusPoints,
+            sortable: true,
+        },
+        {
             name: 'Payment Type',
             selector: row => row.payment_type,
             sortable: true,
