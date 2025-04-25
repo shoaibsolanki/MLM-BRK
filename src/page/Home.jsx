@@ -37,9 +37,9 @@ useEffect(() => {
       
       <div className="min-h-screen bg-gray-100">
       {/* <Header /> */}
-      <CategoryBar />
       <main className="max-w-screen-2xl mx-auto px-2 sm:px-4">
         <MainBanner currentSlide={currentSlide} setCurrentSlide={setCurrentSlide} />
+      <CategoryBar />
         {/* Featured Products Section */}
         <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
