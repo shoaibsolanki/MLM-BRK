@@ -84,7 +84,7 @@ const AddRpBonusModal = ({ open, handleClose ,GetRpData}) => {
                         helperText={errors.type?.message}
                     >
                         {/* <MenuItem value="Other Type">Other Type</MenuItem> */}
-                        {bonustype && bonustype.map((el)=> <MenuItem value="Early Buy Benefit">{el.type}</MenuItem>)}
+                        {bonustype && bonustype.map((el)=> <MenuItem value={el.type}>{el.type}</MenuItem>)}
                     </TextField>
                     <TextField
                         label="Bonus"
