@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
           {product?.price !== product?.actual_price && product?.actual_price > 0 && (
             <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
               {product?.discount_type === 'percentage'
-                ? `Flat ${product?.discount.toFixed(0)}% OFF`
+                ? ` ${product?.discount.toFixed(0)}% OFF`
                 : `Flat ₹${(product?.actual_price - product?.price).toFixed(2)} OFF`}
             </div>
           )}

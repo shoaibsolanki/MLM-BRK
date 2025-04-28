@@ -241,10 +241,27 @@ UpdateSponsor(customerId, referId){
   return http.put(`/customer/update-refer-by/${customerId}/${referId}`)
 } 
 
+GetUom(saasId, storeId){
+  return http.get(`/omni/get-uom/${saasId}/${storeId}`)
+}
 
+AddUom(data)
+{
+  return http.post(`/omni/create_uom`,data)
+}
+EditUom(id,uom)
+{
+  return http.patch(`/omni/update_uom/${id}/${uom}`)
+} 
+DeleteUom(id) {
+  return http.patch(`/omni/delete_uom/${id}`);
+}
  
+//testimonial
 
-
+Addtestimonial(saasId,storeId){
+  return http.get(`testimonial/get-date/${saasId}/${storeId}`)
+}
  
 
 
