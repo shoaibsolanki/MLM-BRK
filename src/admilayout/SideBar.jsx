@@ -3,7 +3,6 @@ import {
   Avatar,
   Box,
   Collapse,
-  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -11,24 +10,14 @@ import {
   Typography,
   Tooltip,
   tooltipClasses,
-  Button,
-  ListSubheader,
 } from "@mui/material";
 import {
-  Settings,
   ExitToApp,
-  Inventory2,
-  Factory,
-  PersonAdd,
-  Store,
   ExpandLess,
   ExpandMore,
-  Menu,
-  Close,
+  
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
-import PersonIcon from "@mui/icons-material/Person";
-import StorageIcon from "@mui/icons-material/Storage";
 import {
   Home,
   Layers,
@@ -40,18 +29,12 @@ import {
   User,
   IndianRupee,
   Gift,
-  GiftIcon,
   ShieldCheck,
   BadgePercent,
   Repeat,
-  Award,
-  Gem,
-  Star,
-  Sparkle,
-  Trophy,
-  Megaphone,
+ 
 } from "lucide-react";
-
+import StraightenIcon from '@mui/icons-material/Straighten';
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -220,31 +203,31 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       icon: <Gift size={20} />,
       path: "/admin/gift",
     },
-    // {
-    //   title: "Gift Orders",
-    //   icon: <GiftIcon size={20} />,
-    //   path: "/admin/gift/orders",
-    // },
+    {
+      title: "Unit Manage",
+      icon: <StraightenIcon size={20} />, // Using 'Gem' as a representation for unit of measurement
+      path: "/admin/uom",
+    },
     // {
     //   title: "Gift Coupon",
     //   icon: <GiftIcon size={20} />,
     //   path: "/admin/gift/coupon",
     // },
-    // {
-    //   title: "Schemes",
-    //   icon: <Trophy size={20} />,
-    //   hasSubmenu: true,
-    //   submenu: [
-    //     {
-    //       title: "Progressive bonus",
-    //       path: "/admin/scheme/progressive",
-    //     },
-    //     {
-    //       title: "Successive bonus",
-    //       path: "/admin/scheme/successive",
-    //     },
-    //   ],
-    // },
+    {
+      title: "Testimonial",
+      icon: <GalleryVertical size={20} />, // Added icon for Testimonial
+      hasSubmenu: true,
+      submenu: [
+        {
+          title: "Add",
+          path: "/admin/testimonial/add",
+        },
+        {
+          title: "View",
+          path: "/admin/testimonial/view",
+        },
+      ],
+    },
   ];
 
   return (
