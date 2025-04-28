@@ -53,6 +53,8 @@ const Vieworder = lazy(()=> import('./admincomponents/Vieworder'))
 const UserKYCScreen = lazy(()=> import('./admincomponents/ViewCustomerKyc'))
 const InvoiceView = lazy(()=> import('./admincomponents/InvoiceView'))
 const Kyclist = lazy(()=> import('./adminpage/Kyclist'))
+const Uom = lazy(()=> import('./adminpage/Uom'))
+const Testimonial = lazy(()=> import('./adminpage/Testimonial'))
 function App() {
   function ScrollToTop() {
     const { pathname } = useLocation();
@@ -121,6 +123,8 @@ function App() {
               <Route path="KYC" element={<ProtectedRouteForAdmin Component={Kyclist} />} />
               <Route path="userkyc/:id" element={<ProtectedRouteForAdmin Component={UserKYCScreen} />} />
               <Route path="InvoiceView/:id" element={<ProtectedRouteForAdmin Component={InvoiceView} />} />
+              <Route path="uom" element={<ProtectedRouteForAdmin Component={Uom} />} />
+              <Route path="testimonial/view" element={<ProtectedRouteForAdmin Component={Testimonial} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />
