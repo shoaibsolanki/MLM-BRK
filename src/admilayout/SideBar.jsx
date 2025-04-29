@@ -219,11 +219,11 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       hasSubmenu: true,
       submenu: [
         {
-          title: "Add",
+          title: "Add Testimonial",
           path: "/admin/testimonial/add",
         },
         {
-          title: "View",
+          title: "View Testimonial",
           path: "/admin/testimonial/view",
         },
       ],
