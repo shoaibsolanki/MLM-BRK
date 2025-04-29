@@ -274,6 +274,9 @@ Addtestimonial(saasId,storeId,data){
 GetTestimonial(saasId,storeId){
   return http.get(`testimonial/get-date/${saasId}/${storeId}`)
 }
+GetTestimonialforcustomer(){
+  return http.get(`testimonial/get-date`)
+}
 
 DeleteTestimonial(id){
   return http.delete(`testimonial/delete/${id}`)

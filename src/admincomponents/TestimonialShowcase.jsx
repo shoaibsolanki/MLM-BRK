@@ -6,7 +6,7 @@ export default function TestimonialShowcase() {
   const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
 const FetchData = async () => {
         try {
-            const response = await DataService.GetTestimonial(saasId, storeId);
+            const response = await DataService.GetTestimonialforcustomer();
             console.log(response.data);
             setTestimonials(response.data.data)
         } catch (error) {
