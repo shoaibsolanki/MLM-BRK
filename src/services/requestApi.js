@@ -259,11 +259,36 @@ DeleteUom(id) {
  
 //testimonial
 
-Addtestimonial(saasId,storeId){
-  return http.get(`testimonial/get-date/${saasId}/${storeId}`)
+Addtestimonial(saasId,storeId,data){
+  return http.post(`testimonial/add-image/${saasId}/${storeId}`,data,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+
+    
+  )
 }
  
+GetTestimonial(saasId,storeId){
+  return http.get(`testimonial/get-date/${saasId}/${storeId}`)
+}
 
+DeleteTestimonial(id){
+  return http.delete(`testimonial/delete/${id}`)
+}
+
+EditTestimonail(id,data){
+  return http.patch(`testimonial/update/${id}` , data ,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+
+  )
+}
 
 
 
