@@ -15,6 +15,7 @@ import {
   ExitToApp,
   ExpandLess,
   ExpandMore,
+  SupportAgent,
   
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -32,10 +33,24 @@ import {
   ShieldCheck,
   BadgePercent,
   Repeat,
+  Wallet,
  
 } from "lucide-react";
 import StraightenIcon from '@mui/icons-material/Straighten';
+import { useAuth } from "../contexts/AuthConext";
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+  const userData = JSON.parse(localStorage.getItem("user_data"))
+  const {userType} = userData || {}
+   const { permission, isLoding, role } = useAuth();
+  const checkPermission = (index, page) => {
+    console.log(index , page)
+     return (
+       userType === "ADMIN" ||
+       (( userType == "subadmin" ) &&
+       permission[index]?.name === page &&
+       permission[index]?.status === true )
+     );
+   };
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -59,26 +74,25 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       title: "Dashboard",
       icon: <Home size={20} />,
       path: "/admin",
+      isPermission : checkPermission(0 ,"Dashboard")
     },
     {
       title: "Manage Category",
       icon: <Layers size={20} />,
       path: "/admin/categories",
+      isPermission : checkPermission(1 ,"Category")
     },
     {
       title: "Manage Sub Category",
       icon: <Layers size={20} />,
       path: "/admin/subcategories",
-    },
-    {
-      title: "Gallery",
-      icon: <GalleryVertical size={20} />,
-      path: "/admin/AllGallery",
+      isPermission : checkPermission(1,"Category")
     },
     {
       title: "Manage Product",
       icon: <Package size={20} />,
       path: "/admin/products",
+      isPermission : checkPermission(2 ,"Product"),
       hasSubmenu: true,
       submenu: [
         {
@@ -95,22 +109,31 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       title: "Manage Sub Product",
       icon: <Package size={20} />,
       path: "/admin/combo",
+      isPermission : checkPermission(2 ,"Product"),
       hasSubmenu: true,
       submenu: [
         {
           title: "Add Sub Product",
-          path: "/admin/combo/add",
+          path: "/admin/subproducts/add",
         },
         {
           title: "Sub Product List",
-          path: "/admin/combo/list",
+          path: "/admin/subproducts/list",
         },
       ],
     },
     {
+      title: "Gallery",
+      icon: <GalleryVertical size={20} />,
+      path: "/admin/AllGallery",
+      isPermission : checkPermission(3 ,"Gallery"),
+    },
+    
+    {
       title: "Manage Distributor",
       icon: <Users size={20} />,
       path: "/admin/distributors",
+      isPermission : checkPermission(4 ,"Distributor"),
       hasSubmenu: true,
       submenu: [
         {
@@ -127,46 +150,55 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       title: "Manage User",
       icon: <User size={20} />,
       path: "/admin/users",
+      isPermission : checkPermission(5 ,"User"),
     },
     {
       title: "Manage Order",
       icon: <ShoppingCart size={20} />,
       path: "/admin/orders",
+      isPermission : checkPermission(6 ,"Order"),
     },
     {
       title: "RP Bonus Manage",
       icon: <BadgePercent size={20} />,
       path: "/admin/bonus",
+      isPermission : checkPermission(7,"Bonus"),
     },
     {
       title: "RP Transactions",
       icon: <Repeat size={20} />,
       path: "/admin/rp/transactions",
+      isPermission : checkPermission(8 ,"RpTransactions"),
     },
     {
       title: "RP Value Exchange",
       icon: <IndianRupee size={20} />,
       path: "/admin/rp/exchange",
+      isPermission : checkPermission(9 ,"RpExchange"),
     },
     {
       title: "Manage Complaint",
       icon: <ShieldCheck size={20} />,
       path: "/admin/Complaint",
+      isPermission : checkPermission(10 ,"Complaint"),
     },
     {
       title: "Manage Slider",
       icon: <Image size={20} />,
       path: "/admin/slider",
+      isPermission : checkPermission(11 ,"Slider"),
     },
     {
       title: "Manage KYC",
       icon: <ShieldCheck size={20} />,
       path: "/admin/KYC",
+      isPermission : checkPermission(12 ,"KYC"),
     },
     {
       title: "Income",
       icon: <IndianRupee size={20} />,
       hasSubmenu: true,
+      isPermission : checkPermission(13 ,"Income"),
       submenu: [
         {
           title: "Beginner",
@@ -202,21 +234,31 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       title: "Manage Gift",
       icon: <Gift size={20} />,
       path: "/admin/gift",
+      isPermission : checkPermission(14 ,"Gift"),
     },
     {
       title: "Unit Manage",
       icon: <StraightenIcon size={20} />, // Using 'Gem' as a representation for unit of measurement
       path: "/admin/uom",
+      isPermission : checkPermission(15 ,"Unit"),
     },
-    // {
-    //   title: "Gift Coupon",
-    //   icon: <GiftIcon size={20} />,
-    //   path: "/admin/gift/coupon",
-    // },
+    {
+      title: "Wallet",
+      icon: <Wallet size={20} />, // Using 'Gem' as a representation for unit of measurement
+      path: "/admin/Wallet",
+      isPermission : checkPermission(17 ,"Wallet"),
+    },
+    {
+      title: "Create Admin",
+      icon: <SupportAgent size={20} />,
+      path: "/admin/Crete_admin",
+      isPermission : userType == "ADMIN",
+    },
     {
       title: "Testimonial",
       icon: <GalleryVertical size={20} />, // Added icon for Testimonial
       hasSubmenu: true,
+      isPermission : checkPermission(16 ,"Testimonial"),
       submenu: [
         {
           title: "Add Testimonial",
@@ -272,7 +314,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
             </div>
             <nav>
               <List>
-                {menuItems.map((item, index) => (
+                {menuItems?.filter((el) => el.isPermission == true ).map((item, index) => (
                   <React.Fragment key={index}>
                     <Tooltip
                     componentsProps={{  
