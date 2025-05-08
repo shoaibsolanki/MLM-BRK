@@ -56,6 +56,8 @@ const Kyclist = lazy(()=> import('./adminpage/Kyclist'))
 const Uom = lazy(()=> import('./adminpage/Uom'))
 const Testimonial = lazy(()=> import('./adminpage/Testimonial'))
 const Addtestimonnial = lazy(()=> import('./adminpage/Addtestimonnial'))
+const CreateAdminForm = lazy(()=> import('./adminpage/CreateAdminForm'))
+const Wallet = lazy(()=> import('./adminpage/Wallet'))
 function App() {
   function ScrollToTop() {
     const { pathname } = useLocation();
@@ -96,37 +98,39 @@ function App() {
             </Route>
 
             {/* Admin Routes */}
-            <Route path="/admin" element={<ProtectedRouteForAdmin Component={Adminhome} />}>
-              <Route index element={<ProtectedRouteForAdmin Component={Dashboard} />} />
-              <Route  path="AllGallery" element={<ProtectedRouteForAdmin Component={AllGallery} />} />
+            <Route path="/admin" element={<ProtectedRouteForAdmin  page="Dashboard" index="0" Component={Adminhome} />}>
+              <Route index element={<ProtectedRouteForAdmin page="Dashboard" index="0" Component={Dashboard} />} />
+              <Route path="categories" element={<ProtectedRouteForAdmin page="Category" index="1" Component={Category} />} />
+              <Route path="subcategories" element={<ProtectedRouteForAdmin page="Category" index="1" Component={SubCategoryPage} />} />
+              <Route path="products/add" element={<ProtectedRouteForAdmin page="Product" index="2" Component={AddProduct} />} />
+              <Route path="products/list" element={<ProtectedRouteForAdmin page="Product" index="2" Component={Allproduct} />} />
+              <Route path="subproducts/add" element={<ProtectedRouteForAdmin page="Product" index="2" Component={AddsubProduct} />} />
+              <Route path="subproducts/list" element={<ProtectedRouteForAdmin page="Product" index="2" Component={Subproductlist} />} />
+              {/* <Route path="combo/add" element={<ProtectedRouteForAdmin page="Product" index="2"  Component={AddCombo} />} /> */}
+              {/* <Route path="combo/list"  element={<ProtectedRouteForAdmin page="Product" index="2" Component={Combolist} />} /> */}
+              <Route  path="AllGallery" element={<ProtectedRouteForAdmin page="Gallery" index="3" Component={AllGallery} />} />
 
-              <Route path="categories" element={<ProtectedRouteForAdmin Component={Category} />} />
-              <Route path="subcategories" element={<ProtectedRouteForAdmin Component={SubCategoryPage} />} />
-              <Route path="products/add" element={<ProtectedRouteForAdmin Component={AddProduct} />} />
-              <Route path="products/list" element={<ProtectedRouteForAdmin Component={Allproduct} />} />
-              <Route path="subproducts/add" element={<ProtectedRouteForAdmin Component={AddsubProduct} />} />
-              <Route path="subproducts/list" element={<ProtectedRouteForAdmin Component={Subproductlist} />} />
-              <Route path="distributors/add" element={<ProtectedRouteForAdmin Component={DistributorCreate} />} />
-              <Route path="distributors/list" element={<ProtectedRouteForAdmin Component={Distibutorlist} />} />
-              <Route path="users" element={<ProtectedRouteForAdmin Component={UserMange} />} />
-              <Route path="orders" element={<ProtectedRouteForAdmin Component={OrderMange} />} />
-              <Route path="combo/add" element={<ProtectedRouteForAdmin Component={AddCombo} />} />
-              <Route path="combo/list" element={<ProtectedRouteForAdmin Component={Combolist} />} />
+              <Route path="distributors/add" element={<ProtectedRouteForAdmin page="Distributor" index="4" Component={DistributorCreate} />} />
+              <Route path="distributors/list" element={<ProtectedRouteForAdmin page="Distributor" index="4" Component={Distibutorlist} />} />
+              <Route path="users" element={<ProtectedRouteForAdmin page="User" index="5" Component={UserMange} />} />
+              <Route path="Cutomertree/:Custid" element={<ProtectedRouteForAdmin page="User" index="5" Component={CustomerTreeview} />} />
+              <Route path="orders" element={<ProtectedRouteForAdmin page="Order" index="6" Component={OrderMange} />} />
+              <Route path="vieworder/:id" element={<ProtectedRouteForAdmin page="Order" index="6" Component={Vieworder} />} />
+              <Route path="InvoiceView/:id" element={<ProtectedRouteForAdmin page="Order" index="6" Component={InvoiceView} />} />
               <Route path="Complaint" element={<ProtectedRouteForAdmin Component={Complaintlist} />} />
-              <Route path="bonus" element={<ProtectedRouteForAdmin Component={Rpbonusemange} />} />
-              <Route path="rp/transactions" element={<ProtectedRouteForAdmin Component={Rptransactions} />} />
-              <Route path="rp/exchange" element={<ProtectedRouteForAdmin Component={Rpexchange} />} />
-              <Route path="gift" element={<ProtectedRouteForAdmin Component={Giftmange} />} />
-              <Route path="Cutomertree/:Custid" element={<ProtectedRouteForAdmin Component={CustomerTreeview} />} />
-              <Route path="Slider" element={<ProtectedRouteForAdmin Component={Slider} />} />
-              <Route path="income/:name" element={<ProtectedRouteForAdmin Component={LeveWiseIncome} />} />
-              <Route path="vieworder/:id" element={<ProtectedRouteForAdmin Component={Vieworder} />} />
-              <Route path="KYC" element={<ProtectedRouteForAdmin Component={Kyclist} />} />
-              <Route path="userkyc/:id" element={<ProtectedRouteForAdmin Component={UserKYCScreen} />} />
-              <Route path="InvoiceView/:id" element={<ProtectedRouteForAdmin Component={InvoiceView} />} />
-              <Route path="uom" element={<ProtectedRouteForAdmin Component={Uom} />} />
-              <Route path="testimonial/view" element={<ProtectedRouteForAdmin Component={Testimonial} />} />
-              <Route path="testimonial/add" element={<ProtectedRouteForAdmin Component={Addtestimonnial} />} />
+              <Route path="bonus" element={<ProtectedRouteForAdmin page="Bonus" index="7" Component={Rpbonusemange} />} />
+              <Route path="rp/transactions" element={<ProtectedRouteForAdmin page="RpTransactions" index="8" Component={Rptransactions} />} />
+              <Route path="rp/exchange" element={<ProtectedRouteForAdmin page="RpExchange" index="9" Component={Rpexchange} />} />
+              <Route path="gift" element={<ProtectedRouteForAdmin page="Complaint" index="10" Component={Giftmange} />} />
+              <Route path="Slider" element={<ProtectedRouteForAdmin page="Slider" index="11" Component={Slider} />} />
+              <Route path="KYC" element={<ProtectedRouteForAdmin page="KYC" index="12" Component={Kyclist} />} />
+              <Route path="userkyc/:id" element={<ProtectedRouteForAdmin page="KYC" index="12" Component={UserKYCScreen} />} />
+              <Route path="income/:name" element={<ProtectedRouteForAdmin page="Income" index="13" Component={LeveWiseIncome} />} />
+              <Route path="uom" element={<ProtectedRouteForAdmin page="Unit" index="15" Component={Uom} />} />
+              <Route path="testimonial/view" element={<ProtectedRouteForAdmin page="Testimonial" index="16" Component={Testimonial} />} />
+              <Route path="testimonial/add" element={<ProtectedRouteForAdmin page="Testimonial" index="16" Component={Addtestimonnial} />} />
+              <Route path="Wallet" element={<ProtectedRouteForAdmin page="Wallet" index="17" Component={Wallet} />} />
+              <Route path="Crete_admin" element={<ProtectedRouteForAdmin Component={CreateAdminForm} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />
             <Route path='*' element={<NotFound />} />
