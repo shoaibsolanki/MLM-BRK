@@ -27,7 +27,10 @@ export default function UserKYCScreen() {
     aadharBackImg,
     pancardImg,
     gstImg,
-    status
+    status,
+    pincode,
+    gstAddress,
+    nomineeName
   } = userData
   const {id} = useParams()
 
@@ -126,6 +129,20 @@ export default function UserKYCScreen() {
         <div>
           <h2 className="font-semibold mb-1">PAN Card Number</h2>
           <p>{panNO || '-'}</p>
+        </div>
+        <div>
+          <h2 className="font-semibold mb-1">Pin Code</h2>
+          <p>{pincode || '-'}</p>
+        </div>
+        <div>
+          <h2 className="font-semibold mb-1">GST Address</h2>
+          <p>{gstAddress || '-'}</p>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div>
+          <h2 className="font-semibold mb-1">Nominee Name</h2>
+          <p>{nomineeName || '-'}</p>
         </div>
       </div>
       <Image.PreviewGroup
