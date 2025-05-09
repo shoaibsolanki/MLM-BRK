@@ -10,6 +10,8 @@ const DistributorCreate = () => {
     register,
     handleSubmit,
     formState: { errors ,isSubmitting},
+    watch,
+    reset
   } = useForm({
     defaultValues: {
       user_name: '',
@@ -23,19 +25,22 @@ const DistributorCreate = () => {
       country:"india",
       referralCode:"",
       store_id:storeId,
-      saas_id:saasId
+      saas_id:saasId,
+      timing:"",
     },
-  });
+  }); 
+  const password = watch('password');
   
   const onSubmit =async (data) => {
     console.log('Form Data:', data);
     try {
-      const response = await DataService.CreateDistributor(data)
+      const response = await DataService.CreteUser(data)
       if (response.data.status) {
         enqueueSnackbar('Distributor Added Successfully' , {variant:"success"})
+        reset()
       }
     } catch (error) {
-      enqueueSnackbar('Something Wrong in Add Distributor' , {variant:"error"})
+      enqueueSnackbar( error?.response?.data.message || error.message ||'Something Wrong in Add Distributor' , {variant:"error"})
       console.log(error)
     }
   };
@@ -64,6 +69,18 @@ const DistributorCreate = () => {
             {...register('password', { required: 'Password is required' })}
             error={!!errors.password}
             helperText={errors.password?.message}
+          />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            {...register('confirm_password', { 
+              required: 'Confirm Password is required', 
+              validate: (value) =>  value === password || 'Passwords do not match',
+            })}
+            error={!!errors.confirm_password}
+            helperText={errors.confirm_password?.message}
           />
           <TextField
             label="Store Name"
@@ -98,11 +115,18 @@ const DistributorCreate = () => {
           <TextField
             label="Address"
             variant="outlined"
-            // className="md:col-span-2"
             fullWidth
             {...register('address', { required: 'Address is required' })}
             error={!!errors.address}
             helperText={errors.address?.message}
+          />
+          <TextField
+            label="Timing (e.g., 10pm - 3pm)"
+            variant="outlined"
+            fullWidth
+            {...register('timing', { required: 'Timing is required' })}
+            error={!!errors.timing}
+            helperText={errors.timing?.message}
           />
           <div className="md:col-span-3 flex justify-end">
             <Button variant="contained" color="primary" type="submit" disabled={isSubmitting}>
