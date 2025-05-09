@@ -6,8 +6,8 @@ import NotPermission from './page/NotPermision'
 const ProtectedRouteForAdmin = (props) => {
     const { Component , index, page} = props
     const token = localStorage.getItem("token")
-    const userData = JSON.parse(localStorage.getItem("user_data"))
-    const {userType} = userData || {}
+    const userData = JSON.parse(localStorage.getItem("user_data")) || {}
+    const { userType } = userData
     const { permission, isLoding, role } = useAuth();
 
      
