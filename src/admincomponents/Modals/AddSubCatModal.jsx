@@ -10,19 +10,22 @@ const AddSubCatModal = ({ open, handleClose ,getsubcategory}) => {
     const [masterCategory, setMasterCategory] = useState([]);
     const [file, setFile] = useState(null)
     const onFormSubmit = async(data) => {
-       
+        if (!file) {
+            enqueueSnackbar('Please select an image file', { variant: "error" });
+            return;
+        }
         try {
-            const response = await DataService.AddSubCategory(data)
-            if(response.data.status){
-                if(file){
-                  await  fetchSubCategoryById(response.data.data.category_id)
+            const response = await DataService.AddSubCategory(data);
+            if (response.data.status) {
+                if (file) {
+                    await fetchSubCategoryById(response.data.data.category_id);
                 }
-                enqueueSnackbar('SubCategory Created Successfully' , {variant:"success"})
+                enqueueSnackbar('SubCategory Created Successfully', { variant: "success" });
                 handleClose();
-                getsubcategory()
+                getsubcategory();
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
     
@@ -108,7 +111,9 @@ const AddSubCatModal = ({ open, handleClose ,getsubcategory}) => {
                                 variant="outlined"
                                 fullWidth
                             />
-                    
+                    <small className="text-gray-500">
+            270px X 200px (jpg, jpeg, png, gif, svg)
+          </small>
                     
                     <div className="flex justify-end space-x-4">
                         <Button onClick={handleClose} variant="outlined" color="secondary">
