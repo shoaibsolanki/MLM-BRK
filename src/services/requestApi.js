@@ -23,6 +23,13 @@ class DataService {
   AddMasterCategory(data){
     return http.post(`/Master-category/master/category`,data)
   }
+  AddMasterCategoryImage(id, formData){
+    return http.post(`/Master-category/save-image-by-master/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  }
   // GetSubCategory(saasid,storeid,categoryid){
   //   return http.get(`/Master-category/get-list/${saasid}/${storeid}/${categoryid}`)
   // }
@@ -82,7 +89,7 @@ class DataService {
   GetDistributor(page,size,saasid, storeid){
     return http.get(`/user-master/get-distributer/${page}/${size}/${saasid}/${storeid}`)
   }
-  CreateDistributor(data){
+  CreteUser(data){
     return http.post(`auth/user-registration`,data)
   }
   EditDistributor(id,data){
@@ -292,6 +299,30 @@ EditTestimonail(id,data){
 
   )
 }
+
+GetAllPermission(){
+  return http.get('page-permission/get-all')
+}
+
+AddPermission(id,list){
+  return http.post(`/page-permission/add-page-permission-user/${id}`,list)
+}
+Adminpermisions(id){
+  return http.get(`/page-permission/get-page-permission-user/${id}`)
+}
+
+GetSubAdmin(saasId, storeId){
+  return http.get(`/user-master/get-subAdmin/${saasId}/${storeId}`)
+}
+
+DeleteUser(userId){
+  return http.delete(`/user-master/delete-user/${userId}`)
+}
+
+Wallettrsaction(storeId,page){
+  return http.get(`/wallet/get-transaction/${storeId}/${page}`)
+}
+
 
 
 
