@@ -52,6 +52,9 @@ const EditMasterCategory = ({getMatserCategory, open, handleClose, category }) =
                     variant="outlined"
                     margin="normal"
                 />
+                <small className="text-gray-500">
+            270px X 200px (jpg, jpeg, png, gif, svg)
+          </small>
                 <Box mt={2} display="flex" justifyContent="flex-end">
                     <Button onClick={handleClose} variant='outlined' color="secondary" sx={{ mr: 1 }}>
                         Cancel
