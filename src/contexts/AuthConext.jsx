@@ -15,12 +15,14 @@ export const AuthProvider = ({ children }) => {
   const [page, setPage] = useState(1); // Track the current page
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const AdminData = JSON.parse(localStorage.getItem("user_data"));
+  const {userId} = AdminData || {}
   const [getaddress, setAddress] = useState({
-    postalCode:null,
-    route:null,
-    town:null,
-    street:null,
-    Province:null,
+    postalCode: null,
+    route: null,
+    town: null,
+    street: null,
+    Province: null,
     error: null,
   });
   const [location, setLocation] = React.useState({
@@ -39,9 +41,9 @@ export const AuthProvider = ({ children }) => {
   const { id } = authData;
   const isAuthenticated = localStorage.getItem("token");
   // console.log("isAuthenticated", isAuthenticated);
-  const selectedStore = localStorage.getItem('selectedStore');
+  const selectedStore = localStorage.getItem("selectedStore");
   const parsedStore = selectedStore ? JSON.parse(selectedStore) : null;
-  const { saas_id, store_id ,address} = parsedStore || {};
+  const { saas_id, store_id, address } = parsedStore || {};
   const fetchProductApi = async (page) => {
     try {
       console.log("stores get", saas_id, store_id);
@@ -50,9 +52,13 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      const response = await DataService.FetchProductApi(store_id, saas_id, page.toString());
+      const response = await DataService.FetchProductApi(
+        store_id,
+        saas_id,
+        page.toString()
+      );
       console.log(response.data.data);
-      if(response.data.next==null){
+      if (response.data.next == null) {
         setHasMore(false);
       }
       return response.data;
@@ -95,21 +101,21 @@ export const AuthProvider = ({ children }) => {
       console.error(error);
     }
   };
-// reward functiolity 
-const [useRewards, setUseRewards] = useState(false);
-const [isBonusPoint, setBonusPoint] = useState(false);
+  // reward functiolity
+  const [useRewards, setUseRewards] = useState(false);
+  const [isBonusPoint, setBonusPoint] = useState(false);
 
-   const [rewardPoint, setRewardPoint] = useState([])
-    const GetRewardPoint = async (id)=>{
-      try {
-        const response = await DataService.GetRewardPoint(id)
-        if(response.data.status){
-          setRewardPoint(response.data.data)
-        }
-      } catch (error) {
-        console.log(error)
+  const [rewardPoint, setRewardPoint] = useState([]);
+  const GetRewardPoint = async (id) => {
+    try {
+      const response = await DataService.GetRewardPoint(id);
+      if (response.data.status) {
+        setRewardPoint(response.data.data);
       }
+    } catch (error) {
+      console.log(error);
     }
+  };
   // console.log(allOrders);
   // useEffect(() => {
   //   if(store_id,saas_id,id){
@@ -144,65 +150,97 @@ const [isBonusPoint, setBonusPoint] = useState(false);
     // navigate("/login")
   };
 
-  const DataByCatogory=async (id)=>{
+  // const DataByCatogory = async (id) => {
+  //   try {
+  //     const response = await DataService.GetItemByCatogory(id, saas_id);
+  //     console.log(response);
+  //     if (response.data.status) {
+  //       const updatedProducts = response.data.data.map((item) => ({
+  //         ...item,
+  //         new_price: item.price,
+  //       }));
+  //       setHasMore(false);
+  //       setProducts(updatedProducts);
+  //       setSelectedCat(id);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = React.useState("success");
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  //new devlopment
+  const [categories, setCategories] = useState([]);
+
+  const saasid = "5";
+  const storeid = "50001";
+
+  const getCategory = async () => {
     try {
-      const response =await DataService.GetItemByCatogory(id, saas_id)
-      console.log(response)
-      if(response.data.status){
-        const updatedProducts = response.data.data.map((item) => ({
-          ...item,
-          new_price: item.price,
-        
-        }));
-        setHasMore(false)
-        setProducts(updatedProducts)
-        setSelectedCat(id)
+      const response = await DataService.GetMasterCategory(saasid, storeid);
+      if (response?.data?.data?.length > 0) {
+        setCategories(response.data.data);
+        // DataByCatogory(response.data.data[0].category_id);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+  const [permission, setPermission] = useState([]);
+  const [role, setRole] = useState();
+  const [isLoding, setIsLoading] = useState(true);
+  const GetPermission = async ()=>{
+    setIsLoading(true);
+    try {
+      const response = await DataService.Adminpermisions(userId)
+      if(response?.data?.status){
+        console.log(response?.data?.data)
+      setPermission(response.data.data.permission);
+      setRole(response.data.data.userRole);
+      }else{
+        logout()
       }
     } catch (error) {
       console.log(error)
+    }finally {
+      setIsLoading(false); // Ensure loading is set to false after completion
     }
   }
-
-
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-      const [snackbarMessage, setSnackbarMessage] = React.useState("");
-      const [snackbarSeverity, setSnackbarSeverity] = React.useState("success");
+ 
+  useEffect(() => {
+    if(userId){
+      GetPermission()
+    }else{
+      navigate('/admin/login')
+      localStorage.clear()
+    }
+  }, [userId])
   
-      const handleSnackbarClose = () => {
-          setSnackbarOpen(false);
-      };
 
 
-      //new devlopment
-        const [categories, setCategories] = useState([]);
-        
-        
-        const saasid = "5";
-        const storeid = "50001";
-      
-        const getCategory = async () => {
-          try {
-            const response = await DataService.GetMasterCategory(saasid,storeid);
-            if (response?.data?.data?.length > 0) {
-              setCategories(response.data.data);
-              // DataByCatogory(response.data.data[0].category_id);
-            }
-          } catch (error) {
-            console.error("Error fetching categories:", error);
-          }
-        };
 
 
-        // Seach state
-        const [searchKeyword, setSearchKeyword] = useState('');
-        const [searchResults, setSearchResults] = useState([]);
+
+  // Seach state
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   return (
     <AuthContext.Provider
       value={{
-        searchKeyword, setSearchKeyword, searchResults, setSearchResults,
+        searchKeyword,
+        setSearchKeyword,
+        searchResults,
+        setSearchResults,
         storeid,
         saasid,
-        // new 
+        // new
         getCategory,
         categories,
         snackbarOpen,
@@ -214,7 +252,7 @@ const [isBonusPoint, setBonusPoint] = useState(false);
         handleSnackbarClose,
         // snackbarSeverity,
         authData,
-        isAuthenticated,     
+        isAuthenticated,
         allOrders,
         selectedCat,
         id,
@@ -226,7 +264,7 @@ const [isBonusPoint, setBonusPoint] = useState(false);
         isPaymentSuccessful,
         setIsPaymentSuccessful,
         getOrderHistory,
-        DataByCatogory,
+        // DataByCatogory,
         setStores,
         stores,
         hasMore,
@@ -236,7 +274,9 @@ const [isBonusPoint, setBonusPoint] = useState(false);
         setUseRewards,
         isBonusPoint,
         setBonusPoint,
-       
+        role,
+        permission,
+        isLoding
       }}
     >
       {children}
