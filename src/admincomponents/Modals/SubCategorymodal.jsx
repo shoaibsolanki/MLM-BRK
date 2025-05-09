@@ -41,6 +41,7 @@ const SubCategoryModal = ({ open, handleClose, getsubcategory, defaultValues }) 
                 if(response.data.status){
                     getsubcategory()
                     enqueueSnackbar("Image Updated Successfully", {variant: "success"})
+                    handleClose()
                 }
             }
         } catch (error) {
@@ -67,30 +68,39 @@ const SubCategoryModal = ({ open, handleClose, getsubcategory, defaultValues }) 
                     <Controller
                         name="category"
                         control={control}
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                label="Sub Category Name"
-                                variant="outlined"
-                                fullWidth
-                            />
+                        rules={{ required: "Sub Category Name is required" }}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <TextField
+                                    {...field}
+                                    label="Sub Category Name"
+                                    variant="outlined"
+                                    fullWidth
+                                    error={!!error}
+                                    helperText={error ? error.message : null}
+                                />
+                            </>
                         )}
                     />
                     <Controller
                         name="file"
                         control={control}
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                type="file"
-                                onChange={onChange}
-                                inputProps={{ accept: "image/*" }}
-                                variant="outlined"
-                                fullWidth
-                            />
+                        // rules={{ required: "Image file is required" }}
+                        render={({ field, fieldState: { error } }) => (
+                            <>
+                                <TextField
+                                    {...field}
+                                    type="file"
+                                    onChange={onChange}
+                                    inputProps={{ accept: "image/*" }}
+                                    variant="outlined"
+                                    fullWidth
+                                    error={!!error}
+                                    helperText={error ? error.message : "270px X 200px (jpg, jpeg, png, gif, svg)"}
+                                />
+                            </>
                         )}
                     />
-                   
                     <div className="flex justify-end space-x-2">
                         <Button
                             variant="outlined"
