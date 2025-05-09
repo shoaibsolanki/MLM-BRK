@@ -49,6 +49,7 @@ const SubCategoryPage = () => {
 
     const columns = [
         { name: 'Category Name', selector: row => row.category_name || 'N/A', sortable: true },
+        { name: 'Master Category Name', selector: row => row.masterCategory_name || 'N/A', sortable: true },
         { 
             name: 'Image', 
             selector: row => (
