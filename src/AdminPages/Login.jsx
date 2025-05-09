@@ -69,11 +69,15 @@ const Login = () => {
         try {
             const response = await DataService.Login(data)
             console.log(response)
-            if (response.data.data.user_data.userType !== 'ADMIN') {
-              enqueueSnackbar('Access denied. User type is not authorized.', { variant: 'error' });
-              return;
-            }
             if(response.data.status){
+            
+
+              const {userType} = response?.data?.data?.user_data || {}
+              console.log(userType)
+              if (userType !== 'ADMIN' && userType !== 'subadmin' ) {
+                enqueueSnackbar('Access denied. User type is not authorized.', { variant: 'error' });
+                return;
+              }
               localStorage.setItem('token', response.data.data.jwt_response)
               localStorage.setItem('user_data', JSON.stringify(response.data.data.user_data))
               localStorage.setItem('store_data', JSON.stringify(response.data.data.store_data))
