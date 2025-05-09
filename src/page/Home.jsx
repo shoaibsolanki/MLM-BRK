@@ -8,7 +8,7 @@ import ProductCard from '../components/ProductCard'
 import { getCategories, getFeaturedProducts } from '../components/data/mockData.jsx';
 import DataService from "../services/requestApi.js";
 import { useAuth } from '../contexts/AuthConext.jsx'
-import TestimonialShowcase from '../admincomponents/Testimonialshowcase.jsx'
+import TestimonialShowcase from "../components/TestimonialShowcase.jsx";
 
 const Home = () => {
       const [currentSlide, setCurrentSlide] = useState(0);

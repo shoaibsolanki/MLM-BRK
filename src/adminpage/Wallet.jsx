@@ -4,11 +4,10 @@ import DataService from '../services/requestApi'
 const Wallet = () => {
     const {  storeId } = JSON.parse(localStorage.getItem("user_data"));
     const columns = [
-        { name: 'UserID', selector: row => row.userID, sortable: true },
-        { name: 'Name', selector: row => row.name, sortable: true },
-        { name: 'Type', selector: row => row.type, sortable: true },
+        { name: 'Wallet ID', selector: row => row.toWalletId, sortable: true },
+        { name: 'Type', selector: row => row.transactionType, sortable: true },
         { name: 'Amount', selector: row => row.amount, sortable: true },
-        { name: 'Date', selector: row => row.date, sortable: true },
+        { name: 'Date', selector: row => row.businessDate, sortable: true },
     ];
 
    const [data, setData] = React.useState([])

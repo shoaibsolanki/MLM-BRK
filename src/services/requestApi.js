@@ -323,6 +323,38 @@ Wallettrsaction(storeId,page){
   return http.get(`/wallet/get-transaction/${storeId}/${page}`)
 }
 
+AddBlog(saasId,storeId,data){
+  return http.post(`/testimonial/add-Blog/${saasId}/${storeId}`,data,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  )
+}
+
+GetAllBlogs(saasId,storeId){
+  return http.get(`/testimonial/get-Blog/${saasId}/${storeId}`)
+}
+
+DeleteBlog(id){
+  return http.delete(`testimonial/deleteBlog/${id}`)
+}
+
+UpdateBlogbyid(id,data){
+  return http.patch(`testimonial/updateBlog/${id}`,data,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  )
+}
+
+
+
+
+
 
 
 

@@ -18,6 +18,7 @@ const Cart = lazy(() => import('./page/Cart'));
 const Checkout = lazy(() => import('./page/Checkout'));
 const Profile = lazy(() => import('./components/Profile/Profile'));
 const CreateKyc = lazy(() => import('./components/KYC/CreateKyc'));
+const Blog = lazy(() => import('./page/Blog'));
 
 
 
@@ -58,6 +59,8 @@ const Testimonial = lazy(()=> import('./adminpage/Testimonial'))
 const Addtestimonnial = lazy(()=> import('./adminpage/Addtestimonnial'))
 const CreateAdminForm = lazy(()=> import('./adminpage/CreateAdminForm'))
 const Wallet = lazy(()=> import('./adminpage/Wallet'))
+const AddBlog = lazy(()=> import('./adminpage/Blog/AddBlog'))
+const ViewBlog = lazy(()=> import('./adminpage/Blog/ViewBlogs'))
 function App() {
   function ScrollToTop() {
     const { pathname } = useLocation();
@@ -92,6 +95,9 @@ function App() {
               <Route   path="/customer-registration/:organization/:referralCode" element={<CustomerRegstration />} />  
               <Route path="/cart" element={<Cart />} />
               <Route path="/kyc" element={<CreateKyc />} />
+              <Route path="/Blog" element={<Blog />} />
+
+
 
 
 
@@ -130,6 +136,8 @@ function App() {
               <Route path="testimonial/view" element={<ProtectedRouteForAdmin page="Testimonial" index="16" Component={Testimonial} />} />
               <Route path="testimonial/add" element={<ProtectedRouteForAdmin page="Testimonial" index="16" Component={Addtestimonnial} />} />
               <Route path="Wallet" element={<ProtectedRouteForAdmin page="Wallet" index="17" Component={Wallet} />} />
+              <Route path="AddBlog" element={<ProtectedRouteForAdmin page="Blog" index="18" Component={AddBlog} />} />
+              <Route path="ViewBlog" element={<ProtectedRouteForAdmin page="Blog" index="18" Component={ViewBlog} />} />
               <Route path="Crete_admin" element={<ProtectedRouteForAdmin Component={CreateAdminForm} />} />
             </Route>
             <Route path='/admin/login' element={<Login />} />

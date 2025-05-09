@@ -3,7 +3,6 @@ import TestimonialCarousel from "../admincomponents/Microcomponents/TestimonialC
 import DataService from '../services/requestApi'
 export default function TestimonialShowcase() {
   const [testimonials , setTestimonials] =useState([])
-  const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
 const FetchData = async () => {
         try {
             const response = await DataService.GetTestimonialforcustomer();

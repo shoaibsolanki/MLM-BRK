@@ -15,6 +15,7 @@ import {
   ExitToApp,
   ExpandLess,
   ExpandMore,
+  PostAdd,
   SupportAgent,
   
 } from "@mui/icons-material";
@@ -165,7 +166,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       isPermission : checkPermission(7,"Bonus"),
     },
     {
-      title: "RP Transactions",
+      title: "Payout",
       icon: <Repeat size={20} />,
       path: "/admin/rp/transactions",
       isPermission : checkPermission(8 ,"RpTransactions"),
@@ -247,6 +248,23 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
       icon: <Wallet size={20} />, // Using 'Gem' as a representation for unit of measurement
       path: "/admin/Wallet",
       isPermission : checkPermission(17 ,"Wallet"),
+    },
+    {
+      title: "Blog Mange  ",
+      icon: <PostAdd size={20} />, // Using 'Gem' as a representation for unit of measurement
+      path: "/admin/Blog",
+      hasSubmenu: true,
+      isPermission : checkPermission(18 ,"Blog"),
+      submenu: [
+        {
+          title: "Add Blog",
+          path: "/admin/AddBlog",
+        },
+        {
+          title: "View Blog",
+          path: "/admin/ViewBlog",
+        },
+      ]
     },
     {
       title: "Create Admin",

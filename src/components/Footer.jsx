@@ -72,7 +72,7 @@ const Footer = () => {
                 <a href="#" className="text-sm hover:text-gray-600 transition duration-300">Contact Us</a>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-gray-600 transition duration-300">Blog</a>
+                <a href="/Blog" className="text-sm hover:text-gray-600 transition duration-300">Blog</a>
               </li>
             </ul>
           </div>

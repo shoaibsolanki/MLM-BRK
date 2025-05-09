@@ -4,11 +4,14 @@ import { TextField, Checkbox, Button, FormControlLabel } from '@mui/material';
 import DataService from '../services/requestApi';
 import { useSnackbar } from 'notistack';
 import CustomDataTable from '../admincomponents/Microcomponents/DataTable';
-import { Trash } from 'lucide-react';
+import { Edit, Trash } from 'lucide-react';
+import Updatesubadmin from '../admincomponents/Modals/Updatesubadmin';
 
 
 const CreateAdminForm = () => {
   const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data")) || {};
+  const [open , setOpen] = useState(false)
+  const [id , setId] = useState("")
   const [menuOptions , setMenuOption] = useState([])
   const { enqueueSnackbar} = useSnackbar()
   const { handleSubmit,formState: { errors ,isSubmitting}, register, setValue ,watch ,reset} = useForm({
@@ -138,6 +141,9 @@ const CreateAdminForm = () => {
       { name: 'Password', selector: row => row.password, sortable: true },
       { name: 'Action', selector: row => <>
       <Trash onClick={()=> handleDelete(row.userId)} className='cursor-pointer'/>
+        <Edit className='cursor-pointer' onClick={()=>{
+          setId(row.userId)
+          setOpen(true)}} />
       </>, sortable: true },
     ]
 
@@ -230,7 +236,8 @@ const CreateAdminForm = () => {
     <div className="p-6 mt-4 max-w-6xl mx-auto bg-white rounded">
      <CustomDataTable columns={columns} data={data} />
     </div>
-   
+    
+    <Updatesubadmin id={id} open={open} handleClose={()=> setOpen(false)} />
 
 
 </>

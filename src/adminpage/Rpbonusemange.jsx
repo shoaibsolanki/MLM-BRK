@@ -69,6 +69,7 @@ const Rpbonusemange = () => {
             name: 'Type',
             selector: row => row.type,
             sortable: true,
+            width: "200px"
         },
         {
             name: 'Bonus',

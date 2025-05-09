@@ -218,7 +218,7 @@ export const AuthProvider = ({ children }) => {
     if(userId){
       GetPermission()
     }else{
-      navigate('/admin/login')
+      // navigate('/admin/login')
       localStorage.clear()
     }
   }, [userId])
