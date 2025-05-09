@@ -37,6 +37,7 @@ const Distibutorlist = () => {
         // { name: 'Address', selector: row => row.address, sortable: true },
         { name: 'City', selector: row => row.city, sortable: true },
         { name: 'Mobile', selector: row => row.mobileNumber, sortable: true },
+        { name: 'Timing', selector: row => row.timing, sortable: true },
         { 
             name: 'Action', 
             selector: row => <Edit className='cursor-pointer' onClick={()=> {setOpen(true);
