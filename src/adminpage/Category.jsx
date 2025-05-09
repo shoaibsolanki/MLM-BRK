@@ -51,8 +51,8 @@ const Category = () => {
                 : 'No Image', 
             sortable: true 
         },
-        { name: 'SaaS ID', selector: row => row.saasId, sortable: true },
-        { name: 'Store ID', selector: row => row.store_id, sortable: true },
+        // { name: 'SaaS ID', selector: row => row.saasId, sortable: true },
+        // { name: 'Store ID', selector: row => row.store_id, sortable: true },
         { 
             name: 'Action', 
             selector: row => (
