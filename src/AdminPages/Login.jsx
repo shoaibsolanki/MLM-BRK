@@ -68,12 +68,11 @@ const Login = () => {
         console.log("Login Data:", data);
         try {
             const response = await DataService.Login(data)
+            localStorage.clear()
             console.log(response)
             if(response.data.status){
-            
-
+            setTimeout(() => {
               const {userType} = response?.data?.data?.user_data || {}
-              console.log(userType)
               if (userType !== 'ADMIN' && userType !== 'subadmin' ) {
                 enqueueSnackbar('Access denied. User type is not authorized.', { variant: 'error' });
                 return;
@@ -83,6 +82,8 @@ const Login = () => {
               localStorage.setItem('store_data', JSON.stringify(response.data.data.store_data))
                 enqueueSnackbar(response.data.message, { variant: 'success' })
                 navigate('/admin')
+            }, 1000);
+
             }
         } catch (error) {
             console.log(error)
