@@ -4,7 +4,7 @@ import { Modal, Box, Button, TextField, MenuItem } from "@mui/material";
 import DataService from '../../services/requestApi'
 import { useSnackbar } from "notistack";
 const AddRpBonusModal = ({ open, handleClose ,GetRpData}) => {
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm();
     const [bonustype, setBonusType] = useState([])
     const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
     const { enqueueSnackbar } = useSnackbar()
@@ -71,7 +71,11 @@ const AddRpBonusModal = ({ open, handleClose ,GetRpData}) => {
                         label="End RP"
                         type="number"
                         fullWidth
-                        {...register("end_rp", { required: "End RP is required" })}
+                        {...register("end_rp", { 
+                            required: "End RP is required", 
+                            validate: value => 
+                                parseFloat(value) > parseFloat(watch("start_rp")) || "End RP must be greater than to Start RP"
+                        })}
                         error={!!errors.end_rp}
                         helperText={errors.end_rp?.message}
                     />
