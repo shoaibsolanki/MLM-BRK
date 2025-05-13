@@ -1,45 +1,45 @@
 import { Copy, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DataService from '../services/requestApi';
 import { useSnackbar } from 'notistack';
+import { useAuth } from '../contexts/AuthConext';
 
 const ReferAndEarnModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const {login} =useAuth()
   const { enqueueSnackbar } = useSnackbar();
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
+const handleLogin = async () => {
+  setLoading(true);
+  try {
+    const response = await DataService.Login({ user_name: userId, password });
 
-  const handleLogin = async () => {
-    setLoading(true);
-    try {
-      const response = await DataService.Login({ user_name: userId, password });
-      // if (response.data.data.user_data.userType !== 'ADMIN') {
-      //   enqueueSnackbar('Access denied. User type is not authorized.', { variant: 'error' });
-      //   return;
-      // }
-      if (response.data.status) {
-        localStorage.clear();
-        localStorage.setItem('token', response.data.data.jwt_response);
-        localStorage.setItem('user_data', JSON.stringify(response.data.data.user_data));
-        localStorage.setItem('authData', JSON.stringify(response.data.data.customer_data));
-        localStorage.setItem('store_data', JSON.stringify(response.data.data.store_data));
-
-        enqueueSnackbar(response.data.message, { variant: 'success' });
-        navigate('/');
-    window.location.reload();
-
-        onClose();
-      }
-    } catch (error) {
-      enqueueSnackbar(error?.response?.data?.message || 'Login failed', { variant: 'error' });
-    } finally {
-      setLoading(false);
+  // No need for await
+    
+    if (response.data.status) {
+     setTimeout(() => {
+       localStorage.setItem('token', response.data.data.jwt_response);
+      localStorage.setItem('authData', JSON.stringify(response.data.data.customer_data));
+      localStorage.setItem('store_data', JSON.stringify(response.data.data.store_data));
+      
+      login(response.data.data.customer_data);
+      enqueueSnackbar(response.data.message, { variant: 'success' });
+      navigate('/');
+      onClose();
+     }, 1000);
     }
-  };
+  } catch (error) {
+    enqueueSnackbar(error?.response?.data?.message || 'Login failed', { variant: 'error' });
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleRegistration = () => {
     onClose();

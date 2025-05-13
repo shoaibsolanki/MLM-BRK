@@ -18,7 +18,7 @@ const navItems = [
 ];
 
 const Header = () => {
-  const { searchKeyword, setSearchKeyword, setSearchResults,logout } = useAuth();
+  const { searchKeyword, setSearchKeyword, setSearchResults,logout ,authData} = useAuth();
   const { cart, totalItems } = useCart();
   const isAuthenticated = localStorage.getItem("token");
 
@@ -59,12 +59,13 @@ const Header = () => {
   };
 
   const handleNavigation = (path) => {
-    if (path === '/refer') {
-      if (isAuthenticated) {
-        setShowReferralModal(true);
+    if (path === '/refer') { 
+      console.log(authData)
+      if (isAuthenticated && authData && Object.keys(authData).length > 0) {
+      setShowReferralModal(true);
       } else {
-        // Optional: navigate to login or show alert
-        setIsModalOpen(true); // or show a toast
+      // Optional: navigate to login or show alert
+      setIsModalOpen(true); // or show a toast
       }
     } else {
       navigate(path);
