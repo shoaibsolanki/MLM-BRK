@@ -128,7 +128,7 @@ export const AuthProvider = ({ children }) => {
   // }, []);
 
   useEffect(() => {
-    const storedAuthData = JSON.parse(localStorage.getItem("authData"));
+    const storedAuthData = JSON.parse(localStorage.getItem("authData")) || {};
     if (storedAuthData) {
       setAuthData(storedAuthData);
     }
