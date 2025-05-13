@@ -35,7 +35,7 @@ const ReferralModal = ({ onClose }) => {
   }, [id]);
 
   const copyToClipboard = () => {
-    const referralUrl = `https://${window.location.host}/customer-registration/${organization}/${referralCode}`;
+    const referralUrl = `https://${window.location.host}/customer-registration/${organization}/${referralCode || id}`;
   
     if (navigator.clipboard && window.isSecureContext) {
       // ✅ Use Clipboard API
@@ -114,7 +114,7 @@ const ReferralModal = ({ onClose }) => {
           </select>
 
           <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between mb-6">
-            <span className="font-mono text-lg font-medium">{referralCode || "Loading..."}</span>
+            <span className="font-mono text-lg font-medium">{referralCode || id || "Loading..."}</span>
             <button
               onClick={copyToClipboard}
               className="text-blue-600 hover:text-blue-800 p-1 rounded-md transition-colors"
