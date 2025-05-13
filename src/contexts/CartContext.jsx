@@ -106,7 +106,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     if (typeof window !== "undefined" && !id) {
-      localStorage.setItem("cart", JSON.stringify(cart));
+      localStorage.setItem("cart", JSON.stringify(cart || []));
     }
   }, [cart]);
 
