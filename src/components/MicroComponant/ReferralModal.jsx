@@ -10,7 +10,7 @@ const ReferralModal = ({ onClose }) => {
   const { authData } = useAuth();
   const { id } = authData || {};
   const { enqueueSnackbar } = useSnackbar(); // Notistack for alerts
-  const [organization, setOrganization] = useState("organization1"); // Default organization
+  const [organization, setOrganization] = useState("org1"); // Default organization
 
   const fetchReferralCode = async () => {
     try {
