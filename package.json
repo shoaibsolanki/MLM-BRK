@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@hookform/resolvers": "^5.0.1",
     "@mui/icons-material": "^6.1.6",
     "@mui/material": "^6.1.6",
     "@mui/x-date-pickers": "^7.22.2",
@@ -38,7 +39,8 @@
     "react-to-print": "^3.0.6",
     "sweetalert2": "^11.14.5",
     "swiper": "^11.1.15",
-    "vite-plugin-commonjs": "^0.10.3"
+    "vite-plugin-commonjs": "^0.10.3",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
