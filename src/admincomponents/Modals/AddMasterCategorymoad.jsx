@@ -22,6 +22,10 @@ const AddMasterCategoryModal = ({ getMatserCategory }) => {
 
   const onSubmit = async (data) => {
     try {
+      if(!file) {
+        enqueueSnackbar("Please select an image file", { variant: "error" });
+        return;
+      }
       const response = await DataService.AddMasterCategory(data);
       if (response.data.status) {
         enqueueSnackbar("Category Add Successfully", { variant: "success" });
@@ -79,7 +83,11 @@ const AddMasterCategoryModal = ({ getMatserCategory }) => {
             <TextField
               type="file"
               onChange={onChange}
-              inputProps={{ accept: "image/*" }}
+              InputProps={{
+                            inputProps: {
+                                accept: '.jpg,.jpeg,.png,.gif'
+                            }
+                        }}
               variant="outlined"
               fullWidth
             />
