@@ -57,7 +57,11 @@ const EditRpBonusModal = ({ open, handleClose, selectedrow ,GetRpData}) => {
                             label="End RP"
                             type="number"
                             fullWidth
-                            {...register('end_rp', { required: 'End RP is required' })}
+                            {...register("end_rp", { 
+                            required: "End RP is required", 
+                            validate: value => 
+                                parseFloat(value) > parseFloat(watch("start_rp")) || "End RP must be greater than to Start RP"
+                        })}
                             error={!!errors.end_rp}
                             helperText={errors.end_rp?.message}
                         />
