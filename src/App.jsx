@@ -11,6 +11,7 @@ import { useLocation } from 'react-router-dom';
 // Lazy load components
 const Home = lazy(() => import('./page/Home'));
 const Gallery = lazy(() => import('./page/Gallery'));
+const Singleblog = lazy(() => import('./page/Singleblog'));
 const ProductsPage = lazy(() => import('./page/ProductsPage'));
 const ProductDetailPage = lazy(() => import('./page/ProductDetailPage'));
 const Support = lazy(() => import('./page/Support'));
@@ -84,7 +85,8 @@ function App() {
               <Route index element={<Home />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/gallery" element={<Gallery />} />   
-
+            <Route path="/ViewBlog" element={<Singleblog />} />   
+              
               <Route path="products" element={<ProductsPage />} />
               <Route path="profile" element={<Profile />} />
 
