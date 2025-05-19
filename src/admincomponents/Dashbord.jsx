@@ -38,8 +38,8 @@ const Dashboard = () => {
   ];
 
   const dataNewOrders = [
-    { orderNumber: 'O001', userName: 'John Doe', pickupCenter: 'Center 1', totalAmount: '$100', orderStatus: 'Pending', orderDate: '2023-03-01', action: 'View' },
-    { orderNumber: 'O002', userName: 'Jane Smith', pickupCenter: 'Center 2', totalAmount: '$200', orderStatus: 'Completed', orderDate: '2023-03-02', action: 'View' },
+    { orderNumber: 'O001', userName: 'John Doe', pickupCenter: 'Center 1', totalAmount: 'Rs.100', orderStatus: 'Pending', orderDate: '2023-03-01', action: 'View' },
+    { orderNumber: 'O002', userName: 'Jane Smith', pickupCenter: 'Center 2', totalAmount: 'Rs.200', orderStatus: 'Completed', orderDate: '2023-03-02', action: 'View' },
     // Add more data as needed
   ];
 
