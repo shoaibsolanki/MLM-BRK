@@ -107,7 +107,11 @@ const AddSubCatModal = ({ open, handleClose ,getsubcategory}) => {
                             <TextField
                                 type="file"
                                 onChange={onChange}
-                                inputProps={{ accept: "image/*" }}
+                                InputProps={{
+                            inputProps: {
+                                accept: '.jpg,.jpeg,.png,.gif'
+                            }
+                        }}
                                 variant="outlined"
                                 fullWidth
                             />
