@@ -258,7 +258,7 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === "discount_type" || name === "actual_price" || name === "discount") {
+      if (name === "discount_type" && name === "actual_price" && name === "discount") {
         const discountType = value.discount_type;
         const actualPrice = parseFloat(value.actual_price || 0);
         const discount = parseFloat(value.discount || 0);
@@ -282,27 +282,38 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
   }, [watch, trigger, reset]);
 
 
-  const modules = {
+   const modules = {
     toolbar: [
-      [{ 'font': [] }],
+      [{ font: [] }],
+      [{ size: ['small', false, 'large', 'huge'] }], // Add this line
       ['bold', 'underline', 'italic'],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      [{ 'align': [] }],
-      [{ 'table': [] }],
+      [{ color: [] }, { background: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ align: [] }],
       ['link', 'image', 'video'],
       ['clean'],
-      ['code-block']
+      ['code-block'],
     ],
   };
-
-  const formats = [
-    'font', 'bold', 'underline', 'italic',
-    'color', 'background', 'list', 'bullet',
-    'align', 'link', 'image', 'video', 'clean',
-    'code-block'
+  
+        const formats = [
+    'font',
+    'size', // Add this line
+    'bold',
+    'underline',
+    'italic',
+    'color',
+    'background',
+    'list',
+    'bullet',
+    'align',
+    'link',
+    'image',
+    'video',
+    'clean',
+    'code-block',
   ];
-   
+  
 
   const handleQuillChange = (value) => {
     console.log(value)
@@ -486,6 +497,7 @@ const UpdateProductModal = ({ open, handleClose, selectedRow, fetchData }) => {
                   />
                   <input
                     type="file"
+                    accept="image/*"
                     style={{ display: "none" }}
                     onChange={(e) => handleImageChange(e, image.imageId)}
                   />

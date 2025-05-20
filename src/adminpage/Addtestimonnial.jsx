@@ -69,7 +69,11 @@ return (
                             {...register('file')}
                             type="file"
                             label="Upload File"
-                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                            inputProps: {
+                                accept: '.jpg,.jpeg,.png,.gif'
+                            }
+                        }}
                             fullWidth
                             margin="normal"
                     />

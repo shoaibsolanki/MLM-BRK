@@ -7,8 +7,35 @@ const UpdateSliderModal = ({ open, handleClose ,Banners}) => {
     const [file2, setFile2] = useState(null);
     const [file3, setFile3] = useState(null);
     const {enqueueSnackbar} = useSnackbar()
-    const handleFileChange = (e, setFile) => {
-        setFile(e.target.files[0]);
+    const checkImageDimensions = (file) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    resolve({
+                        width: img.width,
+                        height: img.height,
+                        isValid: img.width === 1400 && img.height === 500
+                    });
+                };
+            };
+        });
+    };
+
+    const handleFileChange = async (e, setFile) => {
+        const file = e.target.files[0];
+        if (file) {
+            const dimensions = await checkImageDimensions(file);
+            if (dimensions.isValid) {
+                setFile(file);
+            } else {
+                enqueueSnackbar('Image dimensions must be 1400px x 500px', { variant: 'error' });
+                e.target.value = '';
+            }
+        }
     };
     const {  saasId } = JSON.parse(localStorage.getItem("user_data"));
 
@@ -56,22 +83,46 @@ const UpdateSliderModal = ({ open, handleClose ,Banners}) => {
                     <TextField
                         type="file"
                         fullWidth
+                        InputProps={{
+                            inputProps: {
+                                accept: '.jpg,.jpeg,.png,.gif'
+                            }
+                        }}
                         onChange={(e) => handleFileChange(e, setFile1)}
                     />
+                    <small className="text-gray-500">
+                        1400px X 500px (jpg, jpeg, png, gif, svg)
+                    </small>
                 </Box>
                 <Box mb={2}>
                     <TextField
                         type="file"
                         fullWidth
+                        InputProps={{
+                            inputProps: {
+                                accept: '.jpg,.jpeg,.png,.gif'
+                            }
+                        }}
                         onChange={(e) => handleFileChange(e, setFile2)}
                     />
+                    <small className="text-gray-500">
+                        1400px X 500px (jpg, jpeg, png, gif, svg)
+                    </small>
                 </Box>
                 <Box mb={2}>
                     <TextField
                         type="file"
                         fullWidth
+                        InputProps={{
+                            inputProps: {
+                                accept: '.jpg,.jpeg,.png,.gif'
+                            }
+                        }}
                         onChange={(e) => handleFileChange(e, setFile3)}
                     />
+                    <small className="text-gray-500">
+                        1400px X 500px (jpg, jpeg, png, gif, svg)
+                    </small>
                 </Box>
                 <Box display="flex" justifyContent="space-between">
                     <Button variant="contained" color="primary" onClick={handleSubmit}>

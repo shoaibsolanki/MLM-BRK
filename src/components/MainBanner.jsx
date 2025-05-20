@@ -26,6 +26,15 @@ const MainBanner = ({ currentSlide, setCurrentSlide }) => {
     useEffect(() => {
         fetchAllBanner();
     }, []);
+
+    // Add auto-sliding functionality
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentSlide((prev) => (prev === banners.length - 1 ? 0 : prev + 1));
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, [banners.length, setCurrentSlide]);
   
     const goToPrevSlide = () => {
         setCurrentSlide((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
@@ -38,7 +47,7 @@ const MainBanner = ({ currentSlide, setCurrentSlide }) => {
     return (
         <div className="relative my-2 overflow-hidden rounded-sm">
             {/* Banner Image */}
-            <div className="relative h-[250px] sm:h-[200px] md:h-[250px] lg:h-[250px] overflow-hidden">
+            <div className="relative h-[150px] sm:h-[200px] md:h-[250px] lg:h-[450px] overflow-hidden">
                 <div 
                     className="flex transition-transform duration-300 ease-out h-full"
                     style={{ transform: `translateX(-${currentSlide * 100}%)` }}
@@ -48,7 +57,8 @@ const MainBanner = ({ currentSlide, setCurrentSlide }) => {
                             <img 
                                 src={image} 
                                 alt={`Banner ${index + 1}`}
-                                className="w-full h-full object-cover object-center"
+                                className="object-cover transition-transform "
+                                // className="w-full h-full object-cover object-center"
                             />
                         </div>
                     ))}

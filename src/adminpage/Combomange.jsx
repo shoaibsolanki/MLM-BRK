@@ -239,7 +239,11 @@ const handleComboImageChange = (e) => {
         </FormControl>
         <TextField
             type="file"
-            inputProps={{ accept: "image/*" }}
+            InputProps={{
+                            inputProps: {
+                                accept: '.jpg,.jpeg,.png,.gif'
+                            }
+                        }}
             onChange={handleComboImageChange}
             fullWidth
             variant="outlined"

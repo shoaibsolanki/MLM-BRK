@@ -158,6 +158,7 @@ const UpdateBlogModal = ({ open, handleClose, selected, getData }) => {
               <input
                 onChange={handleFileChange}
                 type="file"
+                accept="image/*"
                 className="block w-full text-sm text-gray-500  border-2 p-1 rounded"
               />
               <small className="text-gray-500">

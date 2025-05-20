@@ -32,6 +32,7 @@ const Allproduct = () => {
                 />
                 <input 
                     type="file" 
+                    accept="image/*"
                     style={{ display: 'none' }} 
                     onChange={(e) => handleImageChange(e, row)} 
                 />
@@ -44,7 +45,13 @@ const Allproduct = () => {
         name: 'Description',
         cell: row => (
           <div
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.description) }}
+            dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(
+              row.description?.length > 20
+                ? row.description.slice(0, 20) + '...'
+                : row.description
+            )
+          }}
             style={{ maxWidth: '200px', overflow: 'hidden' }}
           />
         ),

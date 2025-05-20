@@ -8,10 +8,12 @@ import { Add } from "@mui/icons-material";
 import { Trash } from "lucide-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { useNavigate } from "react-router-dom";
 const AddProduct = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
   const [tumbnailimage, setTumbnailimage] = useState(null);
+  const navigate = useNavigate()
   const handletumbnail = (e) => {
     const file = e.target.files[0];
     setTumbnailimage(file);
@@ -166,10 +168,19 @@ const AddProduct = () => {
       !productData.item_name ||
       !productData.price ||
       !productData.description ||
-      !productData.actual_price
+      !productData.actual_price||
+      !tumbnailimage
     ) {
       enqueueSnackbar(
-        "Please fill in all required fields: Product Name, Price, Description, and MRP",
+        "Please fill in all required fields: Product Name, Price, Description, and MRP , Thumbnail Image",
+        { variant: "error" }
+      );
+      return;
+    }
+
+    if(productData.item_code.length < 8 || productData.hsn_code.length < 4){
+      enqueueSnackbar(
+        "Please fill in all required fields: Product ID Minimum 8 and HSN Code Minimum 4",
         { variant: "error" }
       );
       return;
@@ -181,6 +192,7 @@ const AddProduct = () => {
         enqueueSnackbar("Product Added Successfully", { variant: "success" });
         handleUpload(response.data.data.item_id);
         AddThumbnailImage(response.data.data.item_id);
+        navigate('products/list')
         setProductData({
           item_name: "",
           price: 0,
@@ -274,36 +286,37 @@ const AddProduct = () => {
     }
   };
 
-  const modules = {
-    toolbar: [
-      [{ font: [] }],
-      ["bold", "underline", "italic"],
-      [{ color: [] }, { background: [] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }],
-      [{ table: [] }],
-      ["link", "image", "video"],
-      ["clean"],
-      ["code-block"],
-    ],
-  };
+ const modules = {
+  toolbar: [
+    [{ font: [] }],
+    [{ size: ['small', false, 'large', 'huge'] }], // Add this line
+    ['bold', 'underline', 'italic'],
+    [{ color: [] }, { background: [] }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    [{ align: [] }],
+    ['link', 'image', 'video'],
+    ['clean'],
+    ['code-block'],
+  ],
+};
 
-  const formats = [
-    "font",
-    "bold",
-    "underline",
-    "italic",
-    "color",
-    "background",
-    "list",
-    "bullet",
-    "align",
-    "link",
-    "image",
-    "video",
-    "clean",
-    "code-block",
-  ];
+      const formats = [
+  'font',
+  'size', // Add this line
+  'bold',
+  'underline',
+  'italic',
+  'color',
+  'background',
+  'list',
+  'bullet',
+  'align',
+  'link',
+  'image',
+  'video',
+  'clean',
+  'code-block',
+];
 
   const [uomlist, setUomlist] = useState([]);
 
@@ -385,6 +398,7 @@ const AddProduct = () => {
         <div className="form-group">
           <TextField
             name="item_code"
+            inputProps={{ minLength: 8 }}
             value={productData?.item_code}
             onChange={handleInputChange}
             label="Product ID"
@@ -395,6 +409,8 @@ const AddProduct = () => {
         <div className="form-group">
           <TextField
             name="hsn_code"
+            inputProps={{ minLength: 4 }}
+
             value={productData?.hsn_code}
             onChange={handleInputChange}
             label="HSN Code"
@@ -549,6 +565,7 @@ const AddProduct = () => {
         <div className="form-group">
           <label className="block mb-2">Thumbnail Image</label>
           <input
+          accept="image/*"
             onChange={handletumbnail}
             type="file"
             className="block w-full text-sm text-gray-500  border-2 p-1 rounded"

@@ -1,7 +1,7 @@
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import BlogCard from "../components/Blogcard"
-
+import DataService from '../services/requestApi'
 const BlogList = () => {
   const [blogs, setBlogs] = useState([
     {
@@ -29,21 +29,18 @@ const BlogList = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   // You can use this block when fetching from an API
-  // useEffect(() => {
-  //   const fetchBlogs = async () => {
-  //     setIsLoading(true)
-  //     try {
-  //       const response = await fetch('/api/blogs')
-  //       const data = await response.json()
-  //       setBlogs(data)
-  //     } catch (error) {
-  //       console.error('Error fetching blogs:', error)
-  //     } finally {
-  //       setIsLoading(false)
-  //     }
-  //   }
-  //   fetchBlogs()
-  // }, [])
+  const GetAllBlogs = async ()=>{
+    try {
+      const response =  await DataService.BlogWithoutsaasid()
+      setBlogs(response?.data?.data || [])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    GetAllBlogs()
+  }, [])
+  
 
   if (isLoading) {
     return <div className="text-center py-12">Loading blogs...</div>

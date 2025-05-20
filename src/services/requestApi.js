@@ -336,6 +336,9 @@ AddBlog(saasId,storeId,data){
 GetAllBlogs(saasId,storeId){
   return http.get(`/testimonial/get-Blog/${saasId}/${storeId}`)
 }
+BlogWithoutsaasid(){
+  return http.get(`/testimonial/get-Blog`)
+}
 
 DeleteBlog(id){
   return http.delete(`testimonial/deleteBlog/${id}`)

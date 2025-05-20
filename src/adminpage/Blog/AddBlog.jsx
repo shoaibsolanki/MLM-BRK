@@ -46,7 +46,7 @@ const AddBlog = () => {
 
       try {
         const response = await DataService.AddBlog(saasId, storeId, formData);
-        if (response?.status === 200) {
+        if (response?.data.status) {
         enqueueSnackbar("Blog added successfully!", { variant: "success" });
         setProductData({}); // Reset form
         } else {
@@ -62,35 +62,36 @@ const AddBlog = () => {
 
 
     const modules = {
-        toolbar: [
-          [{ font: [] }],
-          ["bold", "underline", "italic"],
-          [{ color: [] }, { background: [] }],
-          [{ list: "ordered" }, { list: "bullet" }],
-          [{ align: [] }],
-          [{ table: [] }],
-          ["link", "image", "video"],
-          ["clean"],
-          ["code-block"],
-        ],
-      };
-    
+  toolbar: [
+    [{ font: [] }],
+    [{ size: ['small', false, 'large', 'huge'] }], // Add this line
+    ['bold', 'underline', 'italic'],
+    [{ color: [] }, { background: [] }],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    [{ align: [] }],
+    ['link', 'image', 'video'],
+    ['clean'],
+    ['code-block'],
+  ],
+};
+
       const formats = [
-        "font",
-        "bold",
-        "underline",
-        "italic",
-        "color",
-        "background",
-        "list",
-        "bullet",
-        "align",
-        "link",
-        "image",
-        "video",
-        "clean",
-        "code-block",
-      ];
+  'font',
+  'size', // Add this line
+  'bold',
+  'underline',
+  'italic',
+  'color',
+  'background',
+  'list',
+  'bullet',
+  'align',
+  'link',
+  'image',
+  'video',
+  'clean',
+  'code-block',
+];
     
   return (
     <div className='bg-white rounded p-8'>
@@ -111,6 +112,7 @@ const AddBlog = () => {
           <input
             onChange={handleFileChange}
             type="file"
+            accept="image/*"
             className="block w-full text-sm text-gray-500  border-2 p-1 rounded"
           />
           <small className="text-gray-500">

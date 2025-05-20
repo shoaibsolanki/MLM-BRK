@@ -35,7 +35,7 @@ const ReferralModal = ({ onClose }) => {
   }, [id]);
 
   const copyToClipboard = () => {
-    const referralUrl = `https://${window.location.host}/customer-registration/${organization}/${referralCode || id}`;
+    const referralUrl = `${window.location.host}/customer-registration/${organization}/${referralCode || id}`;
   
     if (navigator.clipboard && window.isSecureContext) {
       // ✅ Use Clipboard API

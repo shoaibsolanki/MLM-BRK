@@ -49,27 +49,49 @@ function AllGallery() {
   };
 
   const handleSubmit = async () => {
+    // Validation
+    if (files.length === 0 && links.filter(l => l.trim()).length === 0) {
+      alert("Please add at least one image or one video link.");
+      return;
+    }
+
+    // Validate file types (images only)
+    for (let file of files) {
+      if (!file.type.startsWith("image/")) {
+        alert("Only image files are allowed.");
+        return;
+      }
+    }
+
+    // Validate links (basic check for YouTube or http(s))
+    for (let link of links) {
+      if (link.trim() && !/^https?:\/\/.+/.test(link.trim())) {
+        alert("Please enter a valid video link (must start with http or https).");
+        return;
+      }
+    }
+
     const formData = new FormData();
-  
+
     // Append files
     files.forEach(file => {
       formData.append('file', file);
     });
 
-    formData.append('description', description)
-  
+    formData.append('description', description);
+
     // Append non-empty links
     links.forEach(link => {
       if (link.trim()) {
         formData.append('link', link);
       }
     });
-  
+
     // Log what’s going out
     for (let pair of formData.entries()) {
       console.log(pair[0] + ':', pair[1]);
     }
-  
+
     try {
       const res = await DataService.Addgallery(saasId, storeId, formData);
       console.log(res.data); // show the API response
@@ -85,7 +107,6 @@ function AllGallery() {
       console.error("Upload failed:", err);
     }
   };
-  
   
 
   return (
@@ -162,7 +183,10 @@ function AllGallery() {
                 <CloseIcon />
               </IconButton>
             </Box>
-            <input type="file" multiple onChange={handleFileChange} />
+            <input  className="block w-full text-sm text-gray-500  border-2 p-1 rounded" type="file" multiple accept="image/*" onChange={handleFileChange} />
+            <small className="text-gray-500">
+            270px X 200px (jpg, jpeg, png, gif, svg)
+          </small>
             <Typography fontWeight={600}>Add Description</Typography>
             <TextField
                     fullWidth

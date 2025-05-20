@@ -27,7 +27,13 @@ const ProductCard = ({ product }) => {
         </h3>
         <p className="text-xs text-gray-500 mt-1 line-clamp-2">
           <div
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.description) }}
+            dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(
+              product.description?.length > 20
+                ? product.description.slice(0, 20) + '...'
+                : product.description
+            )
+          }}
             style={{ maxWidth: '200px', overflow: 'hidden' }}
           />
         </p>

@@ -92,7 +92,7 @@ const Header = () => {
   }, []);
   return (
     <>
-    <header className="bg-white py-2.5 px-4 md:px-6 shadow-md sticky top-0 z-50">
+    <header className="bg-white py-2.5 px-4 md:px-6 shadow-md sticky top-0 z-50 ">
       <div className="max-w-screen-2xl mx-auto flex items-center">
         {/* Logo */}
         <div className="mr-4 flex items-center">

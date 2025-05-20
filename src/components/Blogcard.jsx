@@ -1,8 +1,10 @@
 import React from "react"
+import { useNavigate } from "react-router-dom"
 
 const BlogCard = ({ blog }) => {
+  const navigate = useNavigate()
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col h-full border border-gray-200 dark:border-gray-700">
+    <div onClick={()=>navigate('/ViewBlog' , {state : {blog}})} className= "cursor-pointer bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col h-full border border-gray-200 dark:border-gray-700">
       <div className="aspect-video relative overflow-hidden">
         <img
           src={blog.image || "/placeholder.svg"}

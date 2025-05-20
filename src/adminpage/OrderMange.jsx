@@ -119,8 +119,8 @@ const OrderMange = () => {
         try {
             const response = await DataService.GetAllOrderBypage(saasId,page, size);
             console.log('Fetched Orders:', response.data);
-            setData(response.data.data)
-            setCount(response.data.count)
+            setData(response.data.data || [])
+            setCount(response.data.count || 0)
             // You can update the state with the fetched data if needed
         } catch (error) {
             console.error('Error fetching orders:', error);

@@ -92,7 +92,11 @@ const SubCategoryModal = ({ open, handleClose, getsubcategory, defaultValues }) 
                                     {...field}
                                     type="file"
                                     onChange={onChange}
-                                    inputProps={{ accept: "image/*" }}
+                                    InputProps={{
+                            inputProps: {
+                                accept: '.jpg,.jpeg,.png,.gif'
+                            }
+                        }}
                                     variant="outlined"
                                     fullWidth
                                     error={!!error}

@@ -5,6 +5,7 @@ import DataService from "../../services/requestApi"
 import DOMPurify from 'dompurify'
 import { useSnackbar } from 'notistack';
 import UpdateBlogModal from './UpdateBlogModal';
+
 const ViewBlogs = () => {
 
     const { storeId, saasId } = JSON.parse(localStorage.getItem("user_data"));
